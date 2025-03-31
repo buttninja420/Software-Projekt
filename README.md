@@ -1,3 +1,0 @@
-# Software-Projekt
-
-Ha! Gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay
