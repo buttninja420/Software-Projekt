@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JavaFX App
@@ -14,7 +16,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-
+    private List<User> Users = new ArrayList<User>();
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
@@ -35,4 +37,16 @@ public class App extends Application {
         launch();
     }
 
+    public int registerUser(String UID){
+        Users.add(new User(UID)); //create a new user with the giving UID and add to user-list
+
+        return 0; //0 for succes
+    }
+    public List<String> getUsers(){
+        List<String> result = new ArrayList<String>(); 
+        for (User user : Users) {
+            result.add(user.getUID());
+        }
+        return result;
+    }
 }

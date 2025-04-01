@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    String UID;
+    private String UID;
+
     public User(String UID){
-        UID = this.UID;
+        this.UID = UID;
         List<Activity> Activities = new ArrayList<Activity>();
 
     }
+    public String getUID(){
+        return UID;
 
+    }
 }
