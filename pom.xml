@@ -44,7 +44,11 @@
 			<artifactId>cucumber-junit-platform-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+                <dependency>
+                        <groupId>io.cucumber</groupId>
+                        <artifactId>cucumber-picocontainer</artifactId>
+                        <version>7.20.1</version>
+                </dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-suite</artifactId>
