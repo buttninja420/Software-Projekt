@@ -1,3 +1,5 @@
+Feature: Activity Register
+
 Scenario: Register to an activity as employee
 Given an activity with a project leader
 When the employee requests to join an activity
