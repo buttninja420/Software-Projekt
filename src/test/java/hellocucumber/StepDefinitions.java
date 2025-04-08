@@ -2,6 +2,8 @@ package hellocucumber;
 
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
+import io.cucumber.java.en_scouse.An;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class StepDefinitions {
 
     private App app;
     @Given("An app")
-    public void anAppAndANewUserWithTheUID() {
+    public void anApp() {
         // Initialize app and user logic here
          app = new App();
          // Store UID to use later in the test
@@ -39,5 +41,26 @@ public class StepDefinitions {
         }
 
         assertEquals(foundUID, true); // This assertion checks if the UID matches
+    }
+
+
+    @Given("An app with a user with UID: {string}")
+    public void anAppAndANewUserWithTheUID(String uid){
+        app = new App();
+        app.registerUser(uid);
+    }
+
+    @Then("An error: {string} is thrown")
+    public void anErrorIsShown(String expectedErrorMessage){
+        boolean exceptionThrown = false;
+        try {
+            
+            app.registerUser("ELLE");  // Trying to register again with the same UID
+
+        } catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+            assertEquals(expectedErrorMessage, e.getMessage());  // Check if the error message matches the expected one
+        }
+        assertTrue(exceptionThrown,"Expected exception was thrown");
     }
 }

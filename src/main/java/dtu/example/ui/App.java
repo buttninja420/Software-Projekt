@@ -38,6 +38,15 @@ public class App extends Application {
     }
 
     public int registerUser(String UID){
+        
+        for (User user : Users){
+            if(user.getUID().equals(UID)){
+                throw new IllegalArgumentException("User with UID: " + UID + " already exists!");
+                
+            }
+
+
+        }
         Users.add(new User(UID)); //create a new user with the giving UID and add to user-list
 
         return 0; //0 for succes
