@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StepDefinitions {
+public class StepDefinitionsApp {
 
     private App app;
     @Given("An app")
@@ -23,7 +23,7 @@ public class StepDefinitions {
     public void aNewUserRegistersAndEntersAUID(String uid) {
         // Simulate registration logic here
         app.registerUser(uid);
-        System.out.println("user with UID: " + uid + "added!");
+        //System.out.println("user with UID: " + uid + "added!");
     }
 
     @Then("A user with the name {string} exists")
@@ -50,8 +50,17 @@ public class StepDefinitions {
         app.registerUser(uid);
     }
 
-    @Then("registration fails")
-    public void anErrorIsShown(){
-        assertEquals(-1, app.registerUser("ELLE"));  //registerUser returns -1 if it fails
+    @Then("An error: {string} is thrown")
+    public void anErrorIsShown(String expectedErrorMessage){
+        boolean exceptionThrown = false;
+        try {
+            
+            app.registerUser("ELLE");  // Trying to register again with the same UID
+
+        } catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+            assertEquals(expectedErrorMessage, e.getMessage());  // Check if the error message matches the expected one
+        }
+        assertTrue(exceptionThrown,"Expected exception was thrown");
     }
 }
