@@ -16,13 +16,14 @@ import java.util.List;
 public class App extends Application {
 
     private static Scene scene;
-    private List<User> Users = new ArrayList<User>();
+    protected List<User> Users = new ArrayList<User>();
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
+    public App(){}
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
@@ -51,11 +52,24 @@ public class App extends Application {
 
         return 0; //0 for succes
     }
-    public List<String> getUsers(){
-        List<String> result = new ArrayList<String>(); 
-        for (User user : Users) {
-            result.add(user.getUID());
+    public List<User> getUsers(){
+        return Users;
+    }
+
+    public List<String> getUserUIDs(){
+        List<String> UIDs = new ArrayList<String>();
+        for (User user : Users){
+            UIDs.add(user.getUID());
         }
-        return result;
+        return UIDs;
+    }
+
+    public User getUserWithUID(String UID){
+        for (User user : Users) {
+            if (user.getUID().equals(UID)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

@@ -2,9 +2,9 @@ package hellocucumber;
 
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
-import io.cucumber.java.en_scouse.An;
+//import io.cucumber.java.en_scouse.An;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +29,7 @@ public class StepDefinitionsApp {
     @Then("A user with the name {string} exists")
     public void aUserWithTheNameExists(String expectedUid) {
         // Validate that the user with the given UID exists
-        List<String> userUIDS = app.getUsers();
+        List<String> userUIDS = app.getUserUIDs();
         Boolean foundUID = false;
         if (!(userUIDS.isEmpty())){
             for (String uid : userUIDS){
