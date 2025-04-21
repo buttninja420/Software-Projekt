@@ -26,7 +26,7 @@ public class User {
         return Activities;
     }
 
-    public void assignActivity(Activity activity){ //maybe delete
+    public void assignActivityDONOTUSE(Activity activity){ //maybe delete
         Activities.add(activity);
     }
 }
