@@ -13,12 +13,11 @@ public class Activity {
     public int max_users;
     public String Title;
 
-
-    public Activity(int activity_ID, int budgeted_Time, int recorded_time, int add_Time, User assigned_User, Date start_Date, Date end_Date, Boolean fixed, int max_users, String Title) {
+//int activity_ID, int budgeted_Time, int recorded_time, User assigned_User, Date start_Date, Date end_Date, Boolean fixed, int max_users, String Title
+    public Activity(int activity_ID, int budgeted_Time, int recorded_time, User assigned_User, Date start_Date, Date end_Date, Boolean fixed, int max_users, String Title) {
         this.activity_ID = activity_ID;
         this.budgeted_Time = budgeted_Time;
         this.recorded_time = recorded_time;
-        this.add_Time = add_Time;
         this.assigned_User = assigned_User;
         this.start_Date = start_Date;
         this.end_Date = end_Date;
@@ -26,6 +25,10 @@ public class Activity {
         this.max_users = max_users;
         this.Title = Title;
     }
+    
+    public Activity(){}
+
+
     
     public int getBudgeted_Time() {
         return budgeted_Time;
@@ -42,7 +45,6 @@ public class Activity {
     public void addTime(int add_Time) {
 
         // Check if the added time exceeds the budgeted time
-        this.add_Time = add_Time;
 
         if (budgeted_Time >= recorded_time + add_Time) {
             recorded_time = recorded_time + add_Time;
@@ -88,5 +90,8 @@ public class Activity {
         Title = title;
     }
     
-    
+    public void edit_Budgettet_Time(User new_Time){ // ændrer budgettet time
+
+    }
+    public void edit_Date(Date new_EndDate, Date new_StartDate){}
 }
