@@ -1,6 +1,6 @@
 package hellocucumber;
 
-import dtu.example.ui.Project;
+import dtu.example.ui.*;
 import io.cucumber.java.en.*;
 import io.cucumber.java.en_scouse.An;
 

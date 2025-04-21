@@ -36,7 +36,7 @@ public class Activity {
     public void setBudgetedTime(int budgetedTime) {
         this.budgetedTime = budgetedTime;
     }
-    public int getRecordedtime() {
+    public int getRecordedTime() {
         return recordedtime;
     }
     public void setRecordedtime(int recordedtime) {
