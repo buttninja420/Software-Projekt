@@ -5,33 +5,50 @@ import java.util.List;
 
 public class Project {
     Private List<Activity> Activities = new ArrayList<Activity>();
+    Private List<User> assignedUsers = new ArrayList<User>();
+
     private User Leader = Null;
-    private int ProjectNumber;
-    private int max_time;
-    private 
+    private int projectNumber;
+    private int maxTime;
+    private static int idCounter;
 
     public Project(){
-
-
+        this.ProjectNumber = idCounter++;
+        
     }
 
-    public void set_project_leader(User user){
-        this.Leader = this.user;
+    public void setProjectLeader(User user){
+        this.Leader = user;
     } 
     
-    public List<Activity> get_activities(){
+    public List<Activity> getActivities(){
         return this.Activities;
     }
     
-    public void add_activity(Activity activity){
+    public void addActivity(Activity activity){
         Activities.add(activity);
     }
 
-    public int get_assigned_time(){
+    public int getAssignedTime(){
         for ()
 
     }
 
+    public String generateReport(){
+        String report = "";
+
+        report = report + "status of activities:\n";
+        for (Activity activity : Activities) {
+            String activityStatus = "--------------\n";
+            activityStatus += activity.getTitle() + "\n";
+            activityStatus += "Start week: " + activity.getStartWeek() + " | End week: " + activity.getEndWeek() + "\n";
+            activityStatus += "Time status - Budgeted: " + activity.getBudgetedTime() + ", Assigned: " + activity.getAssignedTime() + "\n";
+    
+            report += activityStatus;
+        }
+
+        return report;
+    }
 }
 
 
