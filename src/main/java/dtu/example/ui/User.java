@@ -30,5 +30,7 @@ public class User {
         Activities.add(activity);
     }
 
-    public void removeActivityDONOTUSE(Activity activity)
+    public void removeActivityDONOTUSE(Activity activity){
+        Activities.remove(activity);
+    }
 }
