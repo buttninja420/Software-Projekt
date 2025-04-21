@@ -50,17 +50,8 @@ public class StepDefinitions {
         app.registerUser(uid);
     }
 
-    @Then("An error: {string} is thrown")
-    public void anErrorIsShown(String expectedErrorMessage){
-        boolean exceptionThrown = false;
-        try {
-            
-            app.registerUser("ELLE");  // Trying to register again with the same UID
-
-        } catch (IllegalArgumentException e) {
-            exceptionThrown = true;
-            assertEquals(expectedErrorMessage, e.getMessage());  // Check if the error message matches the expected one
-        }
-        assertTrue(exceptionThrown,"Expected exception was thrown");
+    @Then("registration fails")
+    public void anErrorIsShown(){
+        assertEquals(-1, app.registerUser("ELLE"));  //registerUser returns -1 if it fails
     }
 }

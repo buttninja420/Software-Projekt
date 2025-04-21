@@ -41,8 +41,8 @@ public class App extends Application {
         
         for (User user : Users){
             if(user.getUID().equals(UID)){
-                throw new IllegalArgumentException("User with UID: " + UID + " already exists!");
                 
+                return -1;
             }
 
 
