@@ -1,75 +1,76 @@
 package dtu.example.ui;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Activity {
-    private int activity_ID;
-    private int budgeted_Time;
-    private int recorded_time;
-    public int add_Time;
-    private User assigned_User;
-    public Date start_Date;
-    public Date end_Date;
+    private int activityID;
+    private int budgetedTime;
+    private int recordedtime;
+    public int addTime;
+    private List<User> assignedUsers = new ArrayList<User>();
+    public Date startDate;
+    public Date endDate;
     public Boolean fixed;
-    public int max_users;
+    public int maxusers;
     public String Title;
 
-//int activity_ID, int budgeted_Time, int recorded_time, User assigned_User, Date start_Date, Date end_Date, Boolean fixed, int max_users, String Title
-    public Activity(int activity_ID, int budgeted_Time, int recorded_time, User assigned_User, Date start_Date, Date end_Date, Boolean fixed, int max_users, String Title) {
-        this.activity_ID = activity_ID;
-        this.budgeted_Time = budgeted_Time;
-        this.recorded_time = recorded_time;
-        this.assigned_User = assigned_User;
-        this.start_Date = start_Date;
-        this.end_Date = end_Date;
+//int activityID, int budgetedTime, int recordedtime, User assignedUser, Date startDate, Date endDate, Boolean fixed, int maxusers, String Title
+    public Activity(int activityID, int budgetedTime, int recordedtime, List<User> assignedUsers, Date startDate, Date endDate, Boolean fixed, int maxusers, String Title) {
+        this.activityID = activityID;
+        this.budgetedTime = budgetedTime;
+        this.recordedtime = recordedtime;
+        this.assignedUsers = assignedUsers;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.fixed = fixed;
-        this.max_users = max_users;
+        this.maxusers = maxusers;
         this.Title = Title;
     }
     
     public Activity(){}
-
-
     
-    public int getBudgeted_Time() {
-        return budgeted_Time;
+    public int getBudgetedTime() {
+        return budgetedTime;
     }
-    public void setBudgeted_Time(int budgeted_Time) {
-        this.budgeted_Time = budgeted_Time;
+    public void setBudgetedTime(int budgetedTime) {
+        this.budgetedTime = budgetedTime;
     }
-    public int getRecorded_time() {
-        return recorded_time;
+    public int getRecordedtime() {
+        return recordedtime;
     }
-    public void setRecorded_time(int recorded_time) {
-        this.recorded_time = recorded_time;
+    public void setRecordedtime(int recordedtime) {
+        this.recordedtime = recordedtime;
     }
-    public void addTime(int add_Time) {
+    public void addTime(int addTime) {
 
         // Check if the added time exceeds the budgeted time
 
-        if (budgeted_Time >= recorded_time + add_Time) {
-            recorded_time = recorded_time + add_Time;
+        if (budgetedTime >= recordedtime + addTime) {
+            recordedtime = recordedtime + addTime;
         } else {
             System.out.println("Error: The added time exceeds the budgeted time for the activity.");
         }
 
     }
-    public User getAssigned_User() {
-        return assigned_User;
+    public List<User> getAssignedUser() {
+        return assignedUsers;
     }
-    public void setAssigned_User(User assigned_User) {
-        this.assigned_User = assigned_User;
+    public void assignedUser(User user) {
+        this.assignedUsers.add(user);
+        user.assignActivityDONOTUSE(this);
     }
-    public Date getStart_Date() {
-        return start_Date;
+    public Date getStartDate() {
+        return startDate;
     }
-    public void setStart_Date(Date start_Date) {
-        this.start_Date = start_Date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
-    public Date getEnd_Date() {
-        return end_Date;
+    public Date getEndDate() {
+        return endDate;
     }
-    public void setEnd_Date(Date end_Date) {
-        this.end_Date = end_Date;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
     public Boolean getFixed() {
         return fixed;
@@ -77,11 +78,11 @@ public class Activity {
     public void setFixed(Boolean fixed) {
         this.fixed = fixed;
     }
-    public int getMax_users() {
-        return max_users;
+    public int getMaxusers() {
+        return maxusers;
     }
-    public void setMax_users(int max_users) {
-        this.max_users = max_users;
+    public void setMaxusers(int maxusers) {
+        this.maxusers = maxusers;
     }
     public String getTitle() {
         return Title;
@@ -90,8 +91,8 @@ public class Activity {
         Title = title;
     }
     
-    public void edit_Budgettet_Time(User new_Time){ // ændrer budgettet time
+    public void editBudgettetTime(User newTime){ // ændrer budgettet time
 
     }
-    public void edit_Date(Date new_EndDate, Date new_StartDate){}
+    public void editDate(Date newEndDate, Date newStartDate){}
 }
