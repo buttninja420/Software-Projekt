@@ -10,19 +10,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsActivity {
     protected Activity activity1 = null;
-    protected User
+    protected User user1 = null;
+    protected List<User> finalAnswer = new ArrayList<User>();
+
     @Given("an activity")
-    public void anActivityWithAProjectLeader() {
+    public void anActivity() {
         activity1 = new Activity();
 
     }
     @When("an employee with UID {string} requests to join an activity")
     public void anEmployeeWithUIDRequestsToJoinAnActivity(String string) {
-        activity1.assignedUser()
+        user1 = new User(string);
+        finalAnswer.add(user1);
+        activity1.assignedUser(user1);
     }
     @Then("the employee with UID {string} is added to the activity")
     public void theEmployeeWithUIDIsAddedToTheActivity(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        assertEquals(finalAnswer,activity1.getAssignedUser());
     }
 }
