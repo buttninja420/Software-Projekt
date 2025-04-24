@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsApp {
-
+    Exception thrownException;
     private App app;
     @Given("An app")
     public void anApp() {
@@ -48,6 +48,16 @@ public class StepDefinitionsApp {
     public void anAppAndANewUserWithTheUID(String uid){
         app = new App();
         app.registerUser(uid);
+    }
+    @When("A new user registers and enters an existing UID {string}")
+    public void aNewUserRegistersAndEntersAnExistingUID(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("registration fails")
+    public void registrationFails() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
     @Then("An error: {string} is thrown")
