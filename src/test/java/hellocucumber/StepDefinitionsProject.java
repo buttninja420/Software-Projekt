@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionsProject {
     Exception thrownException;
     private App app;
-    private Project app;
+    private Project tmProject;
     @Given("An app")
     public void anApp() {
         // Initialize app and user logic here
@@ -22,22 +22,22 @@ public class StepDefinitionsProject {
     @Given("a Project {string} with a project leader with UID {string}")
     public void aProjectWithAProjectLeaderWithUID(String projectName, String UID) {
         app.addProject(projectName);
-        app.getProject(projectName);
+        tmProject =  app.getProject(projectName);
+        app.registerUser(UID);
+        tmProject.setProjectLeader(app.getUserWithUID(UID));
         throw new io.cucumber.java.PendingException();
     }
     @When("an employee with UID {string} tries to become project leader")
-    public void anEmployeeWithUIDTriesToBecomeProjectLeader(String string) {
-        // Write code here that turns the phrase above into concrete actions
+    public void anEmployeeWithUIDTriesToBecomeProjectLeader(String name){
+        tmProject.setProjectLeader(app.getUserWithUID(name));
         throw new io.cucumber.java.PendingException();
     }
-    @When("Project leader with UID {string} already exists on project")
-    public void projectLeaderWithUIDAlreadyExistsOnProject(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
+
+    
     @Then("the employee with UID {string} is not project leader")
-    public void theemployeewithUIDisnotprojectleader(String string) {
-        // Write code here that turns the phrase above into concrete actions
+    public void theemployeewithUIDisnotprojectleader(String name){
+        assertEquals(name,tmProject.getProjectleader());
+
         throw new io.cucumber.java.PendingException();
     }
 }
