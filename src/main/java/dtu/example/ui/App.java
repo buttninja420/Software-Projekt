@@ -21,7 +21,7 @@ import java.util.List;
  * JavaFX App
  */
 public class App extends Application {
-    
+
 
     private static Scene scene;
     protected List<User> Users = new ArrayList<User>();
@@ -106,4 +106,20 @@ public class App extends Application {
         }
         return null;
     }
+    public Project getProject(String projectName){
+        for (Project project : projekter){
+            return project;
+        }
+        return null;
+    }
+    public void addProject(String projectName){
+        projekter.add(new Project(projectName));
+    }
+
+    
 }
+
+
+
+
+

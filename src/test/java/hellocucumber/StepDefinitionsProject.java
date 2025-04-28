@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionsProject {
     Exception thrownException;
     private App app;
+    private Project app;
     @Given("An app")
     public void anApp() {
         // Initialize app and user logic here
@@ -21,7 +22,7 @@ public class StepDefinitionsProject {
     @Given("a Project {string} with a project leader with UID {string}")
     public void aProjectWithAProjectLeaderWithUID(String projectName, String UID) {
         app.addProject(projectName);
-        app.get
+        app.getProject(projectName);
         throw new io.cucumber.java.PendingException();
     }
     @When("an employee with UID {string} tries to become project leader")
