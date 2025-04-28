@@ -36,27 +36,32 @@ public class App extends Application {
         VBox VenstreBlok = new VBox(30);
         VenstreBlok.setAlignment(Pos.TOP_LEFT);
 
-        Label infoLabel = new Label("Tryk på følgende knap for at lave et nyt projekt:");
+        Label infoLabel = new Label("Tryk på følgende knap for at lave et nyt projekt:"); //top venstre blok
 
-        Button ProjektKnap = new Button("Lav et NYT PROJEKT");
+        Button ProjektKnap = new Button("Lav et NYT PROJEKT"); //knap til at lave nye projekter
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
         VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
 
-        VBox HøjreKnap = new VBox(30);
+        VBox HøjreKnap = new VBox(30); //højre blok til projekt-listerne 
         HøjreKnap.setAlignment(Pos.TOP_LEFT);
 
         Label ProjektLabel = new Label("Projects");
         HøjreKnap.getChildren().add(ProjektLabel);
 
+        ProjektKnap.setOnAction(event -> {
+            NytVindue();
+        });
+
         mainLay.getChildren().addAll(VenstreBlok, HøjreKnap);
 
-        Scene scene = new Scene(mainLay, 800, 480);
+        Scene scene = new Scene(mainLay, 800, 480); //størrelse på vindue
         stage.setScene(scene);
         stage.show();
     }
     public App(){}
+
 
 
     static void setRoot(String fxml) throws IOException {
@@ -106,4 +111,21 @@ public class App extends Application {
         }
         return null;
     }
+
+    //nyt vinude der åbnes når man trykker på knappen med "nyt projekt"
+    private void NytVindue() {
+        Stage nytVindue = new Stage();
+        nytVindue.setTitle("Nyt Projekt oprettelse");
+
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.CENTER);
+
+        Label Label = new Label("Her kan du oprette et nyt projekt;");
+        layout.getChildren().add(Label);
+        Scene scene = new Scene(layout, 300, 200);
+        nytVindue.setScene(scene);
+        nytVindue.show();
+    }
+
 }
