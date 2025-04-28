@@ -43,4 +43,3 @@ public class StepDefinitionsProject {
         throw new io.cucumber.java.PendingException();
     }
 }
-
