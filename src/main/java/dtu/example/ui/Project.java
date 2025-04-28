@@ -46,7 +46,7 @@ public class Project {
             report.append("Start week: ").append(activity.getStartDate())
                   .append(" | End week: ").append(activity.getEndDate()).append("\n");
             report.append("Time status - Budgeted: ")
-                  .append(activity.getBudgetedTime())
+                  .append(activity.getBudgettedTime())
                   .append(", Assigned: ").append(activity.getRecordedTime()).append("\n");
         }
 
