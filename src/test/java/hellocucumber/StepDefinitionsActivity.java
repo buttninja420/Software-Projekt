@@ -12,8 +12,8 @@ public class StepDefinitionsActivity {
     App app = new App();
     protected Activity activity1 = null;
     protected User user1 = null;
-    @Given("an activity")
-    public void anActivity() {
+    @Given("an activity with a project leader")
+    public void anActivityWithAProjectLeader() {
         activity1 = new Activity();
 
     }
@@ -26,4 +26,21 @@ public class StepDefinitionsActivity {
     public void theEmployeeWithUIDIsAddedToTheActivity(String string) {
         assertEquals(app.getUsers(),activity1.getAssignedUser());
     }
+
+    @Given("an activity with a project leader and free timeslots")
+    public void an_activity_with_a_project_leader_and_free_timeslots() {
+        activity1 = new Activity();
+    }
+
+    @When("the project leader with UID {string} registers an employee with UID {string} for the activity")
+    public void the_project_leader_with_UID_registers_an_employee_with_UID_for_the_activity(String s, String s2) {
+        app.registerUser(s2);
+        activity1.assignUser(app.getUserWithUID(s2));
+    }
+
+    @Then("the employee with UID {string} is registered for the activity")
+    public void the_employee_with_UID_is_registered_for_the_activity(String s) {
+        assertEquals(app.getUsers(),activity1.getAssignedUser());
+    }
+
 }
