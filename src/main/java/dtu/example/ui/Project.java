@@ -27,6 +27,9 @@ public class Project {
         }       
         }
     
+    public User getProjectleader(){
+        return this.leader;
+    }
 
     public List<Activity> getActivities() {
         return this.activities;
