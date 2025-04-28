@@ -49,28 +49,13 @@ public class StepDefinitionsApp {
         app = new App();
         app.registerUser(uid);
     }
+    protected int result;
     @When("A new user registers and enters an existing UID {string}")
-    public void aNewUserRegistersAndEntersAnExistingUID(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void aNewUserRegistersAndEntersAnExistingUID(String uid) {
+        result = app.registerUser(uid);
     }
     @Then("registration fails")
     public void registrationFails() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("An error: {string} is thrown")
-    public void anErrorIsShown(String expectedErrorMessage){
-        boolean exceptionThrown = false;
-        try {
-            
-            app.registerUser("ELLE");  // Trying to register again with the same UID
-
-        } catch (IllegalArgumentException e) {
-            exceptionThrown = true;
-            assertEquals(expectedErrorMessage, e.getMessage());  // Check if the error message matches the expected one
-        }
-        assertTrue(exceptionThrown,"Expected exception was thrown");
+        assertEquals(-1, result);
     }
 }
