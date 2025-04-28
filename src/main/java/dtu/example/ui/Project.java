@@ -11,14 +11,22 @@ public class Project {
     private int projectNumber;
     private int maxTime;
     private static int idCounter;
-
-    public Project() {
+    private String name ="";
+    public Project(String Name) {
         this.projectNumber = idCounter++;
+        this.name = Name;
     }
 
-    public void setProjectLeader(User user) {
-        this.leader = user;
-    }
+    public int setProjectLeader(User user) {
+        if (this.leader == null){
+            this.leader = user;
+            return 0;
+        }
+        else {
+            return -1;
+        }       
+        }
+    
 
     public List<Activity> getActivities() {
         return this.activities;
@@ -52,4 +60,8 @@ public class Project {
 
         return report.toString();
     }
+    public String getName(){
+        return this.name;
+    }
+
 }
