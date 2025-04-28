@@ -2,8 +2,15 @@ package dtu.example.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+//import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,15 +21,42 @@ import java.util.List;
  * JavaFX App
  */
 public class App extends Application {
+    
 
     private static Scene scene;
     private List<User> Users = new ArrayList<User>();
+    //private List<Project> projekter = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        HBox mainLay = new HBox(120);
+        mainLay.setPadding(new Insets(20));
+        mainLay.setAlignment(Pos.TOP_LEFT);
+
+        VBox VenstreBlok = new VBox(30);
+        VenstreBlok.setAlignment(Pos.TOP_LEFT);
+
+        Label infoLabel = new Label("Tryk på følgende knap for at lave et nyt projekt:");
+
+        Button ProjektKnap = new Button("Lav et NYT PROJEKT");
+        ProjektKnap.setPrefHeight(60);
+        ProjektKnap.setPrefWidth(200);
+
+        VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
+
+        VBox HøjreKnap = new VBox(30);
+        HøjreKnap.setAlignment(Pos.TOP_LEFT);
+
+        Label ProjektLabel = new Label("Projects");
+        HøjreKnap.getChildren().add(ProjektLabel);
+
+        mainLay.getChildren().addAll(VenstreBlok, HøjreKnap);
+
+        Scene scene = new Scene(mainLay, 800, 480);
         stage.setScene(scene);
         stage.show();
     }
+
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
