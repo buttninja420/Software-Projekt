@@ -2,15 +2,15 @@ package hellocucumber;
 
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
-import io.cucumber.java.en_scouse.An;
+//import io.cucumber.java.en_scouse.An;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StepDefinitions {
-
+public class StepDefinitionsApp {
+    Exception thrownException;
     private App app;
     @Given("An app")
     public void anApp() {
@@ -23,13 +23,13 @@ public class StepDefinitions {
     public void aNewUserRegistersAndEntersAUID(String uid) {
         // Simulate registration logic here
         app.registerUser(uid);
-        System.out.println("user with UID: " + uid + "added!");
+        //System.out.println("user with UID: " + uid + "added!");
     }
 
     @Then("A user with the name {string} exists")
     public void aUserWithTheNameExists(String expectedUid) {
         // Validate that the user with the given UID exists
-        List<String> userUIDS = app.getUsers();
+        List<String> userUIDS = app.getUserUIDs();
         Boolean foundUID = false;
         if (!(userUIDS.isEmpty())){
             for (String uid : userUIDS){
@@ -48,6 +48,16 @@ public class StepDefinitions {
     public void anAppAndANewUserWithTheUID(String uid){
         app = new App();
         app.registerUser(uid);
+    }
+    @When("A new user registers and enters an existing UID {string}")
+    public void aNewUserRegistersAndEntersAnExistingUID(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("registration fails")
+    public void registrationFails() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
     @Then("An error: {string} is thrown")

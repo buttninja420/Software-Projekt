@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Activity {
-    private int activityID;
-    private int budgetedTime;
-    private int recordedtime;
+    protected int activityID;
+    protected int budgetedTime;
+    protected int recordedtime;
     public int addTime;
-    private List<User> assignedUsers = new ArrayList<User>();
+    protected List<User> assignedUsers = new ArrayList<User>();
     public Date startDate;
     public Date endDate;
     public Boolean fixed;
@@ -36,7 +36,7 @@ public class Activity {
     public void setBudgetedTime(int budgetedTime) {
         this.budgetedTime = budgetedTime;
     }
-    public int getRecordedtime() {
+    public int getRecordedTime() {
         return recordedtime;
     }
     public void setRecordedtime(int recordedtime) {
@@ -56,7 +56,7 @@ public class Activity {
     public List<User> getAssignedUser() {
         return assignedUsers;
     }
-    public void assignedUser(User user) {
+    public void assignUser(User user) {
         this.assignedUsers.add(user);
         user.assignActivityDONOTUSE(this);
     }
