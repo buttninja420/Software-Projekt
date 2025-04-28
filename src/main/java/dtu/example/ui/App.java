@@ -25,6 +25,8 @@ public class App extends Application {
 
     private static Scene scene;
     protected List<User> Users = new ArrayList<User>();
+    private List<Project> projekter = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws IOException {
         HBox mainLay = new HBox(120);
