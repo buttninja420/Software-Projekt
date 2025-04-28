@@ -21,7 +21,7 @@ import java.util.List;
  * JavaFX App
  */
 public class App extends Application {
-    
+
 
     private static Scene scene;
     protected List<User> Users = new ArrayList<User>();
@@ -111,6 +111,7 @@ public class App extends Application {
         }
         return null;
     }
+<<<<<<< HEAD
 
     //nyt vinude der åbnes når man trykker på knappen med "nyt projekt"
     private void NytVindue() {
@@ -129,3 +130,22 @@ public class App extends Application {
     }
 
 }
+=======
+    public Project getProject(String projectName){
+        for (Project project : projekter){
+            return project;
+        }
+        return null;
+    }
+    public void addProject(String projectName){
+        projekter.add(new Project(projectName));
+    }
+
+    
+}
+
+
+
+
+
+>>>>>>> edae98d638d03323d9d1b4d5e08630befd4c7ee6
