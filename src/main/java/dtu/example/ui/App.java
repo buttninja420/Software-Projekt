@@ -112,6 +112,16 @@ public class App extends Application {
         return null;
     }
 
+    public Project getProject(String projectName){
+        for (Project project : projekter){
+            return project;
+        }
+        return null;
+    }
+    public void addProject(String projectName){
+        projekter.add(new Project(projectName));
+    }
+
     //nyt vinude der åbnes når man trykker på knappen med "nyt projekt"
     private void NytVindue() {
         Stage nytVindue = new Stage();
