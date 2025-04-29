@@ -24,10 +24,10 @@ public class Activity {
     public void setBudgettedTime(int BudgettedTime) {
         this.BudgettedTime = BudgettedTime;
     }
-    public int getrecordedTime() {
+    public int getRecordedTime() {
         return recordedTime;
     }
-    public void setrecordedTime(int recordedTime) {
+    public void setRecordedTime(int recordedTime) {
         this.recordedTime = recordedTime;
     }
     public void addTime(int addTime) {
@@ -41,7 +41,7 @@ public class Activity {
         }
 
     }
-    public List<User> getAssignedUser() {
+    public List<User> getAssignedUsers() {
         return assignedUsers;
     }
     public void assignUser(User user) {

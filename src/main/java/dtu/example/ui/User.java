@@ -6,7 +6,7 @@ import java.util.List;
 public class User {
     private String UID;
     private List<Activity> Activities = new ArrayList<Activity>();
-    private static int maxActivities = 20; 
+    public static int maxActivities = 20; 
 
     public User(String UID){
         this.UID = UID;

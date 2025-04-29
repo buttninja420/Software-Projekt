@@ -1,4 +1,9 @@
-Feature: Project.Feature
+Feature: Project things
+
+Scenario: Create a new project
+    Given a project
+    When a project with name "Maintenance" is created
+    Then the project with name "Maintenance" exists
 
 Scenario: Register a new activity
     Given a Project with name "Maintenance"

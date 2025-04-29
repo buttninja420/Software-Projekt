@@ -12,6 +12,7 @@ public class Project {
     private int maxTime;
     private static int idCounter;
     private String name ="";
+    
     public Project(String Name) {
         this.projectNumber = idCounter++;
         this.name = Name;
@@ -27,6 +28,9 @@ public class Project {
         }       
         }
     
+    public User getProjectleader(){
+        return this.leader;
+    }
 
     public List<Activity> getActivities() {
         return this.activities;
@@ -54,7 +58,7 @@ public class Project {
             report.append("Start week: ").append(activity.getStartDate())
                   .append(" | End week: ").append(activity.getEndDate()).append("\n");
             report.append("Time status - Budgeted: ")
-                  .append(activity.getBudgetedTime())
+                  .append(activity.getBudgettedTime())
                   .append(", Assigned: ").append(activity.getRecordedTime()).append("\n");
         }
 
