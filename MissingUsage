@@ -1,0 +1,18 @@
+Project:
+- getAssignedTime
+- generateReport
+
+Activity:
+- getBudgettedTime
+- getRecordedTime
+- getFixed
+- setFixed
+- getMaxUsers
+- setMaxUsers
+- editBudgettedTime
+- editDate
+
+App:
+- setRoot
+- getProject
+- nytVindue
