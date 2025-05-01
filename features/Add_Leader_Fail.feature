@@ -1,4 +1,4 @@
-Feature: Project Leader //Frank
+Feature: Project Leader #Frank
 
   Scenario: Add project "projectTest" leader to project with already existing project leader
     Given a Project "testproject" with a project leader with UID "ELLE"

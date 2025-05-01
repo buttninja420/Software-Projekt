@@ -13,9 +13,9 @@ public class StepDefinitionsActivity {
     App app = new App();
     protected Activity activity1 = null;
     protected User user1 = null;
-    @Given("an activity with a project leader")
-    public void anActivityWithAProjectLeader() {
-        activity1 = new Activity();
+    @Given("an activity with name {string} and a project leader")
+    public void anActivityWithAProjectLeader(String activityName) {
+        activity1.setTitle(activityName);
 
     }
     @When("an employee with UID {string} requests to join an activity")
@@ -28,8 +28,8 @@ public class StepDefinitionsActivity {
         assertEquals(app.getUsers(),activity1.getAssignedUsers());
     }
 
-    @Given("an activity with a project leader and free timeslots")
-    public void an_activity_with_a_project_leader_and_free_timeslots() {
+    @Given("an activity with name {string} and a project leader and free timeslots")
+    public void an_activity_with_a_project_leader_and_free_timeslots(String activityName) {
         activity1 = new Activity();
     }
 
@@ -45,7 +45,7 @@ public class StepDefinitionsActivity {
     }
 
     @Given("an activity with name {string} and start date {string} and end date {string}")
-    public void an_activity_with_name_and_start_date_and_end_date(String activity, String startDate, String endDate) {
+    public void an_activity_with_name_and_start_date_and_end_date(String activityName, String startDate, String endDate) {
         activity1 = new Activity();
         activity1.getTitle();
         activity1.getStartDate();
@@ -65,7 +65,7 @@ public class StepDefinitionsActivity {
     }
 
     @Given("an activity with name {string}")
-    public void an_activity_with_name() {
+    public void an_activity_with_name(String activityName) {
         activity1 = new Activity();
     }
 
@@ -87,7 +87,7 @@ public class StepDefinitionsActivity {
     }
 
     @Given("an activity with name {string} and an employee with UID {string}")
-    public void an_activity_with_name_and_an_employee_with_UID(String activity, String employee) {
+    public void an_activity_with_name_and_an_employee_with_UID(String activityName, String employee) {
         activity1 = new Activity();
         app.registerUser(employee);
         activity1.assignUser(app.getUserWithUID(employee));
@@ -105,7 +105,7 @@ public class StepDefinitionsActivity {
     }
 
     @Given("an activity with name {string} with {int} hours registered")
-    public void an_activity_with_name_with_hours_registered(String activity, int registeredTime) {
+    public void an_activity_with_name_with_hours_registered(String activityName, int registeredTime) {
         activity1 = new Activity();
         activity1.setRecordedTime(registeredTime);
     }
@@ -119,7 +119,5 @@ public class StepDefinitionsActivity {
     public void the_activity_with_name_now_has_hours_of_registered_time(String activity, int Time) {
         assertEquals(Time, activity1.getRecordedTime());
     }
-
-    
 
 }

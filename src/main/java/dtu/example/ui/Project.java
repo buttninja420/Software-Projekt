@@ -12,6 +12,7 @@ public class Project {
     private int maxTime;
     private static int idCounter;
     private String name ="";
+    
     public Project(String Name) {
         this.projectNumber = idCounter++;
         this.name = Name;
