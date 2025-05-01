@@ -11,14 +11,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsProject {
     Exception thrownException;
-    private App app;
-    private Project tmProject;
-    @Given("An app")
-    public void anApp() {
-        // Initialize app and user logic here
-         app = new App();
-         // Store UID to use later in the test
+    App app = new App();
+    Project tmProject;
+    //private Project tmProject;
+    
+    @Given("a project")
+    public void a_project(String projectName) {
+        tmProject = new Project(projectName);
     }
+
+    @When("a project with name {string} is created")
+    public void a_project_with_name_is_created(String projectName) {
+        app.addProject(projectName);
+        //System.out.println("project with name: " + projectName + "added!");
+    }
+
+    @Then("the project with name {string} exists")
+    public void the_project_with_name_exists(String projectName) {
+        assertEquals(projectName, tmProject.getName());
+    }
+    
+
     @Given("a Project {string} with a project leader with UID {string}")
     public void aProjectWithAProjectLeaderWithUID(String projectName, String UID) {
         // app.addProject(projectName);
