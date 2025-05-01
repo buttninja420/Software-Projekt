@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsActivity {
     App app = new App();
-    protected Activity activity1 = null;
+    Activity activity1 = new Activity();
     protected User user1 = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
@@ -53,7 +53,7 @@ public class StepDefinitionsActivity {
     }
 
     @When("the project leader with UID {string} sets the dates to {string} and {string}")
-    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, Date newStartDate, Date newEndDate) {
+    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, String newStartDate, String newEndDate) {
         activity1.setStartDate(newStartDate);
         activity1.setEndDate(newEndDate);
     }
@@ -104,14 +104,15 @@ public class StepDefinitionsActivity {
         assertNotEquals(app.getUsers(),activity1.getAssignedUsers());
     }
 
-    @Given("an activity with name {string} with {int} hours registered")
-    public void an_activity_with_name_with_hours_registered(String activityName, int registeredTime) {
+    @Given("an activity with name {string} with {int} hours budgetted and {int} hours registered")
+    public void an_activity_with_name_with_hours_registered(String activityName, int budgettedTime, int registeredTime) {
         activity1 = new Activity();
+        activity1.setBudgettedTime(budgettedTime);
         activity1.setRecordedTime(registeredTime);
     }
 
     @When("an employee adds {int} hour to the registered work time")
-    public void an_employee_changes_the_registered_time_from_hours_to_hours(int registeredTime, int addedTime) {
+    public void an_employee_changes_the_registered_time_from_hours_to_hours(int addedTime) {
         activity1.addTime(addedTime);  
     }
 
@@ -119,5 +120,30 @@ public class StepDefinitionsActivity {
     public void the_activity_with_name_now_has_hours_of_registered_time(String activity, int Time) {
         assertEquals(Time, activity1.getRecordedTime());
     }
+
+    @Given("an activity with name {string} with {int} hours budgetted")
+    public void an_activity_with_name_with_hours_budgetted(String activityName, int budgettedHours) {
+        activity1 = new Activity();
+        activity1.setTitle(activityName);
+        activity1.setBudgettedTime(budgettedHours);
+    }
+
+    @When("the project leader checks the budgetted hours to be {int} hours")
+    public void the_project_leader_checks_the_budgetted_hours(int budgettedHours) {
+        budgettedHours = activity1.getBudgettedTime();
+    }
+
+    @And("the project leader checks the registered hours to be {int} hours")
+    public void the_project_leader_checks_the_registered_hours_to_be_hours(int registeredHours) {
+        activity1.setRecordedTime(registeredHours);
+    }
+
+    @Then("the project leader sees that the budgetted hours is {int} and that the registered hours is {int}")
+    public void the_project_leader_sees_that_the_budgetted_hours_is_and_that_the_registered_hours_is(int budgettedHours, int registeredHours) {
+        assertEquals(budgettedHours, activity1.getBudgettedTime());
+        assertEquals(registeredHours, activity1.getRecordedTime());
+    }
+
+    
 
 }

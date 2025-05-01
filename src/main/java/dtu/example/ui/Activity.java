@@ -9,8 +9,8 @@ public class Activity {
     protected int recordedTime;
     public int addTime;
     protected List<User> assignedUsers = new ArrayList<User>();
-    public Date startDate;
-    public Date endDate;
+    public String startDate;
+    public String endDate;
     public Boolean fixed;
     public int MaxUsers;
     public String Title;
@@ -48,16 +48,16 @@ public class Activity {
         this.assignedUsers.add(user);
         user.assignActivityDONOTUSE(this);
     }
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
     public Boolean getFixed() {
@@ -76,7 +76,7 @@ public class Activity {
         return Title;
     }
     public void setTitle(String title) {
-        Title = title;
+        this.Title = title;
     }
     
     public void editBudgettetTime(User newTime){ // ændrer budgettet time
