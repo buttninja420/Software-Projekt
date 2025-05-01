@@ -2,11 +2,7 @@ Project:
 - getAssignedTime
 - generateReport
 
-Activity:
-- getFixed
-- setFixed
-- editBudgettedTime
-- editDate
+
 
 App:
 - setRoot

@@ -22,3 +22,16 @@ Scenario: Register a user as project leader
     When an employee with UID "ELLE" is registered to the project takes the role as project leader
     Then the Project with name "Maintenance" has a project leader with the UID "ELLE"
 
+Scenario: Check total assignmed time across all activities
+    Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked
+    And activity with name "Hallway" with 3 hours worked
+    And activity with name "Bathroom" with 1 hour worked
+    When the project leader checks the total assigned time across all activities
+    Then the total assigned time is 6 hours
+
+Scenario: A project leader wants to generate a report
+    Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked with start Date "week 5 2023" and End date "week 7 2023"
+    And activity with name "Hallway" with 3 hours worked with start Date "week 5 2023" and End date "week 7 2023"
+    And activity with name "Bathroom" with 1 hour worked with start Date "week 5 2023" and End date "week 7 2023"
+    When the project leader generates a report for the project
+    Then the report contains the total assigned time of 6 hours and Start date "week 5 2023" and End date "week 7 2023"

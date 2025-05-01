@@ -51,16 +51,22 @@ public class Project {
     public String generateReport() {
         StringBuilder report = new StringBuilder();
         report.append("Status of activities:\n");
+        int totalTime = 0;
 
         for (Activity activity : activities) {
+            totalTime += activity.getRecordedTime();
             report.append("--------------\n");
             report.append(activity.getTitle()).append("\n");
-            report.append("Start week: ").append(activity.getStartDate())
-                  .append(" | End week: ").append(activity.getEndDate()).append("\n");
-            report.append("Time status - Budgeted: ")
+            report.append("Start date: ").append(activity.getStartDate())
+                  .append(" | End date: ").append(activity.getEndDate()).append("\n");
+            report.append("Time status - Budgetted: ")
                   .append(activity.getBudgettedTime())
                   .append(", Assigned: ").append(activity.getRecordedTime()).append("\n");
         }
+        report.append("--------------\n");
+        report.append("Total assigned time: ").append(totalTime).append(" hours");
+
+        System.out.println(report.toString());
 
         return report.toString();
     }

@@ -13,6 +13,8 @@ public class StepDefinitionsProject {
     Exception thrownException;
     App app = new App();
     Project tmProject;
+    int totalAssignedTime = 0;
+    String report;
     //private Project tmProject;
     
     @Given("an app that exist")
@@ -141,5 +143,87 @@ public class StepDefinitionsProject {
     public void the_Project_with_name_has_a_project_leader_with_the_UID(String projectName, String leaderUID) {
         // Write code here that turns the phrase above into concrete actions
         assertEquals(leaderUID, tmProject.getProjectleader().getUID());
+    }
+
+    @Given("a Project with name {string} and activity with name {string} with {int} hours worked")
+    public void a_Project_with_name_and_activity_with_name_with_hours_worked(String projectName, String acitivty1Name, int hoursWorked) {
+        tmProject = new Project(projectName);
+        Activity activity1 = new Activity();
+        tmProject.addActivity(activity1);
+        activity1.setTitle(acitivty1Name);
+        activity1.setRecordedTime(hoursWorked);
+    }
+
+    @And("activity with name {string} with {int} hour worked")
+    public void activity_with_name_with_hour_worked(String activity2Name, int hoursWorked) {
+        Activity activity2 = new Activity();
+        tmProject.addActivity(activity2);
+        activity2.setTitle(activity2Name);
+        activity2.setRecordedTime(hoursWorked);
+        
+    }
+
+    @And("activity with name {string} with {int} hours worked")
+    public void activity_with_name_with_hours_worked(String activity3Name, int hoursWorked) {
+        Activity activity3 = new Activity();
+        tmProject.addActivity(activity3);
+        activity3.setTitle(activity3Name);
+        activity3.setRecordedTime(hoursWorked);
+    }
+
+    @When("the project leader checks the total assigned time across all activities")
+    public void the_project_leader_checks_the_total_assigned_time_across_all_activities() {
+        totalAssignedTime = tmProject.getAssignedTime();
+
+    }
+
+
+    @Then("the total assigned time is {int} hours")
+    public void the_total_assigned_time_is_hours(int totalHours) {
+        assertEquals(totalHours, totalAssignedTime);
+    }
+
+    @Given("a Project with name {string} and activity with name {string} with {int} hours worked with start Date {string} and End date {string}")
+    public void a_Project_with_name_and_activity_with_name_with_hours_worked_with_start_Date_and_End_date(String projectName, String activityName, int hoursWorked, String startDate, String endDate) {
+        tmProject = new Project(projectName);
+        Activity activity1 = new Activity();
+        tmProject.addActivity(activity1);
+        activity1.setTitle(activityName);
+        activity1.setRecordedTime(hoursWorked);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
+    }
+
+    @And("activity with name {string} with {int} hours worked with start Date {string} and End date {string}")
+    public void activity_with_name_with_hours_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, String startDate, String endDate) {
+        Activity activity2 = new Activity();
+        tmProject.addActivity(activity2);
+        activity2.setTitle(activityName);
+        activity2.setRecordedTime(hoursWorked);
+        activity2.setStartDate(startDate);
+        activity2.setEndDate(endDate);
+    }
+
+    @And("activity with name {string} with {int} hour worked with start Date {string} and End date {string}")
+    public void activity_with_name_with_hour_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, String startDate, String endDate) {
+        Activity activity3 = new Activity();
+        tmProject.addActivity(activity3);
+        activity3.setTitle(activityName);
+        activity3.setRecordedTime(hoursWorked);
+        activity3.setStartDate(startDate);
+        activity3.setEndDate(endDate);
+    }
+
+    @When("the project leader generates a report for the project")
+    public void the_project_leader_generates_a_report_for_the_project() {
+        report = tmProject.generateReport();
+    }
+
+    @Then("the report contains the total assigned time of {int} hours and Start date {string} and End date {string}")
+    public void the_report_contains_the_total_assigned_time_of_hours_and_Start_date_and_End_date(int totalHours, String startDate, String endDate) {
+        assertTrue(report.contains("Status of activities:"));
+        assertTrue(report.contains("Total assigned time: " + totalHours + " hours"));
+        assertTrue(report.contains("Start date: " + startDate));
+        assertTrue(report.contains("End date: " + endDate)); 
     }
 }
