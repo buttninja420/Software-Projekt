@@ -3,12 +3,8 @@ Project:
 - generateReport
 
 Activity:
-- getBudgettedTime
-- getRecordedTime
 - getFixed
 - setFixed
-- getMaxUsers
-- setMaxUsers
 - editBudgettedTime
 - editDate
 

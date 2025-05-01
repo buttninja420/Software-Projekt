@@ -95,8 +95,7 @@ public class StepDefinitionsActivity {
 
     @When("the project leader with UID {string} removes the employee with UID {string} from the activity")
     public void the_project_leader_with_UID_removes_the_employee_with_UID_from_the_activity(String projectLeader, String employee) {
-        activity1.getAssignedUsers().remove(app.getUserWithUID(employee));
-        app.getUserWithUID(employee).getActivities().remove(activity1);
+        activity1.unassignUser(app.getUserWithUID(employee));
     }
 
     @Then("the employee with UID {string} is removed from the activity")
@@ -144,6 +143,52 @@ public class StepDefinitionsActivity {
         assertEquals(registeredHours, activity1.getRecordedTime());
     }
 
-    
+    @When("the project leader sets the max users to {int}")
+    public void the_project_leader_sets_the_max_users_to(int maxUser) {
+        activity1.setMaxUsers(maxUser);
+    }
+
+    @Then("the activity with name {string} now has max users set to {int}")
+    public void the_activity_with_name_now_has_max_users_set_to(String activityName, int maxUsers) {
+        assertEquals(activity1.getMaxUsers(), maxUsers);
+    }
+
+    @When("the project leader want to add {int} hours to {int} hours budgetted time and changes the start date to {string} and end date to {string}")
+    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, String startDate, String endDate) {
+        activity1.setBudgettedTime(budgettedTime);
+        activity1.editBudgettetTime(addTime, budgettedTime);
+        activity1.editDate(startDate, endDate);
+        int newTime = budgettedTime + addTime;
+        assertEquals(activity1.getBudgettedTime(), newTime);
+    }
+
+
+    @Then("the activity with name {string} now has budgetted time set to {int} hours and start date {string} and end date {string}")
+    public void the_activity_with_name_now_has_budgetted_time_set_to_hours_and_start_date_and_end_date(String activityName, int budgettedTime, String startDate, String endDate) {
+        assertEquals(activity1.getBudgettedTime(), budgettedTime);
+        assertEquals(activity1.getStartDate(), startDate);
+        assertEquals(activity1.getEndDate(), endDate);
+    }
+
+    @When("the project leader sets activity to be fixed")
+    public void the_project_leader_sets_activity_to_be_fixed() {
+        activity1.setFixed(true);
+    }
+
+    @Then("the activity with name {string} is now fixed")
+    public void the_activity_with_name_is_now_fixed(String s) {
+        assertTrue(activity1.getFixed());
+    }
+
+    @When("an employee adds {int} hours to the registered work time")
+    public void an_employee_adds_hours_to_the_registered_work_time(int addHours) {
+        activity1.addTime(addHours);
+    }
+
+    @Then("the activity with name {string} returns an error message {string}")
+    public void the_activity_with_name_returns_an_error_message(String activityName, String errorMessage) {
+        assertEquals("Error: The added time exceeds the Budgetted time for the activity.", errorMessage);
+        
+    }
 
 }

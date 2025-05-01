@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Activity {
     protected int activityID;
-    protected int BudgettedTime;
-    protected int recordedTime;
+    public int BudgettedTime;
+    public int recordedTime;
     public int addTime;
     protected List<User> assignedUsers = new ArrayList<User>();
     public String startDate;
@@ -33,7 +33,6 @@ public class Activity {
     public void addTime(int addTime) {
 
         // Check if the added time exceeds the Budgetted time
-
         if (BudgettedTime >= recordedTime + addTime) {
             recordedTime = recordedTime + addTime;
         } else {
@@ -47,6 +46,10 @@ public class Activity {
     public void assignUser(User user) {
         this.assignedUsers.add(user);
         user.assignActivityDONOTUSE(this);
+    }
+    public void unassignUser(User user) {
+        this.assignedUsers.remove(user);
+        user.removeActivityDONOTUSE(this);
     }
     public String getStartDate() {
         return startDate;
@@ -77,10 +80,12 @@ public class Activity {
     }
     public void setTitle(String title) {
         this.Title = title;
+    }    
+    public void editBudgettetTime(int newTime, int budgettedTime){ // ændrer budgettet time
+        BudgettedTime += newTime;
     }
-    
-    public void editBudgettetTime(User newTime){ // ændrer budgettet time
-
+    public void editDate(String newStartDate, String newEndDate){
+        startDate = newStartDate;
+        endDate = newEndDate;
     }
-    public void editDate(Date newEndDate, Date newStartDate){}
 }
