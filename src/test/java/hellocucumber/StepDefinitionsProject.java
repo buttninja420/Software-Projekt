@@ -15,14 +15,15 @@ public class StepDefinitionsProject {
     Project tmProject;
     //private Project tmProject;
     
-    @Given("a project")
-    public void a_project(String projectName) {
-        tmProject = new Project(projectName);
+    @Given("an app that exist")
+    public void an_app_that_exist() {
+        app = new App();
     }
-
+    
     @When("a project with name {string} is created")
     public void a_project_with_name_is_created(String projectName) {
         app.addProject(projectName);
+        tmProject = app.getProject(projectName);
         //System.out.println("project with name: " + projectName + "added!");
     }
 
@@ -34,22 +35,15 @@ public class StepDefinitionsProject {
 
     @Given("a Project {string} with a project leader with UID {string}")
     public void aProjectWithAProjectLeaderWithUID(String projectName, String UID) {
-        // app.addProject(projectName);
-        // tmProject =  app.getProject(projectName);
-        // app.registerUser(UID);
-        // tmProject.setProjectLeader(app.getUserWithUID(UID));
-        // throw new io.cucumber.java.PendingException();
-        tmProject = new Project(projectName);
         app.addProject(projectName);
+        tmProject =  app.getProject(projectName);
         app.registerUser(UID);
         tmProject.setProjectLeader(app.getUserWithUID(UID));
-        throw new io.cucumber.java.PendingException();
     }
 
     @When("an employee with UID {string} tries to become project leader")
     public void anEmployeeWithUIDTriesToBecomeProjectLeader(String name){
         tmProject.setProjectLeader(app.getUserWithUID(name));
-        throw new io.cucumber.java.PendingException();
     }
 
     @Then("the employee with UID {string} is not project leader")
@@ -59,7 +53,8 @@ public class StepDefinitionsProject {
 
     @Given("a Project with name {string}")
     public void a_Project_with_name(String projectName) {
-        projectName = tmProject.getName();
+        app.addProject(projectName);
+        tmProject = app.getProject(projectName);
     }
 
     @When("an employee who is not the project leader adds new activity with name {string}")
@@ -124,13 +119,11 @@ public class StepDefinitionsProject {
         activity1.setTitle(activityName);
         activity1.setRecordedTime(workHours);
         activity1.setBudgettedTime(availableHours);
-
-        // Write code here that turns the phrase above into concrete actions
     }
 
     @Given("a Project with name {string} and activity named {string} without a project leader")
     public void a_Project_with_name_and_activity_named_without_a_project_leader(String projectName, String activityName) {
-        // Write code here that turns the phrase above into concrete actions
+        app = new App();
         tmProject = new Project(projectName);
         Activity activity1 = new Activity();
         tmProject.addActivity(activity1);
@@ -149,5 +142,4 @@ public class StepDefinitionsProject {
         // Write code here that turns the phrase above into concrete actions
         assertEquals(leaderUID, tmProject.getProjectleader().getUID());
     }
-
 }

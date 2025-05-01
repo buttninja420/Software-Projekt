@@ -1,9 +1,9 @@
 Feature: Project things
 
 Scenario: Create a new project
-    Given a project
-    When a project with name "Maintenance" is created
-    Then the project with name "Maintenance" exists
+    Given an app that exist
+    When a project with name "name1" is created
+    Then the project with name "name1" exists
 
 Scenario: Register a new activity
     Given a Project with name "Maintenance"
