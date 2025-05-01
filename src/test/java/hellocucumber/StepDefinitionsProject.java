@@ -12,7 +12,7 @@ public class StepDefinitionsProject {
     Exception thrownException;
     private App app;
     private Project tmProject;
-    @Given("An app")
+    @Given("an app for project management")
     public void anApp() {
         // Initialize app and user logic here
          app = new App();
