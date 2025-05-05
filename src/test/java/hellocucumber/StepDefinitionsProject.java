@@ -110,7 +110,7 @@ public class StepDefinitionsProject {
         Activity activity1 = new Activity();
         tmProject.addActivity(activity1);
         activity1.setTitle(activityName);
-        activity1.setBudgettedTime(budgettedHours);
+        activity1.setBudgetedTime(budgettedHours);
         //System.out.println("activity with name: " + s + "added!");
     }
 
@@ -120,7 +120,7 @@ public class StepDefinitionsProject {
         tmProject.addActivity(activity1);
         activity1.setTitle(activityName);
         activity1.setRecordedTime(workHours);
-        activity1.setBudgettedTime(availableHours);
+        activity1.setBudgetedTime(availableHours);
     }
 
     @Given("a Project with name {string} and activity named {string} without a project leader")

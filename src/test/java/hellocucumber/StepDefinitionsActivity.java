@@ -53,7 +53,7 @@ public class StepDefinitionsActivity {
     }
 
     @When("the project leader with UID {string} sets the dates to {string} and {string}")
-    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, String newStartDate, String newEndDate) {
+    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, Date newStartDate, Date newEndDate) {
         activity1.setStartDate(newStartDate);
         activity1.setEndDate(newEndDate);
     }
@@ -106,7 +106,7 @@ public class StepDefinitionsActivity {
     @Given("an activity with name {string} with {int} hours budgetted and {int} hours registered")
     public void an_activity_with_name_with_hours_registered(String activityName, int budgettedTime, int registeredTime) {
         activity1 = new Activity();
-        activity1.setBudgettedTime(budgettedTime);
+        activity1.setBudgetedTime(budgettedTime);
         activity1.setRecordedTime(registeredTime);
     }
 
@@ -124,7 +124,7 @@ public class StepDefinitionsActivity {
     public void an_activity_with_name_with_hours_budgetted(String activityName, int budgettedHours) {
         activity1 = new Activity();
         activity1.setTitle(activityName);
-        activity1.setBudgettedTime(budgettedHours);
+        activity1.setBudgetedTime(budgettedHours);
     }
 
     @When("the project leader checks the budgetted hours to be {int} hours")
@@ -154,11 +154,12 @@ public class StepDefinitionsActivity {
     }
 
     @When("the project leader want to add {int} hours to {int} hours budgetted time and changes the start date to {string} and end date to {string}")
-    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, String startDate, String endDate) {
-        activity1.setBudgettedTime(budgettedTime);
-        activity1.editBudgettetTime(addTime, budgettedTime);
-        activity1.editDate(startDate, endDate);
+    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, Date startDate, Date endDate) {
+        activity1.setBudgetedTime(budgettedTime); 
         int newTime = budgettedTime + addTime;
+        activity1.editBudgetedTime(newTime);
+        activity1.editDate(startDate, endDate);
+
         assertEquals(activity1.getBudgettedTime(), newTime);
     }
 
