@@ -1,7 +1,10 @@
 package hellocucumber;
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
-import java.util.Date;
+
+import java.time.LocalDate;
+
+
 //import io.cucumber.java.en_scouse.An;
 
 //import java.util.ArrayList;
@@ -44,24 +47,29 @@ public class StepDefinitionsActivity {
         assertEquals(app.getUsers(),activity1.getAssignedUsers());
     }
 
-    @Given("an activity with name {string} and start date {string} and end date {string}")
-    public void an_activity_with_name_and_start_date_and_end_date(String activityName, String startDate, String endDate) {
+    @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int}")
+    public void an_activity_with_name_and_start_date_and_end_date(String activityName, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
         activity1 = new Activity();
         activity1.getTitle();
+
+        activity1.setStartDate(LocalDate.of(StartYear, StartMonth, StartDay));        
+        activity1.setEndDate(LocalDate.of(EndYear, EndMonth, EndDay));
+
         activity1.getStartDate();
         activity1.getEndDate();
     }
 
-    @When("the project leader with UID {string} sets the dates to {string} and {string}")
-    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, Date newStartDate, Date newEndDate) {
-        activity1.setStartDate(newStartDate);
-        activity1.setEndDate(newEndDate);
+    @When("the project leader with UID {string} sets the dates to {int} {int} {int} and {int} {int} {int}")
+    public void the_project_leader_with_UID_sets_the_dates_to_and(String projectLeader, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
+        activity1.setStartDate(LocalDate.of(StartYear, StartMonth, StartDay));        
+        activity1.setEndDate(LocalDate.of(EndYear, EndMonth, EndDay));
     }
 
-    @Then("the activity with name {string} now has start date {string} and end date {string}")
-    public void the_activity_with_name_now_has_start_date_and_end_date(String activity, String newStartDate, String newEndDate) {
-        assertEquals(newStartDate, activity1.getStartDate());
-        assertEquals(newEndDate, activity1.getEndDate());
+
+    @Then("the activity with name {string} now has start date {int} {int} {int} and end date {int} {int} {int}")
+    public void the_activity_with_name_now_has_start_date_and_end_date(String activity, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
+        assertEquals(LocalDate.of(StartYear, StartMonth, StartDay), activity1.getStartDate());
+        assertEquals(LocalDate.of(EndYear, EndMonth, EndDay), activity1.getEndDate());
     }
 
     @Given("an activity with name {string}")
@@ -153,22 +161,22 @@ public class StepDefinitionsActivity {
         assertEquals(activity1.getMaxUsers(), maxUsers);
     }
 
-    @When("the project leader want to add {int} hours to {int} hours budgetted time and changes the start date to {string} and end date to {string}")
-    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, Date startDate, Date endDate) {
+    @When("the project leader want to add {int} hours to {int} hours budgetted time and changes the start date to {int} {int} {int} and end date to {int} {int} {int}")
+    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
         activity1.setBudgetedTime(budgettedTime); 
         int newTime = budgettedTime + addTime;
         activity1.editBudgetedTime(newTime);
-        activity1.editDate(startDate, endDate);
+        activity1.editDate(LocalDate.of(StartYear, StartMonth, StartDay), LocalDate.of(EndYear, EndMonth, EndDay));
 
         assertEquals(activity1.getBudgettedTime(), newTime);
     }
 
 
-    @Then("the activity with name {string} now has budgetted time set to {int} hours and start date {string} and end date {string}")
-    public void the_activity_with_name_now_has_budgetted_time_set_to_hours_and_start_date_and_end_date(String activityName, int budgettedTime, String startDate, String endDate) {
+    @Then("the activity with name {string} now has budgetted time set to {int} hours and start date {int} {int} {int} and end date {int} {int} {int}")
+    public void the_activity_with_name_now_has_budgetted_time_set_to_hours_and_start_date_and_end_date(String activityName, int budgettedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
         assertEquals(activity1.getBudgettedTime(), budgettedTime);
-        assertEquals(activity1.getStartDate(), startDate);
-        assertEquals(activity1.getEndDate(), endDate);
+        assertEquals(activity1.getStartDate(), LocalDate.of(StartYear, StartMonth, StartDay));
+        assertEquals(activity1.getEndDate(), LocalDate.of(EndYear, EndMonth, EndDay));
     }
 
     @When("the project leader sets activity to be fixed")

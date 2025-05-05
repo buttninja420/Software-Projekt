@@ -3,7 +3,7 @@ Feature: Activity Register #Jeppe
 Scenario: Register to an activity as employee
   Given an activity with name "cook" and a project leader
   When an employee with UID "XX12" requests to join an activity
-  Then the employee with UID "xx12" is added to the activity
+  Then the employee with UID "XX12" is added to the activity
 
 Scenario: Register an employee for an activity as a project leader
   Given an activity with name "cook" and a project leader and free timeslots
@@ -11,9 +11,9 @@ Scenario: Register an employee for an activity as a project leader
   Then the employee with UID "XX21" is added to the activity
 
 Scenario: Change activity date
-  Given an activity with name "Build bench" and start date "week 10 year 2022" and end date "week 13 year 2022"
-  When the project leader with UID "XX20" sets the dates to "week 11 year 2022" and "week 16 year 2022"
-  Then the activity with name "Build bench" now has start date "week 11 year 2022" and end date "week 16 year 2022"
+  Given an activity with name "Build bench" and start date 2022 1 5 and end date 2022 3 5
+  When the project leader with UID "XX20" sets the dates to 2022 2 5 and 2022 4 5
+  Then the activity with name "Build bench" now has start date 2022 2 5 and end date 2022 4 5
 
 Scenario: Add employee with 20 activites to a new activity
   Given an activity with name "Build bench"
@@ -48,8 +48,8 @@ Scenario: A project leader wants to set the max users for an activity
 
 Scenario: A project leader wants to edit budgetted time and change start date and end date
   Given an activity with name "Build bench" and a project leader
-  When the project leader want to add 5 hours to 20 hours budgetted time and changes the start date to "week 11 year 2022" and end date to "week 16 year 2022"
-  Then the activity with name "Build bench" now has budgetted time set to 25 hours and start date "week 11 year 2022" and end date "week 16 year 2022"
+  When the project leader want to add 5 hours to 20 hours budgetted time and changes the start date to 2022 5 5 and end date to 2022 7 15
+  Then the activity with name "Build bench" now has budgetted time set to 25 hours and start date 2022 5 5 and end date 2022 7 15
 
 Scenario: A project leader sets fixed activities
   Given an activity with name "Weekend" and a project leader
