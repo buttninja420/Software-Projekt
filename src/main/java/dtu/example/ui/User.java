@@ -42,6 +42,20 @@ public class User {
         } else {return false;}        
     }
 
+    
+    public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
+        int count = 0;
+        for (Activity activity : Activities) {
+            // Hvis aktiviteten overlapper med det angivne tidsrum
+            if (!(activity.getEndDate().isBefore(start) || activity.getStartDate().isAfter(end))) {
+                count++;
+            }
+        }
+        return count < 20;
+    }
+    
+    
+
     public List<Activity> getActivities(){
         return Activities;
     }
