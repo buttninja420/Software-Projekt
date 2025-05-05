@@ -31,7 +31,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Tilføj nogle eksempelprojekter
+
         projects.add(new Project("1234"));
         projects.add(new Project("2345"));
         projects.add(new Project("3456"));
@@ -172,7 +172,7 @@ public class App extends Application {
             projectListBox.add(noProject, 0,1);
         } else {
             int column = 0;
-            int row = 1; // start under overskriften
+            int row = 1; 
 
             for (Project project : projects) {
                 Project currentProject = project;
@@ -184,7 +184,7 @@ public class App extends Application {
                 projectListBox.add(button, column, row);
 
                 column++;
-                if (column > 1) { // maks 2 kolonner
+                if (column > 1) { 
                     column = 0;
                     row++;
                 }
@@ -222,22 +222,57 @@ public class App extends Application {
         layout.getChildren().add(projectLeaderBox);
 
 
-        project.addActivity(new Activity("bang your mom"));
-        project.addActivity(new Activity("bang your dad"));
-        project.addActivity(new Activity("bang your mom again"));
+        VBox.setMargin(projectLeaderBox, new Insets(0, 0, 25, 0)); 
+        
+        Label activityLabel = new Label("Activities of project " + project.getName());
+        Button addActivityButton = new Button("+add activity");
+        
+        addActivityButton.setOnAction(event -> {
+            Stage inputWindow = new Stage();
+            inputWindow.setTitle("Add new activity");
+        
+            VBox popupLayout = new VBox(10);
+            layout.setPadding(new Insets(10));
+            layout.setAlignment(Pos.CENTER);
+        
+            Label prompt = new Label("Enter activity name:");
+            TextField inputField = new TextField();
+            Button confirmButton = new Button("Create");
+        
+            confirmButton.setOnAction(e -> {
+                String title = inputField.getText().trim();
+                if (!title.isEmpty()) {
+                    project.addActivity(new Activity(title));
+                    inputWindow.close();
+                    projectEditorWindow.close();
+                    projectEditorWindow(project); 
+                }
+            });
+        
+            popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
+            Scene scene = new Scene(popupLayout, 250, 150);            
+            inputWindow.setScene(scene);
+            inputWindow.initOwner(addActivityButton.getScene().getWindow()); 
+            inputWindow.show();
+        });
+        
+        
+        HBox activityBox = new HBox(10); 
+        activityBox.setAlignment(Pos.CENTER_LEFT);
+        activityBox.getChildren().addAll(activityLabel, addActivityButton);
+        
+        layout.getChildren().add(activityBox);
+        VBox.setMargin(activityBox, new Insets(10, 0, 0, 0));      
 
-        Label activityLabel = new Label("Activities of project "+project.getName());
-        layout.getChildren().add(activityLabel);
+        
         for (Activity activity : project.getActivities()){
             Button button = new Button(activity.getTitle());
             button.setOnAction(event -> activityEditorWindow(activity));
             layout.getChildren().add(button);
         }
         //getActivities
-        //addActivity
 
-
-        Scene scene = new Scene(layout, 300, 200);
+        Scene scene = new Scene(layout, 350, 400);
         projectEditorWindow.setScene(scene);
         projectEditorWindow.show();
         
