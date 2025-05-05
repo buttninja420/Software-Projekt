@@ -62,9 +62,8 @@ public class StepDefinitionsProject {
 
     @When("an employee who is not the project leader adds new activity with name {string}")
     public void an_employee_who_is_not_the_project_leader_adds_new_activity_with_name(String activityName) {
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(activityName);
     }
 
     @Then("the Project has an activity named {string}")
@@ -80,46 +79,41 @@ public class StepDefinitionsProject {
     }
 
     @Given("a Project with name {string} and activity named {string}")
-    public void a_Project_with_name_and_activity_named(String ProjectName, String ActivityName) {
+    public void a_Project_with_name_and_activity_named(String ProjectName, String activityName) {
         // Write code here that turns the phrase above into concrete actions
         tmProject = new Project(ProjectName);
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(ActivityName);
     }
 
     @When("an employee with UID {string} registers time for the activity {string} with {int} hours")
-    public void an_employee_with_UID_registers_time_for_the_activity_with_hours(String UID, String ActivityName, int WorkHours) {
+    public void an_employee_with_UID_registers_time_for_the_activity_with_hours(String UID, String activityName, int WorkHours) {
         app.registerUser(UID);
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(ActivityName);
         activity1.setRecordedTime(WorkHours);
     }
 
     @And("activity {string} has {int} hours worked")
-    public void activity_has_hours_worked(String ActivityName, int RegisteredHours) {
-        Activity activity1 = new Activity();
+    public void activity_has_hours_worked(String activityName, int RegisteredHours) {
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(ActivityName);
         activity1.setRecordedTime(RegisteredHours);
 
     }
 
     @And("activity {string} has {int} available hours")
     public void activity_has_available_hours(String activityName, int budgettedHours) {
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(activityName);
         activity1.setBudgetedTime(budgettedHours);
         //System.out.println("activity with name: " + s + "added!");
     }
 
     @Then("activity {string} has {int} hours worked and {int} hours available")
     public void activity_has_hours_worked_and_hours_available(String activityName, int workHours, int availableHours) {
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(activityName);
         activity1.setRecordedTime(workHours);
         activity1.setBudgetedTime(availableHours);
     }
@@ -128,9 +122,8 @@ public class StepDefinitionsProject {
     public void a_Project_with_name_and_activity_named_without_a_project_leader(String projectName, String activityName) {
         app = new App();
         tmProject = new Project(projectName);
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(activityName);
     }
 
     @When("an employee with UID {string} is registered to the project takes the role as project leader")
@@ -147,28 +140,25 @@ public class StepDefinitionsProject {
     }
 
     @Given("a Project with name {string} and activity with name {string} with {int} hours worked")
-    public void a_Project_with_name_and_activity_with_name_with_hours_worked(String projectName, String acitivty1Name, int hoursWorked) {
+    public void a_Project_with_name_and_activity_with_name_with_hours_worked(String projectName, String activityName, int hoursWorked) {
         tmProject = new Project(projectName);
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(acitivty1Name);
         activity1.setRecordedTime(hoursWorked);
     }
 
     @And("activity with name {string} with {int} hour worked")
-    public void activity_with_name_with_hour_worked(String activity2Name, int hoursWorked) {
-        Activity activity2 = new Activity();
+    public void activity_with_name_with_hour_worked(String activityName, int hoursWorked) {
+        Activity activity2 = new Activity(activityName);
         tmProject.addActivity(activity2);
-        activity2.setTitle(activity2Name);
         activity2.setRecordedTime(hoursWorked);
         
     }
 
     @And("activity with name {string} with {int} hours worked")
-    public void activity_with_name_with_hours_worked(String activity3Name, int hoursWorked) {
-        Activity activity3 = new Activity();
+    public void activity_with_name_with_hours_worked(String activityName, int hoursWorked) {
+        Activity activity3 = new Activity(activityName);
         tmProject.addActivity(activity3);
-        activity3.setTitle(activity3Name);
         activity3.setRecordedTime(hoursWorked);
     }
 
@@ -187,9 +177,8 @@ public class StepDefinitionsProject {
     @Given("a Project with name {string} and activity with name {string} with {int} hours worked with start Date {int} {int} {int} and End date {int} {int} {int}")
     public void a_Project_with_name_and_activity_with_name_with_hours_worked_with_start_Date_and_End_date(String projectName, String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         tmProject = new Project(projectName);
-        Activity activity1 = new Activity();
+        Activity activity1 = new Activity(activityName);
         tmProject.addActivity(activity1);
-        activity1.setTitle(activityName);
         activity1.setRecordedTime(hoursWorked);
         activity1.setStartDate(LocalDate.of(startYear, startMonth, startDay));
         activity1.setEndDate(LocalDate.of(endYear, endMonth, endDay));
@@ -197,9 +186,8 @@ public class StepDefinitionsProject {
 
     @And("activity with name {string} with {int} hours worked with start Date {int} {int} {int} and End date {int} {int} {int}")
     public void activity_with_name_with_hours_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
-        Activity activity2 = new Activity();
+        Activity activity2 = new Activity(activityName);
         tmProject.addActivity(activity2);
-        activity2.setTitle(activityName);
         activity2.setRecordedTime(hoursWorked);
         activity2.setStartDate(LocalDate.of(startYear, startMonth, startDay));
         activity2.setEndDate(LocalDate.of(endYear, endMonth, endDay));
@@ -208,9 +196,8 @@ public class StepDefinitionsProject {
 
     @And("activity with name {string} with {int} hour worked with start Date {int} {int} {int} and End date {int} {int} {int}")
     public void activity_with_name_with_hour_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
-        Activity activity3 = new Activity();
+        Activity activity3 = new Activity(activityName);
         tmProject.addActivity(activity3);
-        activity3.setTitle(activityName);
         activity3.setRecordedTime(hoursWorked);
         activity3.setStartDate(LocalDate.of(startYear, startMonth, startDay));
         activity3.setEndDate(LocalDate.of(endYear, endMonth, endDay));

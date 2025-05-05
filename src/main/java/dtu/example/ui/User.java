@@ -31,7 +31,9 @@ public class User {
     public Boolean getAvailability(){
         if (Activities.size() < maxActivities){
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
     public List<Activity> getActivities(){
