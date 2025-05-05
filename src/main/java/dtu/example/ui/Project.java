@@ -8,7 +8,7 @@ public class Project {
     private List<User> assignedUsers = new ArrayList<>();
 
     private User leader = null;
-    private int projectNumber;
+    private int projectNumber = 0;
     private int maxTime;
     private static int idCounter;
     private String name ="";
@@ -66,7 +66,7 @@ public class Project {
         report.append("--------------\n");
         report.append("Total assigned time: ").append(totalTime).append(" hours");
 
-        System.out.println(report.toString());
+        //System.out.println(report.toString());
 
         return report.toString();
     }

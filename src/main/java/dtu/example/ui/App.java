@@ -26,10 +26,16 @@ public class App extends Application {
 
     private static Scene scene;
     protected List<User> Users = new ArrayList<User>();
-    private List<Project> projekter = new ArrayList<>();
+    protected List<Project> projects = new ArrayList<Project>();
+
+    
 
     @Override
     public void start(Stage stage) throws IOException {
+        projects.add(new Project("1234"));
+        projects.add(new Project("2345"));
+        projects.add(new Project("3456"));
+        projects.add(new Project("4567"));
         HBox mainLay = new HBox(120);
         mainLay.setPadding(new Insets(20));
         mainLay.setAlignment(Pos.TOP_LEFT);
@@ -39,25 +45,43 @@ public class App extends Application {
 
         Label infoLabel = new Label("Tryk på følgende knap for at lave et nyt projekt:"); //top venstre blok
 
-        Button ProjektKnap = new Button("Lav et NYT PROJEKT"); //knap til at lave nye projekter
+        Button ProjektKnap = new Button("Lav et NYT PROJEKT"); //knap til at lave nye projects
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
         VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
 
-        VBox HøjreKnap = new VBox(30); //højre blok til projekt-listerne NB: ikke helt done, der er kun en boks uden indhold
-        HøjreKnap.setAlignment(Pos.TOP_LEFT);
+        List<Button> OldProjectButtons = new ArrayList<Button>();
+
+        
+        VBox ProjectListBox = new VBox(30); //højre blok til projekt-listerne 
+        ProjectListBox.setAlignment(Pos.TOP_LEFT);
 
         Label ProjektLabel = new Label("Projects");
-        HøjreKnap.getChildren().add(ProjektLabel);
+        ProjectListBox.getChildren().add(ProjektLabel);
+
+        if (projects.isEmpty()){
+            Label NoProjectsLabel = new Label("You have zero working projects");
+            ProjectListBox.getChildren().add(NoProjectsLabel);
+        } else {
+            for (Project project : projects){
+                Button button = new Button(project.getName());
+                button.setPrefHeight(60);
+                button.setPrefWidth(200);
+                button.setOnAction(event -> {projectEditorWindow(project);});
+                OldProjectButtons.add(button);
+                ProjectListBox.getChildren().add(button);
+            }
+        }
 
         ProjektKnap.setOnAction(event -> {
-            NytVindue();
+            newProjectWindow();
         });
 
-        mainLay.getChildren().addAll(VenstreBlok, HøjreKnap);
+        mainLay.getChildren().addAll(VenstreBlok, ProjectListBox);
 
         Scene scene = new Scene(mainLay, 800, 480); //størrelse på vindue
+        
         stage.setScene(scene);
         stage.show();
     }
@@ -114,21 +138,19 @@ public class App extends Application {
     }
 
     public Project getProject(String projectName){
-        for (Project project : projekter){
+        for (Project project : projects){
             return project;
         }
         return null;
     }
     public void addProject(String projectName){
-        projekter.add(new Project(projectName));
+        projects.add(new Project(projectName));
     }
 
     //nyt vinude der åbnes når man trykker på knappen med "nyt projekt"
-    private void NytVindue() {
-        Stage nytVindue = new Stage();
-        nytVindue.setTitle("Nyt Projekt oprettelse");
-
-
+    private void newProjectWindow() {
+        Stage newProjectWindow = new Stage();
+        newProjectWindow.setTitle("Nyt Projekt oprettelse");
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10));
@@ -149,6 +171,31 @@ public class App extends Application {
         Scene scene = new Scene(layout, 500, 400);
         nytVindue.setScene(scene);
         nytVindue.show();
+        Scene scene = new Scene(layout, 300, 200);
+        newProjectWindow.setScene(scene);
+        newProjectWindow.show();
+    }
+
+    private void projectEditorWindow(Project project){
+        Stage projectEditorWindow = new Stage();
+        projectEditorWindow.setTitle("Edit Projekt "+project.getName());
+
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.CENTER);
+
+        Label Label1 = new Label("Report of project");
+        layout.getChildren().add(Label1);
+        layout.getChildren().add(new Label(project.generateReport()));
+
+        //setProjectLeader
+        //getActivities
+        //addActivity
+        //getAssignedTime
+
+        Scene scene = new Scene(layout, 300, 200);
+        projectEditorWindow.setScene(scene);
+        projectEditorWindow.show();
     }
 
 }
