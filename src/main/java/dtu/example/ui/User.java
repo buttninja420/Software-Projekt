@@ -42,6 +42,20 @@ public class User {
         } else {return false;}        
     }
 
+    
+    public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
+        int count = 0;
+        for (Activity activity : Activities) {
+            // Hvis aktiviteten overlapper med det angivne tidsrum
+            if (!(activity.getEndDate().isBefore(start) || activity.getStartDate().isAfter(end))) {
+                count++;
+            }
+        }
+        return count < 20;
+    }
+    
+    
+
     public List<Activity> getActivities(){
         return Activities;
     }
@@ -67,10 +81,9 @@ public class User {
     
     //         LocalDate date = LocalDate.of(2025, 5, 5);
     public void registerTime(int timeRegistered, LocalDate date){
+        makeSureDateExists(date);
         int prevTimeWorked = workHistory.get(date);
         int newtime = prevTimeWorked + timeRegistered;
-
-        makeSureDateExists(date);
         workHistory.put(date,newtime);
     }
 
@@ -92,5 +105,11 @@ public class User {
             workHistory.put(date,0);
         }
 
+    }
+
+    public int getHoursToday() {
+        LocalDate today = LocalDate.now();
+        makeSureDateExists(today);
+        return workHistory.get(today);
     }
 }

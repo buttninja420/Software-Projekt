@@ -205,8 +205,58 @@ public class App extends Application {
         layout.getChildren().add(label1);
         layout.getChildren().add(new Label(project.generateReport()));
 
+        String pl = "No current project leader";
+        try {
+            pl = project.getProjectleader().getUID();
+        } catch (java.lang.NullPointerException e1){}
+
+        HBox projectLeaderBox = new HBox();
+        
+        Label projectLeaderLabel = new Label("Project leader:");
+        projectLeaderLabel.setPrefWidth(120);
+        TextField projectLeaderTF = new TextField(pl);
+        projectLeaderTF.setOnKeyTyped(event -> project.setProjectLeader(this.getUserWithUID(projectLeaderTF.getText())));
+        
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel,projectLeaderTF);
+        projectLeaderBox.autosize();
+        layout.getChildren().add(projectLeaderBox);
+
+
+        project.addActivity(new Activity("bang your mom"));
+        project.addActivity(new Activity("bang your dad"));
+        project.addActivity(new Activity("bang your mom again"));
+
+        Label activityLabel = new Label("Activities of project "+project.getName());
+        layout.getChildren().add(activityLabel);
+        for (Activity activity : project.getActivities()){
+            Button button = new Button(activity.getTitle());
+            button.setOnAction(event -> activityEditorWindow(activity));
+            layout.getChildren().add(button);
+        }
+        //getActivities
+        //addActivity
+
+
         Scene scene = new Scene(layout, 300, 200);
         projectEditorWindow.setScene(scene);
         projectEditorWindow.show();
+        
+    }
+
+    public void activityEditorWindow(Activity activity){
+        Stage activityEditorWindow = new Stage();
+        activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
+
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.CENTER);
+
+        //getBudgetedTime
+        //getRecordedTime
+        //
+
+        Scene scene = new Scene(layout, 300, 200);
+        activityEditorWindow.setScene(scene);
+        activityEditorWindow.show();
     }
 }

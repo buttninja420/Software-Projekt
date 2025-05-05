@@ -29,7 +29,7 @@ public class StepDefinitionsActivity {
     }
     @Then("the employee with UID {string} is added to the activity")
     public void theEmployeeWithUIDIsAddedToTheActivity(String string) {
-        assertEquals(app.getUsers(),activity1.getAssignedUsers());
+        assertTrue(activity1.getAssignedUsers().contains(app.getUserWithUID(string)));
     }
 
     @Given("an activity with name {string} and a project leader and free timeslots")
