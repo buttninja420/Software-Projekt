@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.layout.GridPane;
+
 
 /**
  * JavaFX App
@@ -25,7 +27,7 @@ public class App extends Application {
     private static Scene scene;
     protected List<User> Users = new ArrayList<>();
     protected List<Project> projects = new ArrayList<>();
-    private VBox projectListBox; 
+    private GridPane projectListBox; 
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -42,16 +44,18 @@ public class App extends Application {
         VBox VenstreBlok = new VBox(30);
         VenstreBlok.setAlignment(Pos.TOP_LEFT);
 
-        Label infoLabel = new Label("Tryk på følgende knap for at lave et nyt projekt:");
+        Label infoLabel = new Label("Press here to make a new project:");
 
-        Button ProjektKnap = new Button("Lav et NYT PROJEKT");
+        Button ProjektKnap = new Button("Make a NEW project");
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
         VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
 
-        projectListBox = new VBox(30); 
-        projectListBox.setAlignment(Pos.TOP_LEFT);
+        projectListBox = new GridPane();
+        projectListBox.setHgap(20);
+        projectListBox.setVgap(20);
+        projectListBox.setAlignment(Pos. TOP_LEFT); 
 
         ProjektKnap.setOnAction(event -> {
             newProjectWindow();
@@ -127,13 +131,14 @@ public class App extends Application {
 
     private void newProjectWindow() {
         Stage newProjectWindow = new Stage();
-        newProjectWindow.setTitle("Nyt Projekt oprettelse");
+        newProjectWindow.setTitle("New project");
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.TOP_LEFT);
 
-        Label label1 = new Label("Her kan du oprette et nyt projekt:");
+        Label label1 = new Label("Here you can make a new project. Start with giving \nthe new project a name and then you can edit the \nproject on the main window.");
+        label1.setPrefWidth(280);
         Label nameLabel = new Label("Name of new project:");
         TextField newName = new TextField();
         Button createButton = new Button("Opret");
@@ -157,19 +162,32 @@ public class App extends Application {
     private void opdaterProjektListe() {
         projectListBox.getChildren().clear();
 
+        projectListBox.getChildren().clear();
+
         Label titel = new Label("Projects");
-        projectListBox.getChildren().add(titel);
+        projectListBox.add(titel, 0,0);
 
         if (projects.isEmpty()) {
-            projectListBox.getChildren().add(new Label("You have zero working projects"));
+            Label noProject = new Label("You have zero working projects");
+            projectListBox.add(noProject, 0,1);
         } else {
+            int column = 0;
+            int row = 1; // start under overskriften
+
             for (Project project : projects) {
                 Project currentProject = project;
                 Button button = new Button(currentProject.getName());
                 button.setPrefHeight(60);
                 button.setPrefWidth(200);
                 button.setOnAction(event -> projectEditorWindow(currentProject));
-                projectListBox.getChildren().add(button);
+
+                projectListBox.add(button, column, row);
+
+                column++;
+                if (column > 1) { // maks 2 kolonner
+                    column = 0;
+                    row++;
+                }
             }
         }
     }
@@ -187,8 +205,58 @@ public class App extends Application {
         layout.getChildren().add(label1);
         layout.getChildren().add(new Label(project.generateReport()));
 
+        String pl = "No current project leader";
+        try {
+            pl = project.getProjectleader().getUID();
+        } catch (java.lang.NullPointerException e1){}
+
+        HBox projectLeaderBox = new HBox();
+        
+        Label projectLeaderLabel = new Label("Project leader:");
+        projectLeaderLabel.setPrefWidth(120);
+        TextField projectLeaderTF = new TextField(pl);
+        projectLeaderTF.setOnKeyTyped(event -> project.setProjectLeader(this.getUserWithUID(projectLeaderTF.getText())));
+        
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel,projectLeaderTF);
+        projectLeaderBox.autosize();
+        layout.getChildren().add(projectLeaderBox);
+
+
+        project.addActivity(new Activity("bang your mom"));
+        project.addActivity(new Activity("bang your dad"));
+        project.addActivity(new Activity("bang your mom again"));
+
+        Label activityLabel = new Label("Activities of project "+project.getName());
+        layout.getChildren().add(activityLabel);
+        for (Activity activity : project.getActivities()){
+            Button button = new Button(activity.getTitle());
+            button.setOnAction(event -> activityEditorWindow(activity));
+            layout.getChildren().add(button);
+        }
+        //getActivities
+        //addActivity
+
+
         Scene scene = new Scene(layout, 300, 200);
         projectEditorWindow.setScene(scene);
         projectEditorWindow.show();
+        
+    }
+
+    public void activityEditorWindow(Activity activity){
+        Stage activityEditorWindow = new Stage();
+        activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
+
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.CENTER);
+
+        //getBudgetedTime
+        //getRecordedTime
+        //
+
+        Scene scene = new Scene(layout, 300, 200);
+        activityEditorWindow.setScene(scene);
+        activityEditorWindow.show();
     }
 }
