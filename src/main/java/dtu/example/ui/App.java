@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 //import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -44,7 +45,7 @@ public class App extends Application {
 
         VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
 
-        VBox HøjreKnap = new VBox(30); //højre blok til projekt-listerne 
+        VBox HøjreKnap = new VBox(30); //højre blok til projekt-listerne NB: ikke helt done, der er kun en boks uden indhold
         HøjreKnap.setAlignment(Pos.TOP_LEFT);
 
         Label ProjektLabel = new Label("Projects");
@@ -127,13 +128,25 @@ public class App extends Application {
         Stage nytVindue = new Stage();
         nytVindue.setTitle("Nyt Projekt oprettelse");
 
+
+
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10));
-        layout.setAlignment(Pos.CENTER);
+        layout.setAlignment(Pos.TOP_LEFT);
 
-        Label Label = new Label("Her kan du oprette et nyt projekt;");
+        Label Label = new Label("Her kan du oprette et nyt projekt:");
         layout.getChildren().add(Label);
-        Scene scene = new Scene(layout, 300, 200);
+
+        Label NameLabel = new Label("Name of new project:");
+        layout.getChildren().add(Label);
+
+        VBox Hlayout = new HBox(10);
+        Hlayout.setPadding(new Insets(10));
+
+        TextField NewName = new TextField();
+        Hlayout.getChildren().add(NewName);
+
+        Scene scene = new Scene(layout, 500, 400);
         nytVindue.setScene(scene);
         nytVindue.show();
     }
