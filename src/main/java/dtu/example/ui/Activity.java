@@ -61,7 +61,7 @@ public class Activity {
     }
 
     public int assignUser(User user) {
-        if (user.getMaxActivities() > user.getActivities().size()){
+        if (user.getAvailability(this)){
             this.assignedUsers.add(user);
             user.assignActivityDONOTUSE(this);
             return 0;
