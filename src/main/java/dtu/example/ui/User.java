@@ -1,15 +1,28 @@
 package dtu.example.ui;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Date;
 
 public class User {
+    private HashMap<LocalDate, Integer> workHistory = new HashMap<LocalDate, Integer>();
+    private int dailyWorkTime = 8;
     private String UID;
     private List<Activity> Activities = new ArrayList<Activity>();
     public static int maxActivities = 20; 
 
     public User(String UID){
         this.UID = UID;
+    }
+
+    public int getDailyWorkTime(){
+        return dailyWorkTime;
+    }
+
+    public void setDailyWorkTime(int newDailyWorkTime){
+        dailyWorkTime = newDailyWorkTime;
     }
 
     public String getUID(){
@@ -36,5 +49,40 @@ public class User {
 
     public int getMaxActivities(){
         return maxActivities;
+    }
+
+
+    public void registerTime(int timeRegistered){ //updates time today
+        LocalDate today = LocalDate.now();
+        makeSureDateExists(today);
+        workHistory.put(today, timeRegistered);
+    } 
+    //         LocalDate date = LocalDate.of(2025, 5, 5);
+    public void registerTime(int timeRegistered, LocalDate date){
+        int prevTimeWorked = workHistory.get(date);
+        int newtime = prevTimeWorked + timeRegistered;
+        
+        makeSureDateExists(date);
+        workHistory.put(date,newtime);
+    }
+
+    public String showWorkToday(){
+        LocalDate today = LocalDate.now();
+        makeSureDateExists(today);
+        int timeWorked = workHistory.get(today);
+        return "Date: " + today.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;  
+    }
+
+    public String showWorkDate(LocalDate date){
+        makeSureDateExists(date);
+        int timeWorked = workHistory.get(date);
+        return "Date: " + date.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;
+    }
+
+    public void makeSureDateExists(LocalDate date){ //checks if date exists and if it doesnt create a new date entry.
+        if (workHistory.get(date) == null){
+            workHistory.put(date,0);
+        }
+
     }
 }
