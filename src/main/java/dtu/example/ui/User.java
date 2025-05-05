@@ -28,10 +28,18 @@ public class User {
         return UID;
     }
 
-    public Boolean getAvailability(){
-        if (Activities.size() < maxActivities){
+    public Boolean getAvailability(Activity possibleActivity){
+        LocalDate start = possibleActivity.getStartDate();
+        LocalDate end = possibleActivity.getEndDate();
+        int count = 0;
+        for (Activity activity : Activities){
+            if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
+                count++;
+            } 
+        }
+        if (count < maxActivities){
             return true;
-        } else {return false;}
+        } else {return false;}        
     }
 
     public List<Activity> getActivities(){
