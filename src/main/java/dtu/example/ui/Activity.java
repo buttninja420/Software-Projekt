@@ -14,23 +14,9 @@ public class Activity {
     public int maxusers;
     public String title;
 
-//int activityID, int budgetedTime, int recordedtime, User assignedUser, Date startDate, Date endDate, Boolean fixed, int maxusers, String Title
-    public Activity(int activityID, int budgetedTime, int recordedtime, List<User> assignedUsers, LocalDate startDate, LocalDate endDate, Boolean fixed, int maxusers, String title) {
-        this.budgetedTime = budgetedTime;
-        this.recordedtime = recordedtime;
-        this.assignedUsers = assignedUsers;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.fixed = fixed;
-        this.maxusers = maxusers;
-        this.title = title;
-    }
-    
+
     public Activity(String title){
         this.title = title;
-    }
-
-    public Activity(){
     }
     
     public int getBudgetedTime() {
@@ -39,7 +25,7 @@ public class Activity {
     public void setBudgetedTime(int budgetedTime) {
         this.budgetedTime = budgetedTime;
     }
-    public int getRecordedtime() {
+    public int getRecordedTime() {
         return recordedtime;
     }
     public void setRecordedTime(int recordedtime) {
@@ -105,7 +91,7 @@ public class Activity {
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title) {
+    public void editTitle(String title) {
         this.title = title;
     }
     
@@ -116,10 +102,5 @@ public class Activity {
         endDate = newEndDate; 
         startDate = newStartDate;
     }
-    public int getBudgettedTime(){
-        return budgetedTime;
-    }
-    public int getRecordedTime(){
-        return recordedtime;
-    }
+
 }

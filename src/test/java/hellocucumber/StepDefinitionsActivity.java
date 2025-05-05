@@ -1,5 +1,6 @@
 package hellocucumber;
 import dtu.example.ui.*;
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.*;
 
 import java.time.LocalDate;
@@ -14,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsActivity {
     App app = new App();
-    Activity activity1 = new Activity();
+    Activity activity1;
     protected User user1 = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
-        activity1.setTitle(activityName);
+        activity1 = new Activity(activityName);
 
     }
     @When("an employee with UID {string} requests to join an activity")
@@ -33,7 +34,7 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and a project leader and free timeslots")
     public void an_activity_with_a_project_leader_and_free_timeslots(String activityName) {
-        activity1 = new Activity();
+        activity1 = new Activity(activityName);
     }
 
     @When("the project leader with UID {string} registers an employee with UID {string} for the activity")
@@ -49,8 +50,7 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int}")
     public void an_activity_with_name_and_start_date_and_end_date(String activityName, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
-        activity1 = new Activity();
-        activity1.getTitle();
+        activity1 = new Activity(activityName);
 
         activity1.setStartDate(LocalDate.of(StartYear, StartMonth, StartDay));        
         activity1.setEndDate(LocalDate.of(EndYear, EndMonth, EndDay));
@@ -74,7 +74,7 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string}")
     public void an_activity_with_name(String activityName) {
-        activity1 = new Activity();
+        activity1 = new Activity(activityName);
     }
 
     @When("an employee with UID {string} who has {int} ongoing activites tries to join the activity with name {string}")
@@ -96,7 +96,7 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and an employee with UID {string}")
     public void an_activity_with_name_and_an_employee_with_UID(String activityName, String employee) {
-        activity1 = new Activity();
+        activity1 = new Activity(activityName);
         app.registerUser(employee);
         activity1.assignUser(app.getUserWithUID(employee));
     }
@@ -111,10 +111,10 @@ public class StepDefinitionsActivity {
         assertNotEquals(app.getUsers(),activity1.getAssignedUsers());
     }
 
-    @Given("an activity with name {string} with {int} hours budgetted and {int} hours registered")
-    public void an_activity_with_name_with_hours_registered(String activityName, int budgettedTime, int registeredTime) {
-        activity1 = new Activity();
-        activity1.setBudgetedTime(budgettedTime);
+    @Given("an activity with name {string} with {int} hours budgeted and {int} hours registered")
+    public void an_activity_with_name_with_hours_registered(String activityName, int budgetedTime, int registeredTime) {
+        activity1 = new Activity(activityName);
+        activity1.setBudgetedTime(budgetedTime);
         activity1.setRecordedTime(registeredTime);
     }
 
@@ -128,16 +128,15 @@ public class StepDefinitionsActivity {
         assertEquals(Time, activity1.getRecordedTime());
     }
 
-    @Given("an activity with name {string} with {int} hours budgetted")
-    public void an_activity_with_name_with_hours_budgetted(String activityName, int budgettedHours) {
-        activity1 = new Activity();
-        activity1.setTitle(activityName);
-        activity1.setBudgetedTime(budgettedHours);
+    @Given("an activity with name {string} with {int} hours budgeted")
+    public void an_activity_with_name_with_hours_budgeted(String activityName, int budgetedHours) {
+        activity1 = new Activity(activityName);
+        activity1.setBudgetedTime(budgetedHours);
     }
 
-    @When("the project leader checks the budgetted hours to be {int} hours")
-    public void the_project_leader_checks_the_budgetted_hours(int budgettedHours) {
-        budgettedHours = activity1.getBudgettedTime();
+    @When("the project leader checks the budgeted hours to be {int} hours")
+    public void the_project_leader_checks_the_budgeted_hours(int budgetedHours) {
+        budgetedHours = activity1.getBudgetedTime();
     }
 
     @And("the project leader checks the registered hours to be {int} hours")
@@ -145,9 +144,9 @@ public class StepDefinitionsActivity {
         activity1.setRecordedTime(registeredHours);
     }
 
-    @Then("the project leader sees that the budgetted hours is {int} and that the registered hours is {int}")
-    public void the_project_leader_sees_that_the_budgetted_hours_is_and_that_the_registered_hours_is(int budgettedHours, int registeredHours) {
-        assertEquals(budgettedHours, activity1.getBudgettedTime());
+    @Then("the project leader sees that the budgeted hours is {int} and that the registered hours is {int}")
+    public void the_project_leader_sees_that_the_budgeted_hours_is_and_that_the_registered_hours_is(int budgetedHours, int registeredHours) {
+        assertEquals(budgetedHours, activity1.getBudgetedTime());
         assertEquals(registeredHours, activity1.getRecordedTime());
     }
 
@@ -161,22 +160,24 @@ public class StepDefinitionsActivity {
         assertEquals(activity1.getMaxUsers(), maxUsers);
     }
 
-    @When("the project leader want to add {int} hours to {int} hours budgetted time and changes the start date to {int} {int} {int} and end date to {int} {int} {int}")
-    public void the_project_leader_want_to_add_hours_to_hours_budgetted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgettedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
-        activity1.setBudgetedTime(budgettedTime); 
-        int newTime = budgettedTime + addTime;
+    @When("the project leader want to add {int} hours to {int} hours budgeted time and changes the start date to {int} {int} {int} and end date to {int} {int} {int} and change the name to {string}")
+    public void the_project_leader_want_to_add_hours_to_hours_budgeted_time_and_changes_the_start_date_to_and_end_date_to(int addTime, int budgetedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay, String NewName) {
+        activity1.setBudgetedTime(budgetedTime); 
+        int newTime = budgetedTime + addTime;
         activity1.editBudgetedTime(newTime);
+        activity1.editTitle(NewName);
         activity1.editDate(LocalDate.of(StartYear, StartMonth, StartDay), LocalDate.of(EndYear, EndMonth, EndDay));
 
-        assertEquals(activity1.getBudgettedTime(), newTime);
+        assertEquals(activity1.getBudgetedTime(), newTime);
     }
 
 
-    @Then("the activity with name {string} now has budgetted time set to {int} hours and start date {int} {int} {int} and end date {int} {int} {int}")
-    public void the_activity_with_name_now_has_budgetted_time_set_to_hours_and_start_date_and_end_date(String activityName, int budgettedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay) {
-        assertEquals(activity1.getBudgettedTime(), budgettedTime);
+    @Then("the activity with name {string} now has budgeted time set to {int} hours and start date {int} {int} {int} and end date {int} {int} {int} and name {string}")
+    public void the_activity_with_name_now_has_budgeted_time_set_to_hours_and_start_date_and_end_date(String activityName, int budgetedTime, int StartYear , int StartMonth, int StartDay, int EndYear, int EndMonth, int EndDay, String newName) {
+        assertEquals(activity1.getBudgetedTime(), budgetedTime);
         assertEquals(activity1.getStartDate(), LocalDate.of(StartYear, StartMonth, StartDay));
         assertEquals(activity1.getEndDate(), LocalDate.of(EndYear, EndMonth, EndDay));
+        assertEquals(activity1.getTitle(), newName);
     }
 
     @When("the project leader sets activity to be fixed")
@@ -196,7 +197,7 @@ public class StepDefinitionsActivity {
 
     @Then("the activity with name {string} returns an error message {string}")
     public void the_activity_with_name_returns_an_error_message(String activityName, String errorMessage) {
-        assertEquals("Error: The added time exceeds the Budgetted time for the activity.", errorMessage);
+        assertEquals("Error: The added time exceeds the budgeted time for the activity.", errorMessage);
         
     }
 
