@@ -72,7 +72,6 @@ public class User {
         return maxActivities;
     }
 
-
     public void registerTime(int timeRegistered){ //updates time today
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);
