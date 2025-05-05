@@ -66,7 +66,7 @@ public class Project {
         report.append("--------------\n");
         report.append("Total assigned time: ").append(totalTime).append(" hours");
 
-        System.out.println(report.toString());
+        //System.out.println(report.toString());
 
         return report.toString();
     }
