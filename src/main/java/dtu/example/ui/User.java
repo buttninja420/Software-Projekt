@@ -33,4 +33,8 @@ public class User {
     public void removeActivityDONOTUSE(Activity activity){
         Activities.remove(activity);
     }
+
+    public int getMaxActivities(){
+        return maxActivities;
+    }
 }
