@@ -15,7 +15,7 @@ public class Activity {
     public String title;
 
 //int activityID, int budgetedTime, int recordedtime, User assignedUser, Date startDate, Date endDate, Boolean fixed, int maxusers, String Title
-    public Activity(int activityID, int budgetedTime, int recordedtime, List<User> assignedUsers, Date startDate, Date endDate, Boolean fixed, int maxusers, String title) {
+    public Activity(int activityID, int budgetedTime, int recordedtime, List<User> assignedUsers, LocalDate startDate, LocalDate endDate, Boolean fixed, int maxusers, String title) {
         this.budgetedTime = budgetedTime;
         this.recordedtime = recordedtime;
         this.assignedUsers = assignedUsers;
@@ -61,12 +61,12 @@ public class Activity {
     }
 
     public int assignUser(User user) {
-        if (user.getMaxActivities() < user.getActivities().size()){
+        if (user.getMaxActivities() > user.getActivities().size()){
             this.assignedUsers.add(user);
             user.assignActivityDONOTUSE(this);
             return -1;
         }
-        return 0;
+        return -1;
 
     }
 
@@ -81,13 +81,13 @@ public class Activity {
     public Date getStartDate() {
         return startDate;
     }
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
     public Date getEndDate() {
         return endDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
     public Boolean getFixed() {
@@ -112,7 +112,7 @@ public class Activity {
     public void editBudgetedTime(int newTime){ // ændrer budgettet time
         budgetedTime = newTime; 
     }
-    public void editDate(Date newEndDate, Date newStartDate){
+    public void editDate(LocalDate newStartDate, LocalDate newEndDate){
         endDate = newEndDate; 
         startDate = newStartDate;
     }

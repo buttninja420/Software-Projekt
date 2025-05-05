@@ -30,8 +30,8 @@ Scenario: Check total assignmed time across all activities
     Then the total assigned time is 6 hours
 
 Scenario: A project leader wants to generate a report
-    Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked with start Date "week 5 2023" and End date "week 7 2023"
-    And activity with name "Hallway" with 3 hours worked with start Date "week 5 2023" and End date "week 7 2023"
-    And activity with name "Bathroom" with 1 hour worked with start Date "week 5 2023" and End date "week 7 2023"
+    Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked with start Date 2023 5 5 and End date 2023 6 5
+    And activity with name "Hallway" with 3 hours worked with start Date 2023 5 5 and End date 2023 6 5
+    And activity with name "Bathroom" with 1 hour worked with start Date 2023 5 5 and End date 2023 6 5
     When the project leader generates a report for the project
-    Then the report contains the total assigned time of 6 hours and Start date "week 5 2023" and End date "week 7 2023"
+    Then the report contains the total assigned time of 6 hours and Start date 2023 5 5 and End date 2023 6 5
