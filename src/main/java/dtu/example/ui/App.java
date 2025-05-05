@@ -25,7 +25,7 @@ public class App extends Application {
     private static Scene scene;
     protected List<User> Users = new ArrayList<>();
     protected List<Project> projects = new ArrayList<>();
-    private VBox projectListBox; // 🔧 FEJL: du skrev "Vbox" med lille "b"
+    private VBox projectListBox; 
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -50,18 +50,18 @@ public class App extends Application {
 
         VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
 
-        projectListBox = new VBox(30); // 🔧 rettet navn
+        projectListBox = new VBox(30); 
         projectListBox.setAlignment(Pos.TOP_LEFT);
 
         ProjektKnap.setOnAction(event -> {
             newProjectWindow();
         });
 
-        opdaterProjektListe(); // 🔧 kaldes for at vise eksisterende projekter
+        opdaterProjektListe(); 
 
         mainLay.getChildren().addAll(VenstreBlok, projectListBox);
 
-        scene = new Scene(mainLay, 800, 480); // gemt til statisk brug
+        scene = new Scene(mainLay, 800, 480);
         stage.setScene(scene);
         stage.show();
     }
@@ -174,6 +174,7 @@ public class App extends Application {
         }
     }
 
+
     private void projectEditorWindow(Project project) {
         Stage projectEditorWindow = new Stage();
         projectEditorWindow.setTitle("Edit Projekt " + project.getName());
@@ -182,7 +183,7 @@ public class App extends Application {
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.CENTER);
 
-        Label label1 = new Label("Report of project");
+        Label label1 = new Label("Report of projects");
         layout.getChildren().add(label1);
         layout.getChildren().add(new Label(project.generateReport()));
 
