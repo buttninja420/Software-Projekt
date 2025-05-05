@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionsUser {
     App app = new App();
     public User testUser;
+    public Activity activity = new Activity("Activity");
     @Given("An app with a user with UID: {string} exists")
     public void An_app_with_a_user_with_UID_exists(String s) {
         testUser = new User(s);
@@ -52,6 +53,83 @@ public class StepDefinitionsUser {
     public void user_with_UID_has_hours_worked_today(String UID, int hours){
         assertEquals(testUser.getHoursToday(), hours);
     }
+
+    @When("user defines daily work time to be {int} hours")
+    public void user_defines_daily_work_time_to_be_hours(int dailyWorkTime) {
+        testUser.setDailyWorkTime(dailyWorkTime);
+    }
+
+    @Then("user with UID: {string} has daily work time of {int} hours")
+    public void user_with_UID_has_daily_work_time_of_hours(String UID, int workTime) {
+        assertEquals(testUser.getDailyWorkTime(), workTime);
+    }
+
+    @Given("user is registered to {int} activities in time span {int} {int} {int} to {int} {int} {int}")
+    public void user_is_registered_to_activities_in_time_span_to(int activeActivities, int StartYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+        LocalDate start = LocalDate.of(StartYear, startMonth, startDay);
+        LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+        for (int i = 0; i < activeActivities; i++){
+            Activity activity = new Activity("Activity" + i);
+            activity.setStartDate(start);
+            activity.setEndDate(end);
+            activity.assignUser(testUser);
+        }
+    }
+
+
+    @Then("user with UID: {string} exceeds max activities and is not able to register for activity in time span {int} {int} {int} to {int} {int} {int}")
+    public void user_with_UID_exceeds_max_activities_and_is_not_able_to_register_for_activity_in_time_span_to(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+        LocalDate start = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+        assertFalse(testUser.getAvailabilityDate(start, end));
+        assertTrue(testUser.getActivities().size() > testUser.getMaxActivities());
+        
+    }
+
+    @When("user tries to register for activity with start date {int} {int} {int} and end date {int} {int} {int}")
+    public void user_tries_to_register_for_activity_with_start_date_and_end_date(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+        LocalDate start = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+        Activity activity = new Activity("Activity1");
+        activity.setStartDate(start);
+        activity.setEndDate(end);
+    }
+
+    @Then("user with UID: {string} is not able to register for activity with start date {int} {int} {int} and end date {int} {int} {int}")
+    public void user_with_UID_is_not_able_to_register_for_activity_with_start_date_and_end_date(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+        LocalDate start = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+        activity.setStartDate(start);
+        activity.setEndDate(end);
+        assertFalse(testUser.getAvailability(activity));
+    }
+
+    @And("user has {int} hours worked today")
+    public void user_has_hours_worked_today(int workedHours) {
+        testUser.registerTime(workedHours);
+    }
+
+    @And("user registers {int} hours today and {int} hours on date {int} {int} {int}")
+    public void user_registers_hours_today_and_hours_on_date(int registerHours, int otherHours, int Year, int Month, int Day) {
+        testUser.registerTime(registerHours);
+        LocalDate date = LocalDate.of(Year, Month, Day);
+        testUser.registerTime(otherHours, date);
+    }
+
+    @When("user checks work time today and on date {int} {int} {int}")
+    public void user_checks_work_time_today_and_on_date(int Year, int Month, int Day) {
+        LocalDate date = LocalDate.of(Year, Month, Day);
+        testUser.showWorkToday();
+        testUser.showWorkDate(date);
+    }
+
+    @Then("user with UID: {string} has {int} hours worked today and {int} hours on date {int} {int} {int}")
+    public void user_with_UID_has_hours_worked_today_and_hours_on_date(String UID, int workedHours, int otherHours, int Year, int Month, int Day) {
+        LocalDate date = LocalDate.of(Year, Month, Day);
+        assertEquals(testUser.getHoursToday(), workedHours);
+        assertEquals(testUser.showWorkDate(date), "Date: " + date.toString() + "Time worked: " + otherHours + "/" + 8);
+    }
+
 
     
 

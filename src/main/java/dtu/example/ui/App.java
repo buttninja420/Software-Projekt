@@ -286,9 +286,49 @@ public class App extends Application {
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.CENTER);
 
+        //addTime
+        HBox addTimeBox = new HBox();          
+        TextField addTimeTF = new TextField("0");
+        Button addTimeButton = new Button("Add time");
+        addTimeButton.setOnAction(event -> activity.addTime(Integer.valueOf(addTimeTF.getText())));
+        addTimeBox.getChildren().addAll(addTimeTF,addTimeButton);
+        layout.getChildren().add(addTimeBox);
+
+
         //getBudgetedTime
+        HBox BudgetedTimeBox = new HBox();        
+        Label BudgetedTimeLabel = new Label("Budgeted Time:");
+        BudgetedTimeLabel.setPrefWidth(120);
+        String BT = "Nan";
+        try {
+            BT = Integer.toString(activity.getBudgetedTime());
+        } catch (java.lang.NullPointerException e1){}        
+        TextField BudgetedTimeTF = new TextField(BT);
+        BudgetedTimeTF.setOnKeyTyped(event -> activity.setBudgetedTime(Integer.valueOf(BudgetedTimeTF.getText())));
+        BudgetedTimeBox.getChildren().addAll(BudgetedTimeLabel,BudgetedTimeTF);
+        layout.getChildren().add(BudgetedTimeBox);
+
         //getRecordedTime
-        //
+        HBox RecordedTimeBox = new HBox();        
+        Label RecordedTimeLabel = new Label("Recorded Time:");
+        RecordedTimeLabel.setPrefWidth(120);
+        String RT = "Nan";
+        try {
+            RT = Integer.toString(activity.getRecordedTime());
+        } catch (java.lang.NullPointerException e1){}
+        TextField RecordedTimeTF = new TextField(RT);
+        RecordedTimeTF.setOnKeyTyped(event -> activity.setBudgetedTime(Integer.valueOf(RecordedTimeTF.getText())));
+        RecordedTimeBox.getChildren().addAll(RecordedTimeLabel,RecordedTimeTF);
+        layout.getChildren().add(RecordedTimeBox);
+
+        //getAssignedUsers
+        //assignUser
+        //unassignUser
+        //getStartDate
+        //getEndDate
+        //getFixed
+        //getMaxUsers
+        //editDate
 
         Scene scene = new Scene(layout, 300, 200);
         activityEditorWindow.setScene(scene);

@@ -53,11 +53,11 @@ public class Activity {
             return 0;
         }
         return -1;
-
     }
 
     public int unassignUser(User user){
         if(assignedUsers.remove(user)){
+            user.removeActivityDONOTUSE(this);
             return 0;
         }else{
             return -1;
