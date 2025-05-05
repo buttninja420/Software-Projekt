@@ -3,6 +3,7 @@ package hellocucumber;
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
 import io.cucumber.java.en_scouse.An;
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,35 +184,36 @@ public class StepDefinitionsProject {
         assertEquals(totalHours, totalAssignedTime);
     }
 
-    @Given("a Project with name {string} and activity with name {string} with {int} hours worked with start Date {string} and End date {string}")
-    public void a_Project_with_name_and_activity_with_name_with_hours_worked_with_start_Date_and_End_date(String projectName, String activityName, int hoursWorked, String startDate, String endDate) {
+    @Given("a Project with name {string} and activity with name {string} with {int} hours worked with start Date {int} {int} {int} and End date {int} {int} {int}")
+    public void a_Project_with_name_and_activity_with_name_with_hours_worked_with_start_Date_and_End_date(String projectName, String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         tmProject = new Project(projectName);
         Activity activity1 = new Activity();
         tmProject.addActivity(activity1);
         activity1.setTitle(activityName);
         activity1.setRecordedTime(hoursWorked);
-        activity1.setStartDate(startDate);
-        activity1.setEndDate(endDate);
+        activity1.setStartDate(LocalDate.of(startYear, startMonth, startDay));
+        activity1.setEndDate(LocalDate.of(endYear, endMonth, endDay));
     }
 
-    @And("activity with name {string} with {int} hours worked with start Date {string} and End date {string}")
-    public void activity_with_name_with_hours_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, String startDate, String endDate) {
+    @And("activity with name {string} with {int} hours worked with start Date {int} {int} {int} and End date {int} {int} {int}")
+    public void activity_with_name_with_hours_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         Activity activity2 = new Activity();
         tmProject.addActivity(activity2);
         activity2.setTitle(activityName);
         activity2.setRecordedTime(hoursWorked);
-        activity2.setStartDate(startDate);
-        activity2.setEndDate(endDate);
+        activity2.setStartDate(LocalDate.of(startYear, startMonth, startDay));
+        activity2.setEndDate(LocalDate.of(endYear, endMonth, endDay));
     }
 
-    @And("activity with name {string} with {int} hour worked with start Date {string} and End date {string}")
-    public void activity_with_name_with_hour_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, String startDate, String endDate) {
+
+    @And("activity with name {string} with {int} hour worked with start Date {int} {int} {int} and End date {int} {int} {int}")
+    public void activity_with_name_with_hour_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         Activity activity3 = new Activity();
         tmProject.addActivity(activity3);
         activity3.setTitle(activityName);
         activity3.setRecordedTime(hoursWorked);
-        activity3.setStartDate(startDate);
-        activity3.setEndDate(endDate);
+        activity3.setStartDate(LocalDate.of(startYear, startMonth, startDay));
+        activity3.setEndDate(LocalDate.of(endYear, endMonth, endDay));
     }
 
     @When("the project leader generates a report for the project")
@@ -219,11 +221,14 @@ public class StepDefinitionsProject {
         report = tmProject.generateReport();
     }
 
-    @Then("the report contains the total assigned time of {int} hours and Start date {string} and End date {string}")
-    public void the_report_contains_the_total_assigned_time_of_hours_and_Start_date_and_End_date(int totalHours, String startDate, String endDate) {
+    @Then("the report contains the total assigned time of {int} hours and Start date {int} {int} {int} and End date {int} {int} {int}")
+    public void the_report_contains_the_total_assigned_time_of_hours_and_Start_date_and_End_date(int totalHours, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+        LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
         assertTrue(report.contains("Status of activities:"));
         assertTrue(report.contains("Total assigned time: " + totalHours + " hours"));
         assertTrue(report.contains("Start date: " + startDate));
         assertTrue(report.contains("End date: " + endDate)); 
     }
+   
 }

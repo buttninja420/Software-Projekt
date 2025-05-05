@@ -1,6 +1,6 @@
 package dtu.example.ui;
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Activity {
@@ -8,8 +8,8 @@ public class Activity {
     private int recordedtime;
     public int addTime;
     private List<User> assignedUsers = new ArrayList<User>();
-    public Date startDate;
-    public Date endDate;
+    public LocalDate startDate;
+    public LocalDate endDate;
     public Boolean fixed;
     public int maxusers;
     public String title;
@@ -64,7 +64,7 @@ public class Activity {
         if (user.getMaxActivities() > user.getActivities().size()){
             this.assignedUsers.add(user);
             user.assignActivityDONOTUSE(this);
-            return -1;
+            return 0;
         }
         return -1;
 
@@ -78,13 +78,13 @@ public class Activity {
         }
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
     public void setEndDate(LocalDate endDate) {
