@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Date;
 
 public class User {
     private HashMap<LocalDate, Integer> workHistory = new HashMap<LocalDate, Integer>();
@@ -57,11 +56,12 @@ public class User {
         makeSureDateExists(today);
         workHistory.put(today, timeRegistered);
     } 
+    
     //         LocalDate date = LocalDate.of(2025, 5, 5);
     public void registerTime(int timeRegistered, LocalDate date){
         int prevTimeWorked = workHistory.get(date);
         int newtime = prevTimeWorked + timeRegistered;
-        
+
         makeSureDateExists(date);
         workHistory.put(date,newtime);
     }
