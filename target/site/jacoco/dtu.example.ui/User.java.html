@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">javaFX_project</a> &gt; <a href="index.source.html" class="el_package">dtu.example.ui</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package dtu.example.ui;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class User {
+<span class="fc" id="L9">    private HashMap&lt;LocalDate, Integer&gt; workHistory = new HashMap&lt;LocalDate, Integer&gt;();</span>
+<span class="fc" id="L10">    private int dailyWorkTime = 8;</span>
+    private String UID;
+<span class="fc" id="L12">    private List&lt;Activity&gt; Activities = new ArrayList&lt;Activity&gt;();</span>
+<span class="fc" id="L13">    public static int maxActivities = 20; </span>
+
+<span class="fc" id="L15">    public User(String UID){</span>
+<span class="fc" id="L16">        this.UID = UID;</span>
+<span class="fc" id="L17">    }</span>
+
+    public int getDailyWorkTime(){
+<span class="fc" id="L20">        return dailyWorkTime;</span>
+    }
+
+    public void setDailyWorkTime(int newDailyWorkTime){
+<span class="fc" id="L24">        dailyWorkTime = newDailyWorkTime;</span>
+<span class="fc" id="L25">    }</span>
+
+    public String getUID(){
+<span class="fc" id="L28">        return UID;</span>
+    }
+
+    public Boolean getAvailability(Activity possibleActivity){
+<span class="fc" id="L32">        LocalDate start = possibleActivity.getStartDate();</span>
+<span class="fc" id="L33">        LocalDate end = possibleActivity.getEndDate();</span>
+<span class="fc" id="L34">        int count = 0;</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (Activity activity : Activities){</span>
+<span class="pc bpc" id="L36" title="3 of 4 branches missed.">            if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){</span>
+<span class="fc" id="L37">                count++;</span>
+            } 
+<span class="fc" id="L39">        }</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (count &lt; maxActivities){</span>
+<span class="fc" id="L41">            return true;</span>
+<span class="fc" id="L42">        } else {return false;}        </span>
+    }
+
+    
+    public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
+<span class="fc" id="L47">        int count = 0;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (Activity activity : Activities) {</span>
+            // Hvis aktiviteten overlapper med det angivne tidsrum
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">            if (!(activity.getEndDate().isBefore(start) || activity.getStartDate().isAfter(end))) {</span>
+<span class="fc" id="L51">                count++;</span>
+            }
+<span class="fc" id="L53">        }</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        return count &lt; 20;</span>
+    }
+    
+    
+
+    public List&lt;Activity&gt; getActivities(){
+<span class="fc" id="L60">        return Activities;</span>
+    }
+
+    public void assignActivityDONOTUSE(Activity activity){ //maybe delete
+<span class="fc" id="L64">        Activities.add(activity);</span>
+<span class="fc" id="L65">    }</span>
+
+    public void removeActivityDONOTUSE(Activity activity){
+<span class="fc" id="L68">        Activities.remove(activity);</span>
+<span class="fc" id="L69">    }</span>
+
+    public int getMaxActivities(){
+<span class="fc" id="L72">        return maxActivities;</span>
+    }
+
+    public void registerTime(int timeRegistered){ //updates time today
+<span class="fc" id="L76">        LocalDate today = LocalDate.now();</span>
+<span class="fc" id="L77">        makeSureDateExists(today);</span>
+<span class="fc" id="L78">        workHistory.put(today, timeRegistered);</span>
+<span class="fc" id="L79">    } </span>
+    
+    //         LocalDate date = LocalDate.of(2025, 5, 5);
+    public void registerTime(int timeRegistered, LocalDate date){
+<span class="fc" id="L83">        makeSureDateExists(date);</span>
+<span class="fc" id="L84">        int prevTimeWorked = workHistory.get(date);</span>
+<span class="fc" id="L85">        int newtime = prevTimeWorked + timeRegistered;</span>
+<span class="fc" id="L86">        workHistory.put(date,newtime);</span>
+<span class="fc" id="L87">    }</span>
+
+    public String showWorkToday(){
+<span class="fc" id="L90">        LocalDate today = LocalDate.now();</span>
+<span class="fc" id="L91">        makeSureDateExists(today);</span>
+<span class="fc" id="L92">        int timeWorked = workHistory.get(today);</span>
+<span class="fc" id="L93">        return &quot;Date: &quot; + today.toString() + &quot;Time worked: &quot; + timeWorked + &quot;/&quot; + dailyWorkTime;  </span>
+    }
+
+    public String showWorkDate(LocalDate date){
+<span class="fc" id="L97">        makeSureDateExists(date);</span>
+<span class="fc" id="L98">        int timeWorked = workHistory.get(date);</span>
+<span class="fc" id="L99">        return &quot;Date: &quot; + date.toString() + &quot;Time worked: &quot; + timeWorked + &quot;/&quot; + dailyWorkTime;</span>
+    }
+
+    public void makeSureDateExists(LocalDate date){ //checks if date exists and if it doesnt create a new date entry.
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (workHistory.get(date) == null){</span>
+<span class="fc" id="L104">            workHistory.put(date,0);</span>
+        }
+
+<span class="fc" id="L107">    }</span>
+
+    public int getHoursToday() {
+<span class="fc" id="L110">        LocalDate today = LocalDate.now();</span>
+<span class="fc" id="L111">        makeSureDateExists(today);</span>
+<span class="fc" id="L112">        return workHistory.get(today);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

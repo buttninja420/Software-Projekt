@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Project.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">javaFX_project</a> &gt; <a href="index.source.html" class="el_package">dtu.example.ui</a> &gt; <span class="el_source">Project.java</span></div><h1>Project.java</h1><pre class="source lang-java linenums">package dtu.example.ui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Project {
+<span class="fc" id="L7">    private List&lt;Activity&gt; activities = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L8">    private List&lt;User&gt; assignedUsers = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L10">    private User leader = null;</span>
+<span class="fc" id="L11">    private int projectNumber = 0;</span>
+    private int maxTime;
+    private static int idCounter;
+<span class="fc" id="L14">    private String name =&quot;&quot;;</span>
+    
+<span class="fc" id="L16">    public Project(String Name) {</span>
+<span class="fc" id="L17">        this.projectNumber = idCounter++;</span>
+<span class="fc" id="L18">        this.name = Name;</span>
+<span class="fc" id="L19">    }</span>
+
+    public int setProjectLeader(User user) {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (this.leader == null){</span>
+<span class="fc" id="L23">            this.leader = user;</span>
+<span class="fc" id="L24">            return 0;</span>
+        }
+        else {
+<span class="fc" id="L27">            return -1;</span>
+        }       
+        }
+    
+    public User getProjectleader(){
+<span class="fc" id="L32">        return this.leader;</span>
+    }
+
+    public List&lt;Activity&gt; getActivities() {
+<span class="fc" id="L36">        return this.activities;</span>
+    }
+
+    public void addActivity(Activity activity) {
+<span class="fc" id="L40">        activities.add(activity);</span>
+<span class="fc" id="L41">    }</span>
+
+    public int getAssignedTime() {
+<span class="fc" id="L44">        int totalAssignedTime = 0;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Activity activity : activities) {</span>
+<span class="fc" id="L46">            totalAssignedTime += activity.getRecordedTime();</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        return totalAssignedTime;</span>
+    }
+
+    public String generateReport() {
+<span class="fc" id="L52">        StringBuilder report = new StringBuilder();</span>
+<span class="fc" id="L53">        report.append(&quot;Status of activities:\n&quot;);</span>
+<span class="fc" id="L54">        int totalTime = 0;</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (Activity activity : activities) {</span>
+<span class="fc" id="L57">            totalTime += activity.getRecordedTime();</span>
+<span class="fc" id="L58">            report.append(&quot;--------------\n&quot;);</span>
+<span class="fc" id="L59">            report.append(activity.getTitle()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L60">            report.append(&quot;Start date: &quot;).append(activity.getStartDate())</span>
+<span class="fc" id="L61">                  .append(&quot; | End date: &quot;).append(activity.getEndDate()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L62">            report.append(&quot;Time status - Budgetted: &quot;)</span>
+<span class="fc" id="L63">                  .append(activity.getBudgetedTime())</span>
+<span class="fc" id="L64">                  .append(&quot;, Assigned: &quot;).append(activity.getRecordedTime()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        report.append(&quot;--------------\n&quot;);</span>
+<span class="fc" id="L67">        report.append(&quot;Total assigned time: &quot;).append(totalTime).append(&quot; hours&quot;);</span>
+
+        //System.out.println(report.toString());
+
+<span class="fc" id="L71">        return report.toString();</span>
+    }
+    public String getName(){
+<span class="fc" id="L74">        return this.name;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

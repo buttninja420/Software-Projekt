@@ -33,7 +33,7 @@ Scenario: Edit previously registered work hours
 Scenario: Exceed registered hours
   Given an activity with name "Testing" with 20 hours budgeted and 10 hours registered
   When an employee adds 15 hours to the registered work time
-  Then the activity with name "Testing" returns an error message "Error: The added time exceeds the budgeted time for the activity."
+  Then the activity with name "Testing" does not add the registered time
 
 Scenario: Project leader wants to check budgeted hours and check if registered hours exceeds
   Given an activity with name "GetToWork" with 30 hours budgeted
@@ -55,3 +55,8 @@ Scenario: A project leader sets fixed activities
   Given an activity with name "Weekend" and a project leader
   When the project leader sets activity to be fixed
   Then the activity with name "Weekend" is now fixed
+
+Scenario: A user wants to log negative hours
+  Given an activity with name "Weekend" and a project leader
+  When the user tries to log -10 hours
+  Then the user is not able to log negative hours

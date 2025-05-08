@@ -31,17 +31,22 @@ public class Activity {
     public void setRecordedTime(int recordedtime) {
         this.recordedtime = recordedtime;
     }
-    public void addTime(int addTime) {
 
-        // Check if the added time exceeds the budgeted time
+    public void addTime(int addTime) {
+        assert addTime > 0 : "Precondition failed: Cannot add negative time.";
+        assert addTime != 0 : "Precondition failed: Cannot add zero time.";
+
+        int oldRecorded = recordedtime;
 
         if (budgetedTime >= recordedtime + addTime) {
-            recordedtime = recordedtime + addTime;
+            recordedtime += addTime;
+            assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
         } else {
-            System.out.println("Error: The added time exceeds the budgeted time for the activity.");
+            assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
+            throw new IllegalArgumentException("The added time exceeds the budgeted time.");
         }
-
     }
+
     public List<User> getAssignedUsers() {
         return assignedUsers;
     }

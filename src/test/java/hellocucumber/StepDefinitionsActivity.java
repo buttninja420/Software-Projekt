@@ -17,6 +17,7 @@ public class StepDefinitionsActivity {
     App app = new App();
     Activity activity1;
     protected User user1 = null;
+    String errorMessage = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
         activity1 = new Activity(activityName);
@@ -192,13 +193,31 @@ public class StepDefinitionsActivity {
 
     @When("an employee adds {int} hours to the registered work time")
     public void an_employee_adds_hours_to_the_registered_work_time(int addHours) {
-        activity1.addTime(addHours);
+        try {
+            activity1.addTime(addHours);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
     }
 
-    @Then("the activity with name {string} returns an error message {string}")
-    public void the_activity_with_name_returns_an_error_message(String activityName, String errorMessage) {
-        assertEquals("Error: The added time exceeds the budgeted time for the activity.", errorMessage);
-        
+
+    @Then("the activity with name {string} does not add the registered time")
+    public void the_activity_with_name_does_not_add_the_registered_time(String activityName) {
+        assertEquals("The added time exceeds the budgeted time.", errorMessage);        
+    }
+
+    @When("the user tries to log {int} hours")
+    public void the_user_tries_to_log_hours(int i) {
+        try {
+            activity1.addTime(i);
+        } catch (IllegalArgumentException | AssertionError e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("the user is not able to log negative hours")
+    public void the_user_is_not_able_to_log_negative_hours() {
+        assertEquals("Precondition failed: Cannot add negative time.", errorMessage);
     }
 
 }

@@ -20,7 +20,7 @@ Scenario: user checks for availability in time span
     Given An app with a user with UID: "PRIK" exists
     And user is registered to 20 activities in time span 2023 10 1 to 2023 11 1
     When user checks availability in time span 2023 10 1 to 2023 11 1
-    Then user with UID: "PRIK" exceeds max activities and is not able to register for activity in time span 2023 10 1 to 2023 11 1
+    Then user with UID: "PRIK" has reached max activities and is not able to register for activity in time span 2023 10 1 to 2023 11 1
 
 Scenario: user tries to register for activity with no availability
     Given An app with a user with UID: "PRIK" exists
@@ -29,10 +29,16 @@ Scenario: user tries to register for activity with no availability
     Then user with UID: "PRIK" is not able to register for activity with start date 2023 10 1 and end date 2023 11 1
 
 Scenario: user check work time today and other daily
-        Given An app with a user with UID: "PRIK" exists
-        And user has 0 hours worked today
-        And user registers 5 hours today and 8 hours on date 2023 10 1
-        When user checks work time today and on date 2023 10 1
-        Then user with UID: "PRIK" has 5 hours worked today and 8 hours on date 2023 10 1
+    Given An app with a user with UID: "PRIK" exists
+    And user has 0 hours worked today
+    And user registers 5 hours today and 8 hours on date 2023 10 1
+    When user checks work time today and on date 2023 10 1
+    Then user with UID: "PRIK" has 5 hours worked today and 8 hours on date 2023 10 1
+
+Scenario: user check availability for activity with overlapping time span
+    Given An app with a user with UID: "PRIK" exists
+    And user is registered to 2 activities in time span 2023 10 1 to 2023 11 1
+    When user checks availability for activity with start date 2023 10 2 and end date 2023 11 3
+    Then user with UID: "PRIK" is available for activity with start date 2023 10 2 and end date 2023 11 3
 
         

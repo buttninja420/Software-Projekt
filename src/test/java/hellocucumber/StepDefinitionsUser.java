@@ -64,12 +64,12 @@ public class StepDefinitionsUser {
         assertEquals(testUser.getDailyWorkTime(), workTime);
     }
 
-    @Given("user is registered to {int} activities in time span {int} {int} {int} to {int} {int} {int}")
+    @And("user is registered to {int} activities in time span {int} {int} {int} to {int} {int} {int}")
     public void user_is_registered_to_activities_in_time_span_to(int activeActivities, int StartYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         LocalDate start = LocalDate.of(StartYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         for (int i = 0; i < activeActivities; i++){
-            Activity activity = new Activity("Activity" + i);
+            activity = new Activity("Activity" + i);
             activity.setStartDate(start);
             activity.setEndDate(end);
             activity.assignUser(testUser);
@@ -77,12 +77,12 @@ public class StepDefinitionsUser {
     }
 
 
-    @Then("user with UID: {string} exceeds max activities and is not able to register for activity in time span {int} {int} {int} to {int} {int} {int}")
-    public void user_with_UID_exceeds_max_activities_and_is_not_able_to_register_for_activity_in_time_span_to(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+    @Then("user with UID: {string} has reached max activities and is not able to register for activity in time span {int} {int} {int} to {int} {int} {int}")
+    public void user_with_UID_has_reached_max_activities_and_is_not_able_to_register_for_activity_in_time_span_to(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         assertFalse(testUser.getAvailabilityDate(start, end));
-        assertTrue(testUser.getActivities().size() > testUser.getMaxActivities());
+        assertTrue(testUser.getActivities().size() >= testUser.getMaxActivities());
         
     }
 
@@ -90,9 +90,11 @@ public class StepDefinitionsUser {
     public void user_tries_to_register_for_activity_with_start_date_and_end_date(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
-        Activity activity = new Activity("Activity1");
+        activity = new Activity("Activity1");
         activity.setStartDate(start);
         activity.setEndDate(end);
+        activity.assignUser(testUser);
+        testUser.getActivities().add(activity);
     }
 
     @Then("user with UID: {string} is not able to register for activity with start date {int} {int} {int} and end date {int} {int} {int}")
@@ -129,9 +131,27 @@ public class StepDefinitionsUser {
         assertEquals(testUser.getHoursToday(), workedHours);
         assertEquals(testUser.showWorkDate(date), "Date: " + date.toString() + "Time worked: " + otherHours + "/" + 8);
     }
+    
+    @When("user checks availability for activity with start date {int} {int} {int} and end date {int} {int} {int}")
+    public void user_checks_availability_for_activity_with_start_date_and_end_date(int i, int i2, int i3, int i4, int i5, int i6) {
+        LocalDate start = LocalDate.of(i, i2, i3);
+        LocalDate end = LocalDate.of(i4, i5, i6);
+        activity.setStartDate(start);
+        activity.setEndDate(end);
+        testUser.getAvailability(activity);
+    }
 
+    @Then("user with UID: {string} is available for activity with start date {int} {int} {int} and end date {int} {int} {int}")
+    public void user_with_UID_is_available_for_activity_with_start_date_and_end_date(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        LocalDate start = LocalDate.of(i, i2, i3);
+        LocalDate end = LocalDate.of(i4, i5, i6);
+        activity.setStartDate(start);
+        activity.setEndDate(end);
+
+        assertTrue(testUser.getActivities().contains(activity));
+    }
 
     
 
-    
+
 }

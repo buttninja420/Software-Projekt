@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Activity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">javaFX_project</a> &gt; <a href="index.source.html" class="el_package">dtu.example.ui</a> &gt; <span class="el_source">Activity.java</span></div><h1>Activity.java</h1><pre class="source lang-java linenums">package dtu.example.ui;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.List;
+
+<span class="fc" id="L6">public class Activity {</span>
+    private int budgetedTime;
+    private int recordedtime;
+    public int addTime;
+<span class="fc" id="L10">    private List&lt;User&gt; assignedUsers = new ArrayList&lt;User&gt;();</span>
+    public LocalDate startDate;
+    public LocalDate endDate;
+    public Boolean fixed;
+    public int maxusers;
+    public String title;
+
+
+<span class="fc" id="L18">    public Activity(String title){</span>
+<span class="fc" id="L19">        this.title = title;</span>
+<span class="fc" id="L20">    }</span>
+    
+    public int getBudgetedTime() {
+<span class="fc" id="L23">        return budgetedTime;</span>
+    }
+    public void setBudgetedTime(int budgetedTime) {
+<span class="fc" id="L26">        this.budgetedTime = budgetedTime;</span>
+<span class="fc" id="L27">    }</span>
+    public int getRecordedTime() {
+<span class="fc" id="L29">        return recordedtime;</span>
+    }
+    public void setRecordedTime(int recordedtime) {
+<span class="fc" id="L32">        this.recordedtime = recordedtime;</span>
+<span class="fc" id="L33">    }</span>
+
+    public void addTime(int addTime) {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        assert addTime &gt; 0 : &quot;Precondition failed: Cannot add negative time.&quot;;</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        assert addTime != 0 : &quot;Precondition failed: Cannot add zero time.&quot;;</span>
+
+<span class="fc" id="L39">        int oldRecorded = recordedtime;</span>
+
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (budgetedTime &gt;= recordedtime + addTime) {</span>
+<span class="fc" id="L42">            recordedtime += addTime;</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">            assert recordedtime == oldRecorded + addTime : &quot;Postcondition failed: Time not added correctly.&quot;;</span>
+        } else {
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            assert recordedtime == oldRecorded : &quot;Postcondition failed: recordedtime should not change when over budget.&quot;;</span>
+<span class="fc" id="L46">            throw new IllegalArgumentException(&quot;The added time exceeds the budgeted time.&quot;);</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+    public List&lt;User&gt; getAssignedUsers() {
+<span class="fc" id="L51">        return assignedUsers;</span>
+    }
+
+    public int assignUser(User user) {
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (user.getAvailability(this)){</span>
+<span class="fc" id="L56">            this.assignedUsers.add(user);</span>
+<span class="fc" id="L57">            user.assignActivityDONOTUSE(this);</span>
+<span class="fc" id="L58">            return 0;</span>
+        }
+<span class="nc" id="L60">        return -1;</span>
+    }
+
+    public int unassignUser(User user){
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if(assignedUsers.remove(user)){</span>
+<span class="fc" id="L65">            user.removeActivityDONOTUSE(this);</span>
+<span class="fc" id="L66">            return 0;</span>
+        }else{
+<span class="nc" id="L68">            return -1;</span>
+        }
+    }
+
+    public LocalDate getStartDate() {
+<span class="fc" id="L73">        return startDate;</span>
+    }
+    public void setStartDate(LocalDate startDate) {
+<span class="fc" id="L76">        this.startDate = startDate;</span>
+<span class="fc" id="L77">    }</span>
+    public LocalDate getEndDate() {
+<span class="fc" id="L79">        return endDate;</span>
+    }
+    public void setEndDate(LocalDate endDate) {
+<span class="fc" id="L82">        this.endDate = endDate;</span>
+<span class="fc" id="L83">    }</span>
+    public Boolean getFixed() {
+<span class="fc" id="L85">        return fixed;</span>
+    }
+    public void setFixed(Boolean fixed) {
+<span class="fc" id="L88">        this.fixed = fixed;</span>
+<span class="fc" id="L89">    }</span>
+    public int getMaxUsers() {
+<span class="fc" id="L91">        return maxusers;</span>
+    }
+    public void setMaxUsers(int maxusers) {
+<span class="fc" id="L94">        this.maxusers = maxusers;</span>
+<span class="fc" id="L95">    }</span>
+    public String getTitle() {
+<span class="fc" id="L97">        return title;</span>
+    }
+    public void editTitle(String title) {
+<span class="fc" id="L100">        this.title = title;</span>
+<span class="fc" id="L101">    }</span>
+    
+    public void editBudgetedTime(int newTime){ // ændrer budgettet time
+<span class="fc" id="L104">        budgetedTime = newTime; </span>
+<span class="fc" id="L105">    }</span>
+    public void editDate(LocalDate newStartDate, LocalDate newEndDate){
+<span class="fc" id="L107">        endDate = newEndDate; </span>
+<span class="fc" id="L108">        startDate = newStartDate;</span>
+<span class="fc" id="L109">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
