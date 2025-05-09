@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.ListView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,22 +25,58 @@ import javafx.scene.layout.GridPane;
  */
 public class App extends Application {
 
+    private User loginUID;
     private static Scene scene;
     protected List<User> Users = new ArrayList<>();
     protected List<Project> projects = new ArrayList<>();
     private GridPane projectListBox; 
+    
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        projects.add(new Project("1234"));
-        projects.add(new Project("2345"));
-        projects.add(new Project("3456"));
-        projects.add(new Project("4567"));
+        projects.add(new Project("Project1"));
+        projects.add(new Project("Project2"));
+        projects.add(new Project("Project3"));
+        projects.add(new Project("Porject4"));
+
+
+        //Opretter "huba"
+        Users.add(new User("huba"));
+
+        //Opretter de resterende brugere
+        for (int i = 1; i < 50; i++) {
+            Users.add(new User("Use"+i));
+        }
+
+        //Sætter "Use1" som projektleder for Project1
+        projects.stream().filter(p -> p.getName().equals("Project1")).findFirst().ifPresent(
+            p -> p.setProjectLeader(
+                Users.stream().filter(u -> u.getUID().equals("Use1")).findFirst().orElse(null)
+            )
+        );
+
+        //Sætter "huba" som loginUID - test
+        loginUID = Users.get(0); // Simulerer login med første bruger
+
+
+        Button myProjectsButton = new Button("My Activities");
+        myProjectsButton.setPrefHeight(60);
+        myProjectsButton.setPrefWidth(200);
+
+        myProjectsButton.setOnAction(event -> {
+            myProjectWindow(loginUID);
+        });
+
+
+        Label myUserLabel = new Label("Logged in as: " + loginUID.getUID());
+
 
         HBox mainLay = new HBox(120);
         mainLay.setPadding(new Insets(20));
         mainLay.setAlignment(Pos.TOP_LEFT);
+        
+
 
         VBox VenstreBlok = new VBox(30);
         VenstreBlok.setAlignment(Pos.TOP_LEFT);
@@ -50,7 +87,7 @@ public class App extends Application {
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
-        VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
+        VenstreBlok.getChildren().addAll(myUserLabel, infoLabel, ProjektKnap, myProjectsButton);
 
         projectListBox = new GridPane();
         projectListBox.setHgap(20);
@@ -128,6 +165,34 @@ public class App extends Application {
     public void addProject(String projectName) {
         projects.add(new Project(projectName));
     }
+
+    private void myProjectWindow(User currentUser) {
+    Stage myProjectsWindow = new Stage();
+    myProjectsWindow.setTitle("My Activities");
+
+    VBox layout = new VBox(10);
+    layout.setPadding(new Insets(10));
+    layout.setAlignment(Pos.TOP_LEFT);
+
+    Label label1 = new Label("Here you can see your activities:");
+    label1.setPrefWidth(280);
+
+    // ListView til aktiviteter
+    ListView<String> activityList = new ListView<>();
+    for (Activity a : currentUser.getActivities()) {
+        activityList.getItems().add(a.toString()); // eller a.toString()
+    }
+
+    Button closeButton = new Button("Close");
+    closeButton.setOnAction(e -> myProjectsWindow.close());
+
+    layout.getChildren().addAll(label1, activityList, closeButton);
+
+    Scene scene = new Scene(layout, 400, 300);
+    myProjectsWindow.setScene(scene);
+    myProjectsWindow.show();
+}
+
 
     private void newProjectWindow() {
         Stage newProjectWindow = new Stage();

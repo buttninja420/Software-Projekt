@@ -22,7 +22,7 @@ public class Project {
         this.projectNumber = idCounter++;
         this.name = Name;
     }
-
+    
     public int setProjectLeader(User user) {
         if (this.leader == null){
             this.leader = user;
