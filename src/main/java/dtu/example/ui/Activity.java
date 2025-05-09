@@ -14,6 +14,16 @@ public class Activity {
     public int maxusers;
     public String title;
 
+    public Project project;
+
+    public Activity(String title, Project project){
+        this.title = title;
+        this.project = project;
+    }
+
+    public Project getProject() {
+        return this.project;
+    }
 
     public Activity(String title){
         this.title = title;
@@ -73,14 +83,23 @@ public class Activity {
         return startDate;
     }
     public void setStartDate(LocalDate startDate) {
+        if (this.endDate != null && startDate.isAfter(this.endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date.");
+        }
         this.startDate = startDate;
     }
+    
     public LocalDate getEndDate() {
         return endDate;
     }
     public void setEndDate(LocalDate endDate) {
+        if (this.startDate != null && endDate.isBefore(this.startDate)) {
+            throw new IllegalArgumentException("End date cannot be before start date.");
+        }
         this.endDate = endDate;
     }
+    
+    
     public Boolean getFixed() {
         return fixed;
     }
@@ -103,9 +122,13 @@ public class Activity {
     public void editBudgetedTime(int newTime){ // ændrer budgettet time
         budgetedTime = newTime; 
     }
-    public void editDate(LocalDate newStartDate, LocalDate newEndDate){
-        endDate = newEndDate; 
-        startDate = newStartDate;
+    public void editDate(LocalDate newStartDate, LocalDate newEndDate) {
+        if (newStartDate != null && newEndDate != null && newStartDate.isAfter(newEndDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date.");
+        }
+        this.startDate = newStartDate;
+        this.endDate = newEndDate;
     }
+    
 
 }
