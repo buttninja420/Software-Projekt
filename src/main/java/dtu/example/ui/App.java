@@ -30,45 +30,10 @@ public class App extends Application {
     private GridPane projectListBox; 
 
     @Override
-    public void start(Stage stage) throws IOException {
-
-        projects.add(new Project("1234"));
-        projects.add(new Project("2345"));
-        projects.add(new Project("3456"));
-        projects.add(new Project("4567"));
-
-        HBox mainLay = new HBox(120);
-        mainLay.setPadding(new Insets(20));
-        mainLay.setAlignment(Pos.TOP_LEFT);
-
-        VBox VenstreBlok = new VBox(30);
-        VenstreBlok.setAlignment(Pos.TOP_LEFT);
-
-        Label infoLabel = new Label("Press here to make a new project:");
-
-        Button ProjektKnap = new Button("Make a NEW project");
-        ProjektKnap.setPrefHeight(60);
-        ProjektKnap.setPrefWidth(200);
-
-        VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
-
-        projectListBox = new GridPane();
-        projectListBox.setHgap(20);
-        projectListBox.setVgap(20);
-        projectListBox.setAlignment(Pos. TOP_LEFT); 
-
-        ProjektKnap.setOnAction(event -> {
-            newProjectWindow();
-        });
-
-        opdaterProjektListe(); 
-
-        mainLay.getChildren().addAll(VenstreBlok, projectListBox);
-
-        scene = new Scene(mainLay, 800, 480);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage stage) {
+        showLoginWindow(stage);
     }
+    
 
     public App() {}
 
@@ -81,6 +46,37 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    private void showLoginWindow(Stage primaryStage) {
+        Stage loginStage = new Stage();
+        loginStage.setTitle("Login");
+    
+        VBox layout = new VBox(15);
+        layout.setPadding(new Insets(20));
+        layout.setAlignment(Pos.CENTER);
+    
+        Label welcomeLabel = new Label("Welcome");
+        welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+    
+        TextField userIdField = new TextField();
+        userIdField.setPromptText("Enter User ID");
+    
+        Button loginButton = new Button("Sign In");
+        loginButton.setOnAction(e -> {
+            String userId = userIdField.getText().trim();
+            if (!userId.isEmpty()) {
+                registerUser(userId);
+                loginStage.close();
+                startMainWindow(primaryStage);
+            }
+        });
+    
+        layout.getChildren().addAll(welcomeLabel, userIdField, loginButton);
+    
+        Scene scene = new Scene(layout, 300, 200);
+        loginStage.setScene(scene);
+        loginStage.show();
+    }
+    
     public static void main(String[] args) {
         launch();
     }
@@ -370,9 +366,50 @@ public class App extends Application {
         errorStage.setScene(scene);
         errorStage.show();
     }
+
+    private void startMainWindow(Stage stage) {
+            projects.add(new Project("1234"));
+            projects.add(new Project("2345"));
+            projects.add(new Project("3456"));
+            projects.add(new Project("4567"));
+    
+            HBox mainLay = new HBox(120);
+            mainLay.setPadding(new Insets(20));
+            mainLay.setAlignment(Pos.TOP_LEFT);
+    
+            VBox VenstreBlok = new VBox(30);
+            VenstreBlok.setAlignment(Pos.TOP_LEFT);
+    
+            Label infoLabel = new Label("Press here to make a new project:");
+    
+            Button ProjektKnap = new Button("Make a NEW project");
+            ProjektKnap.setPrefHeight(60);
+            ProjektKnap.setPrefWidth(200);
+    
+            VenstreBlok.getChildren().addAll(infoLabel, ProjektKnap);
+    
+            projectListBox = new GridPane();
+            projectListBox.setHgap(20);
+            projectListBox.setVgap(20);
+            projectListBox.setAlignment(Pos. TOP_LEFT); 
+    
+            ProjektKnap.setOnAction(event -> {
+                newProjectWindow();
+            });
+    
+            opdaterProjektListe(); 
+    
+            mainLay.getChildren().addAll(VenstreBlok, projectListBox);
+    
+            scene = new Scene(mainLay, 800, 480);
+            stage.setScene(scene);
+            stage.show();
+
+    }
     
     
 }
+
 
 
         //getAssignedUsers
