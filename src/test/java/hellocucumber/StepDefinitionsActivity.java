@@ -79,7 +79,7 @@ public class StepDefinitionsActivity {
     }
 
     @When("an employee with UID {string} who has {int} ongoing activites tries to join the activity with name {string}")
-    public void an_employee_with_UID_who_has_ongoin_activites_tries_to_join_the_activity(String employee, int ongoingActivities, String activity) {
+    public void an_employee_with_UID_who_has_ongoing_activites_tries_to_join_the_activity(String employee, int ongoingActivities, String activity) {
         app.registerUser(employee);
         if (ongoingActivities < User.maxActivities) {
             activity1.assignUser(app.getUserWithUID(employee));
@@ -194,7 +194,7 @@ public class StepDefinitionsActivity {
     @When("an employee adds {int} hours to the registered work time")
     public void an_employee_adds_hours_to_the_registered_work_time(int addHours) {
         try {
-            activity1.addTime(addHours);
+        activity1.addTime(addHours);
         } catch (IllegalArgumentException e) {
             errorMessage = e.getMessage();
         }
