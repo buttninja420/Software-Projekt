@@ -2,6 +2,8 @@ package dtu.example.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+
 
 public class Project {
     private List<Activity> activities = new ArrayList<>();
@@ -51,25 +53,37 @@ public class Project {
     public String generateReport() {
         StringBuilder report = new StringBuilder();
         report.append("Status of activities:\n");
-        int totalTime = 0;
-
-        for (Activity activity : activities) {
-            totalTime += activity.getRecordedTime();
-            report.append("--------------\n");
-            report.append(activity.getTitle()).append("\n");
-            report.append("Start date: ").append(activity.getStartDate())
-                  .append(" | End date: ").append(activity.getEndDate()).append("\n");
-            report.append("Time status - Budgetted: ")
-                  .append(activity.getBudgetedTime())
-                  .append(", Assigned: ").append(activity.getRecordedTime()).append("\n");
-        }
         report.append("--------------\n");
-        report.append("Total assigned time: ").append(totalTime).append(" hours");
-
-        //System.out.println(report.toString());
-
+    
+        if (activities.isEmpty()) {
+            report.append("No activities yet.\n");
+            report.append("Start date: Not set | End date: Not set\n");
+            report.append("Time status - Budgeted: 0, Assigned: 0\n");
+            report.append("--------------\n");
+        } else {
+            for (Activity activity : activities) {
+                String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "Not set";
+                String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "Not set";
+                int budgetedTime = activity.getBudgetedTime();
+                int recordedTime = activity.getRecordedTime();
+    
+                report.append(activity.getTitle()).append("\n");
+                report.append("Start date: ").append(startDate)
+                      .append(" | End date: ").append(endDate).append("\n");
+                report.append("Time status - Budgeted: ").append(budgetedTime)
+                      .append(", Assigned: ").append(recordedTime).append("\n");
+                report.append("--------------\n");
+            }
+        }
+    
+        int totalTime = getAssignedTime();
+        report.append("Total assigned time: ").append(totalTime).append(" hours\n");
+    
         return report.toString();
     }
+    
+    
+
     public String getName(){
         return this.name;
     }

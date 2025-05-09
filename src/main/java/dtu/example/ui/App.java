@@ -195,131 +195,173 @@ public class App extends Application {
 
     private void projectEditorWindow(Project project) {
         Stage projectEditorWindow = new Stage();
-        projectEditorWindow.setTitle("Edit Projekt " + project.getName());
-
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10));
-        layout.setAlignment(Pos.CENTER);
-
-        Label label1 = new Label("Report of projects");
-        layout.getChildren().add(label1);
-        layout.getChildren().add(new Label(project.generateReport()));
-
-        String pl = "No current project leader";
-        try {
-            pl = project.getProjectleader().getUID();
-        } catch (java.lang.NullPointerException e1){}
-
-        HBox projectLeaderBox = new HBox();
+        projectEditorWindow.setTitle("Edit Project " + project.getName());
+    
+        HBox mainLayout = new HBox(50);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setAlignment(Pos.TOP_LEFT);
+    
+        VBox leftBox = new VBox(15);
+        leftBox.setAlignment(Pos.TOP_LEFT);
+        leftBox.setTranslateX(30);
         
+        Label headerLabel = new Label("Project " + project.getName());
+        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        
+        Label reportLabel = new Label("Reports of projects:");
+        Label startDateLabel = new Label("Start date: Not set");
+        Label endDateLabel = new Label("End date: Not set");
+        
+        HBox projectLeaderBox = new HBox(10);
         Label projectLeaderLabel = new Label("Project leader:");
-        projectLeaderLabel.setPrefWidth(120);
-        TextField projectLeaderTF = new TextField(pl);
-        projectLeaderTF.setOnKeyTyped(event -> project.setProjectLeader(this.getUserWithUID(projectLeaderTF.getText())));
+        final TextField projectLeaderTF = new TextField("No current");
+        projectLeaderTF.setPrefWidth(150);
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF);
         
-        projectLeaderBox.getChildren().addAll(projectLeaderLabel,projectLeaderTF);
-        projectLeaderBox.autosize();
-        layout.getChildren().add(projectLeaderBox);
-
-
-        VBox.setMargin(projectLeaderBox, new Insets(0, 0, 25, 0)); 
+        leftBox.getChildren().addAll(headerLabel, reportLabel, startDateLabel, endDateLabel, projectLeaderBox);
         
-        Label activityLabel = new Label("Activities of project " + project.getName());
-        Button addActivityButton = new Button("+add activity");
+        VBox rightBox = new VBox(15);
+        rightBox.setAlignment(Pos.TOP_LEFT);
+        rightBox.setTranslateY(45);
+    
+        HBox activityHeader = new HBox(10);
+        Label activitiesLabel = new Label("Activities of project:");
+        Button addActivityButton = new Button("+ Add activity");
+        activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
+        activityHeader.setAlignment(Pos.CENTER_LEFT);
         
         addActivityButton.setOnAction(event -> {
             Stage inputWindow = new Stage();
-            inputWindow.setTitle("Add new activity");
-        
+            inputWindow.setTitle("Add New Activity");
+    
             VBox popupLayout = new VBox(10);
-            layout.setPadding(new Insets(10));
-            layout.setAlignment(Pos.CENTER);
-        
+            popupLayout.setPadding(new Insets(10));
+            popupLayout.setAlignment(Pos.CENTER);
+    
             Label prompt = new Label("Enter activity name:");
             TextField inputField = new TextField();
             Button confirmButton = new Button("Create");
-        
+    
             confirmButton.setOnAction(e -> {
                 String title = inputField.getText().trim();
                 if (!title.isEmpty()) {
                     project.addActivity(new Activity(title));
                     inputWindow.close();
                     projectEditorWindow.close();
-                    projectEditorWindow(project); 
+                    projectEditorWindow(project);
                 }
             });
-        
+    
             popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
-            Scene scene = new Scene(popupLayout, 250, 150);            
+            Scene scene = new Scene(popupLayout, 250, 150);
             inputWindow.setScene(scene);
-            inputWindow.initOwner(addActivityButton.getScene().getWindow()); 
             inputWindow.show();
         });
-        
-        
-        HBox activityBox = new HBox(10); 
-        activityBox.setAlignment(Pos.CENTER_LEFT);
-        activityBox.getChildren().addAll(activityLabel, addActivityButton);
-        
-        layout.getChildren().add(activityBox);
-        VBox.setMargin(activityBox, new Insets(10, 0, 0, 0));      
+    
+        rightBox.getChildren().add(activityHeader);
 
-        
-        for (Activity activity : project.getActivities()){
-            Button button = new Button(activity.getTitle());
-            button.setOnAction(event -> activityEditorWindow(activity));
-            layout.getChildren().add(button);
+        for (Activity activity : project.getActivities()) {
+            Button activityButton = new Button(activity.getTitle());
+            activityButton.setOnAction(e -> activityEditorWindow(activity));
+            rightBox.getChildren().add(activityButton);
         }
-        //getActivities
-
-        Scene scene = new Scene(layout, 350, 400);
+        
+    
+        mainLayout.getChildren().addAll(leftBox, rightBox);
+        HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));  
+    
+        Scene scene = new Scene(mainLayout, 600, 400);
         projectEditorWindow.setScene(scene);
         projectEditorWindow.show();
-        
     }
-
-    public void activityEditorWindow(Activity activity){
+    
+    public void activityEditorWindow(Activity activity) {
         Stage activityEditorWindow = new Stage();
         activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
-
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10));
+    
+        VBox layout = new VBox(15);
+        layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-
-        //addTime
-        HBox addTimeBox = new HBox();          
-        TextField addTimeTF = new TextField("0");
-        Button addTimeButton = new Button("Add time");
-        addTimeButton.setOnAction(event -> activity.addTime(Integer.valueOf(addTimeTF.getText())));
-        addTimeBox.getChildren().addAll(addTimeTF,addTimeButton);
+    
+        Label headerLabel = new Label("Activity " + activity.getTitle());
+        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        layout.getChildren().add(headerLabel);
+    
+        Label instructionLabel = new Label("Enter budgeted time first for your activity and then your recorded\ntime below:");
+        layout.getChildren().add(instructionLabel);
+    
+        HBox budgetedTimeBox = new HBox(10);
+        budgetedTimeBox.setAlignment(Pos.CENTER_LEFT);
+        Label budgetedTimeLabel = new Label("Budgeted Time:");
+        final TextField budgetedTimeTF = new TextField(String.valueOf(activity.getBudgetedTime()));
+        budgetedTimeTF.setOnKeyReleased(event -> {
+            try {
+                int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
+                activity.setBudgetedTime(budget);
+            } catch (NumberFormatException ignored) {}
+        });
+        budgetedTimeBox.getChildren().addAll(budgetedTimeLabel, budgetedTimeTF);
+        layout.getChildren().add(budgetedTimeBox);
+    
+        HBox recordedTimeBox = new HBox(10);
+        recordedTimeBox.setAlignment(Pos.CENTER_LEFT);
+        Label recordedTimeLabel = new Label("Recorded Time:");
+        final TextField recordedTimeTF = new TextField(String.valueOf(activity.getRecordedTime()));
+        recordedTimeTF.setEditable(false);
+        recordedTimeBox.getChildren().addAll(recordedTimeLabel, recordedTimeTF);
+        layout.getChildren().add(recordedTimeBox);
+    
+        HBox addTimeBox = new HBox(10);
+        addTimeBox.setAlignment(Pos.CENTER);
+        final TextField addTimeTF = new TextField();
+        addTimeTF.setPromptText("Enter time");
+        Button addTimeButton = new Button("Add recorded time");
+    
+        addTimeButton.setOnAction(event -> {
+            try {
+                int addedTime = Integer.parseInt(addTimeTF.getText().trim());
+                if (addedTime < 0) {
+                    showErrorPopup("Time cannot be negative.");
+                    return;
+                }
+                activity.addTime(addedTime);
+                recordedTimeTF.setText(String.valueOf(activity.getRecordedTime()));
+                addTimeTF.clear();
+            } catch (NumberFormatException e) {
+                showErrorPopup("Please enter a valid number.");
+                addTimeTF.clear();
+            }
+        });
+    
+        addTimeBox.getChildren().addAll(addTimeTF, addTimeButton);
         layout.getChildren().add(addTimeBox);
+    
+        Scene scene = new Scene(layout, 400, 300);
+        activityEditorWindow.setScene(scene);
+        activityEditorWindow.show();
+    }
+    
+    
+    public void showErrorPopup(String message) {
+        Stage errorStage = new Stage();
+        errorStage.setTitle("Input Error");
+        VBox box = new VBox(10);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(10));
+        Label label = new Label(message);
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> errorStage.close());
+        box.getChildren().addAll(label, okButton);
+        Scene scene = new Scene(box, 250, 100);
+        errorStage.setScene(scene);
+        errorStage.show();
+    }
+    
+    
+}
 
 
-        //getBudgetedTime
-        HBox BudgetedTimeBox = new HBox();        
-        Label BudgetedTimeLabel = new Label("Budgeted Time:");
-        BudgetedTimeLabel.setPrefWidth(120);
-        String BT = "Nan";
-        try {
-            BT = Integer.toString(activity.getBudgetedTime());
-        } catch (java.lang.NullPointerException e1){}        
-        TextField BudgetedTimeTF = new TextField(BT);
-        BudgetedTimeTF.setOnKeyTyped(event -> activity.setBudgetedTime(Integer.valueOf(BudgetedTimeTF.getText())));
-        BudgetedTimeBox.getChildren().addAll(BudgetedTimeLabel,BudgetedTimeTF);
-        layout.getChildren().add(BudgetedTimeBox);
 
-        //getRecordedTime
-        HBox RecordedTimeBox = new HBox();        
-        Label RecordedTimeLabel = new Label("Recorded Time:");
-        RecordedTimeLabel.setPrefWidth(120);
-        String RT = "Nan";
-        try {
-            RT = Integer.toString(activity.getRecordedTime());
-        } catch (java.lang.NullPointerException e1){}
-        TextField RecordedTimeTF = new TextField(RT);
-        RecordedTimeTF.setOnKeyTyped(event -> activity.setBudgetedTime(Integer.valueOf(RecordedTimeTF.getText())));
-        RecordedTimeBox.getChildren().addAll(RecordedTimeLabel,RecordedTimeTF);
-        layout.getChildren().add(RecordedTimeBox);
 
         //getAssignedUsers
         //assignUser
@@ -329,9 +371,3 @@ public class App extends Application {
         //getFixed
         //getMaxUsers
         //editDate
-
-        Scene scene = new Scene(layout, 300, 200);
-        activityEditorWindow.setScene(scene);
-        activityEditorWindow.show();
-    }
-}
