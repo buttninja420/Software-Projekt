@@ -1,5 +1,5 @@
 package dtu.example.ui;
-
+import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -203,12 +203,20 @@ public class App extends Application {
     
         VBox leftBox = new VBox(15);
         leftBox.setAlignment(Pos.TOP_LEFT);
+        DatePicker startDatePicker = new DatePicker(project.getStartDate());
+        startDatePicker.setOnAction(event -> project.setStartDate(startDatePicker.getValue()));
+        
+        DatePicker endDatePicker = new DatePicker(project.getEndDate());
+        endDatePicker.setOnAction(event -> project.setEndDate(endDatePicker.getValue()));
+        
         leftBox.setTranslateX(30);
         
         Label headerLabel = new Label("Project " + project.getName());
         headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         
         Label reportLabel = new Label("Reports of projects:");
+        
+
         Label startDateLabel = new Label("Start date: Not set");
         Label endDateLabel = new Label("End date: Not set");
         
@@ -218,7 +226,13 @@ public class App extends Application {
         projectLeaderTF.setPrefWidth(150);
         projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF);
         
-        leftBox.getChildren().addAll(headerLabel, reportLabel, startDateLabel, endDateLabel, projectLeaderBox);
+        leftBox.getChildren().addAll(
+            headerLabel, 
+            reportLabel, 
+            new Label("Start date:"), startDatePicker,
+            new Label("End date:"), endDatePicker,
+            projectLeaderBox
+        );
         
         VBox rightBox = new VBox(15);
         rightBox.setAlignment(Pos.TOP_LEFT);
@@ -229,7 +243,7 @@ public class App extends Application {
         Button addActivityButton = new Button("+ Add activity");
         activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
         activityHeader.setAlignment(Pos.CENTER_LEFT);
-        
+
         addActivityButton.setOnAction(event -> {
             Stage inputWindow = new Stage();
             inputWindow.setTitle("Add New Activity");
@@ -361,13 +375,8 @@ public class App extends Application {
 }
 
 
-
-
         //getAssignedUsers
         //assignUser
         //unassignUser
-        //getStartDate
-        //getEndDate
         //getFixed
         //getMaxUsers
-        //editDate

@@ -14,6 +14,9 @@ public class Project {
     private int maxTime;
     private static int idCounter;
     private String name ="";
+    private LocalDate startDate;
+    private LocalDate endDate;
+
     
     public Project(String Name) {
         this.projectNumber = idCounter++;
@@ -53,6 +56,12 @@ public class Project {
     public String generateReport() {
         StringBuilder report = new StringBuilder();
         report.append("Status of activities:\n");
+        report.append("Project start date: ").append(
+            (startDate != null) ? startDate.toString() : "Not set"
+        ).append(" | End date: ").append(
+            (endDate != null) ? endDate.toString() : "Not set"
+        ).append("\n");
+
         report.append("--------------\n");
     
         if (activities.isEmpty()) {
@@ -87,5 +96,22 @@ public class Project {
     public String getName(){
         return this.name;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+    
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+    
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+    
 
 }
