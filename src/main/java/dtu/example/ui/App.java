@@ -34,6 +34,14 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        //Opretter "huba"
+        Users.add(new User("huba"));
+
+        //Opretter de resterende brugere
+        for (int i = 1; i < 50; i++) {
+            Users.add(new User("Use"+i));
+        }
+        
         showLoginWindow(stage);
     }
 
@@ -67,9 +75,15 @@ public class App extends Application {
         loginButton.setOnAction(e -> {
             String userId = userIdField.getText().trim();
             if (!userId.isEmpty()) {
-                registerUser(userId);
-                loginStage.close();
-                startMainWindow(primaryStage);
+                loginUID = new User(userId);
+                
+                if (registerUser(userId) == -1) {
+                    loginStage.close();
+                    startMainWindow(primaryStage);
+                } else {
+                    showErrorPopup("User doesn't exists. Please try again.");
+                }
+                
             }
         });
     
@@ -405,23 +419,12 @@ public class App extends Application {
         projects.add(new Project("Porject4"));
 
 
-        //Opretter "huba"
-        Users.add(new User("huba"));
-
-        //Opretter de resterende brugere
-        for (int i = 1; i < 50; i++) {
-            Users.add(new User("Use"+i));
-        }
-
         //Sætter "Use1" som projektleder for Project1
         projects.stream().filter(p -> p.getName().equals("Project1")).findFirst().ifPresent(
             p -> p.setProjectLeader(
                 Users.stream().filter(u -> u.getUID().equals("Use1")).findFirst().orElse(null)
             )
         );
-
-        //Sætter "huba" som loginUID - test
-        loginUID = Users.get(0); // Simulerer login med første bruger
 
 
         Button myProjectsButton = new Button("My Activities");
