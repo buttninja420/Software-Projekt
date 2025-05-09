@@ -41,7 +41,7 @@ public class App extends Application {
         for (int i = 1; i < 50; i++) {
             Users.add(new User("Use"+i));
         }
-        
+
         showLoginWindow(stage);
     }
 
@@ -75,9 +75,9 @@ public class App extends Application {
         loginButton.setOnAction(e -> {
             String userId = userIdField.getText().trim();
             if (!userId.isEmpty()) {
-                loginUID = new User(userId);
                 
                 if (registerUser(userId) == -1) {
+                    loginUID = getUserWithUID(userId);
                     loginStage.close();
                     startMainWindow(primaryStage);
                 } else {
@@ -280,8 +280,22 @@ public class App extends Application {
         HBox projectLeaderBox = new HBox(10);
         Label projectLeaderLabel = new Label("Project leader:");
         final TextField projectLeaderTF = new TextField("No current");
+
+        Button projectLeaderButton = new Button("Assign project leader");
+        projectLeaderButton.setOnAction(event -> {
+            String newLeader = projectLeaderTF.getText().trim();
+            if (!newLeader.isEmpty() && newLeader.length() == 4) {
+                project.setProjectLeader(getUserWithUID(newLeader));
+                projectLeaderTF.setText(newLeader);
+                projectLeaderTF.setEditable(false);
+            }
+        });
+
+
         projectLeaderTF.setPrefWidth(150);
-        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF);
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
+
+        
         
         leftBox.getChildren().addAll(
             headerLabel, 
@@ -316,7 +330,7 @@ public class App extends Application {
             confirmButton.setOnAction(e -> {
                 String title = inputField.getText().trim();
                 if (!title.isEmpty()) {
-                    project.addActivity(new Activity(title));
+                    project.addActivity(new Activity(title, project));
                     inputWindow.close();
                     projectEditorWindow.close();
                     projectEditorWindow(project);
@@ -345,6 +359,7 @@ public class App extends Application {
         projectEditorWindow.setScene(scene);
         projectEditorWindow.show();
     }
+
     
     public void activityEditorWindow(Activity activity) {
         Stage activityEditorWindow = new Stage();
@@ -387,6 +402,8 @@ public class App extends Application {
         final TextField addTimeTF = new TextField();
         addTimeTF.setPromptText("Enter time");
         Button addTimeButton = new Button("Add recorded time");
+        Button assignUserButton = new Button("Assign user");
+        Button assignSelf = new Button("Assign");
     
         addTimeButton.setOnAction(event -> {
             try {
@@ -406,6 +423,11 @@ public class App extends Application {
     
         addTimeBox.getChildren().addAll(addTimeTF, addTimeButton);
         layout.getChildren().add(addTimeBox);
+        if (activity.getProject().getProjectleader().equals(loginUID) && activity.getProject().getProjectleader() != null) {
+            layout.getChildren().add(assignUserButton);
+        } else {
+            layout.getChildren().add(assignSelf);
+        }
     
         Scene scene = new Scene(layout, 400, 300);
         activityEditorWindow.setScene(scene);
@@ -434,12 +456,6 @@ public class App extends Application {
         projects.add(new Project("Project3"));
         projects.add(new Project("Porject4"));
 
-
-        projects.stream().filter(p -> p.getName().equals("Project1")).findFirst().ifPresent(
-            p -> p.setProjectLeader(
-                Users.stream().filter(u -> u.getUID().equals("Use1")).findFirst().orElse(null)
-            )
-        );
 
 
         Button myProjectsButton = new Button("My Activities");

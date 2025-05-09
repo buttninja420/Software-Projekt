@@ -14,6 +14,16 @@ public class Activity {
     public int maxusers;
     public String title;
 
+    public Project project;
+
+    public Activity(String title, Project project){
+        this.title = title;
+        this.project = project;
+    }
+
+    public Project getProject() {
+        return this.project;
+    }
 
     public Activity(String title){
         this.title = title;
