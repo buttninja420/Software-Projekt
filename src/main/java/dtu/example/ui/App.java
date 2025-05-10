@@ -1,4 +1,5 @@
 package dtu.example.ui;
+
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,33 +21,31 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.GridPane;
 
-
 /**
  * JavaFX App
  */
 public class App extends Application {
 
-    private User loginUID;
+    private User LoginUser;
     private static Scene scene;
     protected List<User> Users = new ArrayList<>();
     protected List<Project> projects = new ArrayList<>();
-    private GridPane projectListBox; 
-    
+    private GridPane projectListBox;
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Opretter "huba"
+        // Opretter "huba"
         Users.add(new User("huba"));
 
         for (int i = 1; i < 50; i++) {
-            Users.add(new User("Use"+i));
+            Users.add(new User("Use" + i));
         }
 
         showLoginWindow(stage);
     }
 
-
-    public App() {}
+    public App() {
+    }
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
@@ -60,40 +59,40 @@ public class App extends Application {
     private void showLoginWindow(Stage primaryStage) {
         Stage loginStage = new Stage();
         loginStage.setTitle("Login");
-    
+
         VBox layout = new VBox(15);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
-    
+
         Label welcomeLabel = new Label("Welcome");
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-    
+
         TextField userIdField = new TextField();
         userIdField.setPromptText("Enter User ID");
-    
+
         Button loginButton = new Button("Sign In");
         loginButton.setOnAction(e -> {
             String userId = userIdField.getText().trim();
             if (!userId.isEmpty()) {
-                
-                if (registerUser(userId) == -1) {
-                    loginUID = getUserWithUID(userId);
+
+                if (getUserUIDs().contains(userId)) {
+                    LoginUser = getUserWithUID(userId);
                     loginStage.close();
                     startMainWindow(primaryStage);
                 } else {
                     showErrorPopup("User doesn't exists. Please try again.");
                 }
-                
+
             }
         });
-    
+
         layout.getChildren().addAll(welcomeLabel, userIdField, loginButton);
-    
+
         Scene scene = new Scene(layout, 300, 200);
         loginStage.setScene(scene);
         loginStage.show();
     }
-    
+
     public static void main(String[] args) {
         launch();
     }
@@ -142,32 +141,38 @@ public class App extends Application {
         projects.add(new Project(projectName));
     }
 
-    private void myProjectWindow(User currentUser) {
-    Stage myProjectsWindow = new Stage();
-    myProjectsWindow.setTitle("My Activities");
+    private void myActivitiesWindow(User currentUser) {
+        Stage myActivitiesWindow = new Stage();
+        myActivitiesWindow.setTitle("My Activities");
 
-    VBox layout = new VBox(10);
-    layout.setPadding(new Insets(10));
-    layout.setAlignment(Pos.TOP_LEFT);
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.TOP_LEFT);
 
-    Label label1 = new Label("Here you can see your activities:");
-    label1.setPrefWidth(280);
+        Label label1 = new Label("Here you can see your activities:");
+        label1.setPrefWidth(280);
 
-    ListView<String> activityList = new ListView<>();
-    for (Activity a : currentUser.getActivities()) {
-        activityList.getItems().add(a.getTitle()); 
+        ListView<HBox> activityList = new ListView<>();
+
+        for (Activity a : currentUser.getActivities()) {
+            Label titleLabel = new Label(a.getTitle());
+            titleLabel.setPrefWidth(150); // Set column width
+            Label dateLabel = new Label(a.getStartDate() + " - " + a.getEndDate());
+            
+            HBox row = new HBox(10, titleLabel, dateLabel);
+            activityList.getItems().add(row);
+        }
+
+        activityList.setItems(activityList.getItems().sorted());
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> myActivitiesWindow.close());
+
+        layout.getChildren().addAll(label1, activityList, closeButton);
+
+        Scene scene = new Scene(layout, 400, 300);
+        myActivitiesWindow.setScene(scene);
+        myActivitiesWindow.show();
     }
-
-    Button closeButton = new Button("Close");
-    closeButton.setOnAction(e -> myProjectsWindow.close());
-
-    layout.getChildren().addAll(label1, activityList, closeButton);
-
-    Scene scene = new Scene(layout, 400, 300);
-    myProjectsWindow.setScene(scene);
-    myProjectsWindow.show();
-    }
-
 
     private void newProjectWindow() {
         Stage newProjectWindow = new Stage();
@@ -177,7 +182,8 @@ public class App extends Application {
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.TOP_LEFT);
 
-        Label label1 = new Label("Here you can make a new project. Start with giving \nthe new project a name and then you can edit the \nproject on the main window.");
+        Label label1 = new Label(
+                "Here you can make a new project. Start with giving \nthe new project a name and then you can edit the \nproject on the main window.");
         label1.setPrefWidth(280);
         Label nameLabel = new Label("Name of new project:");
         TextField newName = new TextField();
@@ -205,14 +211,14 @@ public class App extends Application {
         projectListBox.getChildren().clear();
 
         Label titel = new Label("Projects");
-        projectListBox.add(titel, 0,0);
+        projectListBox.add(titel, 0, 0);
 
         if (projects.isEmpty()) {
             Label noProject = new Label("You have zero working projects");
-            projectListBox.add(noProject, 0,1);
+            projectListBox.add(noProject, 0, 1);
         } else {
             int column = 0;
-            int row = 1; 
+            int row = 1;
 
             for (Project project : projects) {
                 Project currentProject = project;
@@ -224,7 +230,7 @@ public class App extends Application {
                 projectListBox.add(button, column, row);
 
                 column++;
-                if (column > 1) { 
+                if (column > 1) {
                     column = 0;
                     row++;
                 }
@@ -232,161 +238,157 @@ public class App extends Application {
         }
     }
 
-
     private void projectEditorWindow(Project project) {
-    Stage projectEditorWindow = new Stage();
-    projectEditorWindow.setTitle("Edit Project " + project.getName());
+        Stage projectEditorWindow = new Stage();
+        projectEditorWindow.setTitle("Edit Project " + project.getName());
 
-    HBox mainLayout = new HBox(50);
-    mainLayout.setPadding(new Insets(20));
-    mainLayout.setAlignment(Pos.TOP_LEFT);
+        HBox mainLayout = new HBox(50);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setAlignment(Pos.TOP_LEFT);
 
-    VBox leftBox = new VBox(15);
-    leftBox.setAlignment(Pos.TOP_LEFT);
-    DatePicker startDatePicker = new DatePicker(project.getStartDate());
-    startDatePicker.setOnAction(event -> {
-        LocalDate selectedDate = startDatePicker.getValue();
-        if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
-            showErrorPopup("Start date cannot be after end date. Pick a new date");
-            startDatePicker.setValue(project.getStartDate());
-        } else {
-            project.setStartDate(selectedDate);
-        }
-    });
-
-    DatePicker endDatePicker = new DatePicker(project.getEndDate());
-    endDatePicker.setOnAction(event -> {
-        LocalDate selectedDate = endDatePicker.getValue();
-        if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
-            showErrorPopup("End date cannot be before start date. Pick a new date");
-            endDatePicker.setValue(project.getEndDate());
-        } else {
-            project.setEndDate(selectedDate);
-        }
-    });
-
-    leftBox.setTranslateX(30);
-
-    Label headerLabel = new Label("Project " + project.getName());
-    headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-
-    Label reportLabel = new Label("Reports of projects:");
-
-    Label startDateLabel = new Label("Start date: Not set");
-    Label endDateLabel = new Label("End date: Not set");
-
-    HBox projectLeaderBox = new HBox(10);
-    Label projectLeaderLabel = new Label("Project leader:");
-    TextField projectLeaderTF = new TextField();
-    if (project.getProjectleader() != null) {
-        projectLeaderTF.setText(project.getProjectleader().getUID());
-        projectLeaderTF.setDisable(true);
-    } else {
-        projectLeaderTF.setText("No current");
-    }
-    
-
-    Button projectLeaderButton = new Button("Assign project leader");
-    projectLeaderButton.setOnAction(event -> {
-        String newLeader = projectLeaderTF.getText().trim();
-        User user = getUserWithUID(newLeader);
-    
-        if (user != null) {
-            project.setProjectLeader(user);
-            projectLeaderTF.setText(newLeader);
-            projectLeaderTF.setEditable(false);
-            projectLeaderTF.setDisable(true);
-        } else {
-            showErrorPopup("User '" + newLeader + "' does not exist. \nCannot assign as project leader.");
-        }
-    });
-    
-
-    projectLeaderTF.setPrefWidth(150);
-    projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
-
-    leftBox.getChildren().addAll(
-        headerLabel,
-        reportLabel,
-        new Label("Start date:"), startDatePicker,
-        new Label("End date:"), endDatePicker,
-        projectLeaderBox
-    );
-
-    VBox rightBox = new VBox(15);
-    rightBox.setAlignment(Pos.TOP_LEFT);
-    rightBox.setTranslateY(45);
-
-    HBox activityHeader = new HBox(10);
-    Label activitiesLabel = new Label("Activities of project:");
-    Button addActivityButton = new Button("+ Add activity");
-    activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
-    activityHeader.setAlignment(Pos.CENTER_LEFT);
-
-    rightBox.getChildren().add(activityHeader);
-
-    for (Activity activity : project.getActivities()) {
-        Button activityButton = new Button(activity.getTitle());
-        activityButton.setOnAction(e -> activityEditorWindow(activity));
-        rightBox.getChildren().add(activityButton);
-    }
-
-    addActivityButton.setOnAction(event -> {
-        Stage inputWindow = new Stage();
-        inputWindow.setTitle("Add New Activity");
-
-        VBox popupLayout = new VBox(10);
-        popupLayout.setPadding(new Insets(10));
-        popupLayout.setAlignment(Pos.CENTER);
-
-        Label prompt = new Label("Enter activity name:");
-        TextField inputField = new TextField();
-        Button confirmButton = new Button("Create");
-
-        confirmButton.setOnAction(e -> {
-            String title = inputField.getText().trim();
-            if (!title.isEmpty()) {
-                Activity newActivity = new Activity(title, project);
-                project.addActivity(newActivity);
-
-                Button activityButton = new Button(newActivity.getTitle());
-                activityButton.setOnAction(ev -> activityEditorWindow(newActivity));
-                rightBox.getChildren().add(activityButton);
-
-                inputWindow.close();
+        VBox leftBox = new VBox(15);
+        leftBox.setAlignment(Pos.TOP_LEFT);
+        DatePicker startDatePicker = new DatePicker(project.getStartDate());
+        startDatePicker.setOnAction(event -> {
+            LocalDate selectedDate = startDatePicker.getValue();
+            if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
+                showErrorPopup("Start date cannot be after end date. Pick a new date");
+                startDatePicker.setValue(project.getStartDate());
+            } else {
+                project.setStartDate(selectedDate);
             }
         });
 
-        popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
-        Scene scene = new Scene(popupLayout, 250, 150);
-        inputWindow.setScene(scene);
-        inputWindow.show();
-    });
+        DatePicker endDatePicker = new DatePicker(project.getEndDate());
+        endDatePicker.setOnAction(event -> {
+            LocalDate selectedDate = endDatePicker.getValue();
+            if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
+                showErrorPopup("End date cannot be before start date. Pick a new date");
+                endDatePicker.setValue(project.getEndDate());
+            } else {
+                project.setEndDate(selectedDate);
+            }
+        });
 
-    mainLayout.getChildren().addAll(leftBox, rightBox);
-    HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));
+        leftBox.setTranslateX(30);
 
-    Scene scene = new Scene(mainLayout, 800, 500);
-    projectEditorWindow.setScene(scene);
-    projectEditorWindow.show();
-}
+        Label headerLabel = new Label("Project " + project.getName());
+        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-    
+        Label reportLabel = new Label("Reports of projects:");
+
+        Label startDateLabel = new Label("Start date: Not set");
+        Label endDateLabel = new Label("End date: Not set");
+
+        HBox projectLeaderBox = new HBox(10);
+        Label projectLeaderLabel = new Label("Project leader:");
+        TextField projectLeaderTF = new TextField();
+        if (project.getProjectleader() != null) {
+            projectLeaderTF.setText(project.getProjectleader().getUID());
+            projectLeaderTF.setDisable(true);
+        } else {
+            projectLeaderTF.setText("No current");
+        }
+
+        Button projectLeaderButton = new Button("Assign project leader");
+        projectLeaderButton.setOnAction(event -> {
+            String newLeader = projectLeaderTF.getText().trim();
+            User user = getUserWithUID(newLeader);
+
+            if (user != null) {
+                project.setProjectLeader(user);
+                projectLeaderTF.setText(newLeader);
+                projectLeaderTF.setEditable(false);
+                projectLeaderTF.setDisable(true);
+            } else {
+                showErrorPopup("User '" + newLeader + "' does not exist. \nCannot assign as project leader.");
+            }
+        });
+
+        projectLeaderTF.setPrefWidth(150);
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
+
+        leftBox.getChildren().addAll(
+                headerLabel,
+                reportLabel,
+                new Label("Start date:"), startDatePicker,
+                new Label("End date:"), endDatePicker,
+                projectLeaderBox);
+
+        VBox rightBox = new VBox(15);
+        rightBox.setAlignment(Pos.TOP_LEFT);
+        rightBox.setTranslateY(45);
+
+        HBox activityHeader = new HBox(10);
+        Label activitiesLabel = new Label("Activities of project:");
+        Button addActivityButton = new Button("+ Add activity");
+        activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
+        activityHeader.setAlignment(Pos.CENTER_LEFT);
+
+        rightBox.getChildren().add(activityHeader);
+
+        for (Activity activity : project.getActivities()) {
+            Button activityButton = new Button(activity.getTitle());
+            activityButton.setOnAction(e -> activityEditorWindow(activity));
+            rightBox.getChildren().add(activityButton);
+        }
+
+        addActivityButton.setOnAction(event -> {
+            Stage inputWindow = new Stage();
+            inputWindow.setTitle("Add New Activity");
+
+            VBox popupLayout = new VBox(10);
+            popupLayout.setPadding(new Insets(10));
+            popupLayout.setAlignment(Pos.CENTER);
+
+            Label prompt = new Label("Enter activity name:");
+            TextField inputField = new TextField();
+            Button confirmButton = new Button("Create");
+
+            confirmButton.setOnAction(e -> {
+                String title = inputField.getText().trim();
+                if (!title.isEmpty()) {
+                    Activity newActivity = new Activity(title, project);
+                    project.addActivity(newActivity);
+
+                    Button activityButton = new Button(newActivity.getTitle());
+                    activityButton.setOnAction(ev -> activityEditorWindow(newActivity));
+                    rightBox.getChildren().add(activityButton);
+
+                    inputWindow.close();
+                }
+            });
+
+            popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
+            Scene scene = new Scene(popupLayout, 250, 150);
+            inputWindow.setScene(scene);
+            inputWindow.show();
+        });
+
+        mainLayout.getChildren().addAll(leftBox, rightBox);
+        HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));
+
+        Scene scene = new Scene(mainLayout, 800, 500);
+        projectEditorWindow.setScene(scene);
+        projectEditorWindow.show();
+    }
+
     public void activityEditorWindow(Activity activity) {
         Stage activityEditorWindow = new Stage();
         activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
-    
+
         VBox layout = new VBox(15);
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-    
+
         Label headerLabel = new Label("Activity " + activity.getTitle());
         headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         layout.getChildren().add(headerLabel);
-    
-        Label instructionLabel = new Label("Enter budgeted time first for your activity and then your recorded\ntime below:");
+
+        Label instructionLabel = new Label(
+                "Enter budgeted time first for your activity and then your recorded\ntime below:");
         layout.getChildren().add(instructionLabel);
-    
+
         HBox budgetedTimeBox = new HBox(10);
         budgetedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label budgetedTimeLabel = new Label("Budgeted Time:");
@@ -395,11 +397,12 @@ public class App extends Application {
             try {
                 int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
                 activity.getProject().setBudgetedTime(budget);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         });
         budgetedTimeBox.getChildren().addAll(budgetedTimeLabel, budgetedTimeTF);
         layout.getChildren().add(budgetedTimeBox);
-    
+
         HBox recordedTimeBox = new HBox(10);
         recordedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label recordedTimeLabel = new Label("Recorded Time:");
@@ -407,7 +410,7 @@ public class App extends Application {
         recordedTimeTF.setEditable(false);
         recordedTimeBox.getChildren().addAll(recordedTimeLabel, recordedTimeTF);
         layout.getChildren().add(recordedTimeBox);
-    
+
         HBox addTimeBox = new HBox(10);
         addTimeBox.setAlignment(Pos.CENTER);
         final TextField addTimeTF = new TextField();
@@ -417,10 +420,10 @@ public class App extends Application {
         Button assignSelf = new Button("Assign self");
 
         assignSelf.setOnAction(event -> {
-            int result = activity.assignUser(loginUID);
+            int result = activity.assignUser(LoginUser);
 
             if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
-                
+
                 // Tilmeld bruger her
             } else {
                 showErrorPopup("You can only join an activity when both the project and activity have dates.");
@@ -433,7 +436,7 @@ public class App extends Application {
             }
 
         });
-    
+
         addTimeButton.setOnAction(event -> {
             try {
                 int addedTime = Integer.parseInt(addTimeTF.getText().trim());
@@ -449,22 +452,22 @@ public class App extends Application {
                 addTimeTF.clear();
             }
         });
-    
+
         addTimeBox.getChildren().addAll(addTimeTF, addTimeButton);
         layout.getChildren().add(addTimeBox);
-        if (activity.getProject().getProjectleader() != null && activity.getProject().getProjectleader().equals(loginUID)) {
+        if (activity.getProject().getProjectleader() != null
+                && activity.getProject().getProjectleader().equals(LoginUser)) {
             layout.getChildren().addAll(assignUserButton, assignSelf);
         } else {
             layout.getChildren().addAll(assignSelf);
 
         }
-    
+
         Scene scene = new Scene(layout, 400, 300);
         activityEditorWindow.setScene(scene);
         activityEditorWindow.show();
     }
-    
-    
+
     public void showErrorPopup(String message) {
         Stage errorStage = new Stage();
         errorStage.setTitle("Input Error");
@@ -486,25 +489,27 @@ public class App extends Application {
         projects.add(new Project("Project3"));
         projects.add(new Project("Porject4"));
 
+        Button myActivitiesButton = new Button("My Activities");
+        myActivitiesButton.setPrefHeight(60);
+        myActivitiesButton.setPrefWidth(200);
 
-
-        Button myProjectsButton = new Button("My Activities");
-        myProjectsButton.setPrefHeight(60);
-        myProjectsButton.setPrefWidth(200);
-
-        myProjectsButton.setOnAction(event -> {
-            myProjectWindow(loginUID);
+        myActivitiesButton.setOnAction(event -> {
+            myActivitiesWindow(LoginUser);
         });
 
+        Label myUserLabel = new Label("Logged in as: " + LoginUser.getUID());
 
-        Label myUserLabel = new Label("Logged in as: " + loginUID.getUID());
+        Button addFixedAtivitiesButton = new Button("Add fixed activites");
+        addFixedAtivitiesButton.setPrefHeight(60);
+        addFixedAtivitiesButton.setPrefWidth(200);
 
+        addFixedAtivitiesButton.setOnAction(event -> {
+            addFixedAtivitiesButton(LoginUser);
+        });
 
         HBox mainLay = new HBox(120);
         mainLay.setPadding(new Insets(20));
         mainLay.setAlignment(Pos.TOP_LEFT);
-        
-
 
         VBox VenstreBlok = new VBox(30);
         VenstreBlok.setAlignment(Pos.TOP_LEFT);
@@ -515,18 +520,18 @@ public class App extends Application {
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
-        VenstreBlok.getChildren().addAll(myUserLabel, infoLabel, ProjektKnap, myProjectsButton);
+        VenstreBlok.getChildren().addAll(myUserLabel, infoLabel, ProjektKnap, myActivitiesButton, addFixedAtivitiesButton);
 
         projectListBox = new GridPane();
         projectListBox.setHgap(20);
         projectListBox.setVgap(20);
-        projectListBox.setAlignment(Pos. TOP_LEFT); 
+        projectListBox.setAlignment(Pos.TOP_LEFT);
 
         ProjektKnap.setOnAction(event -> {
             newProjectWindow();
         });
 
-        opdaterProjektListe(); 
+        opdaterProjektListe();
 
         mainLay.getChildren().addAll(VenstreBlok, projectListBox);
 
@@ -534,15 +539,61 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
 
-    
+    private void addFixedAtivitiesButton(User LogedinUser) {
+        Stage inputWindow = new Stage();
+        inputWindow.setTitle("Add New fixed Activity");
+
+        VBox popupLayout = new VBox(10);
+        popupLayout.setPadding(new Insets(10));
+        popupLayout.setAlignment(Pos.CENTER);
+
+        Label prompt = new Label("Enter activity name:");
+        TextField inputField = new TextField();
+
+        HBox DatepickersBox = new HBox(15);
+        DatepickersBox.setAlignment(Pos.TOP_LEFT);
+        DatePicker startDatePicker = new DatePicker(LocalDate.now());
+        
+
+        DatePicker endDatePicker = new DatePicker(LocalDate.now().plusDays(1));
+        
+
+        DatepickersBox.getChildren().addAll(startDatePicker,endDatePicker);
+
+        Button confirmButton = new Button("Create");
+
+        confirmButton.setOnAction(e -> {
+            String title = inputField.getText().trim();
+            if (!title.isEmpty()) {
+                if (startDatePicker.getValue().isBefore(endDatePicker.getValue())){
+                    Activity newActivity = new Activity(title);
+                    newActivity.assignUser(LogedinUser);
+                    newActivity.fixed = true;
+                
+                    newActivity.editDate(startDatePicker.getValue(),endDatePicker.getValue());
+
+                    inputWindow.close();
+                } else {
+                    showErrorPopup("Start date cannot be after end date.");
+                }
+                
+            } else {
+                showErrorPopup("Activity must have a title please add one");
+            }
+        });
+
+
+        popupLayout.getChildren().addAll(prompt, inputField, DatepickersBox, confirmButton);
+        Scene scene = new Scene(popupLayout, 250, 150);
+        inputWindow.setScene(scene);
+        inputWindow.show();
+    }
+
 }
 
-
-
-        //getAssignedUsers
-        //assignUser
-        //unassignUser
-        //getFixed
-        //getMaxUsers
+// getAssignedUsers
+// assignUser
+// unassignUser
+// getFixed
+// getMaxUsers
