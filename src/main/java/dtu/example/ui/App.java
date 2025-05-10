@@ -155,18 +155,8 @@ public class App extends Application {
 
     ListView<String> activityList = new ListView<>();
     for (Activity a : currentUser.getActivities()) {
-        String projectName = (a.getProject() != null) ? a.getProject().getName() : "Unknown Project";
-        String role = project.getProjectleader() != null && project.getProjectleader().equals(currentUser) 
-                      ? "Project Leader" 
-                      : "User";
-    
-        String info = "Activity: " + a.getTitle() + 
-                      ", Project: " + projectName + 
-                      ", Role: " + role;
-    
-        activityList.getItems().add(info);
+        activityList.getItems().add(a.getTitle()); 
     }
-    
 
     Button closeButton = new Button("Close");
     closeButton.setOnAction(e -> myProjectsWindow.close());
