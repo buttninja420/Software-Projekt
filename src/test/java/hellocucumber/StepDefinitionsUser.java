@@ -15,6 +15,7 @@ public class StepDefinitionsUser {
     public Project tmProject;
     public User testUser;
     public Activity activity = new Activity("Activity");
+    public String errorMessage; 
     @Given("An app with a user with UID: {string} exists")
     public void An_app_with_a_user_with_UID_exists(String s) {
         testUser = new User(s);
@@ -47,7 +48,12 @@ public class StepDefinitionsUser {
 
     @When ("user registers {int} hours worked")
     public void user_with_UID_registers_hours_worked(int hours){
-        testUser.registerTime(hours);
+        try{
+            testUser.registerTime(hours);
+        }catch(Error e){
+            errorMessage = e.getMessage();
+        }
+
     }
 
     @Then ("user with UID: {string} has {int} hours worked today")
@@ -109,7 +115,12 @@ public class StepDefinitionsUser {
 
     @And("user has {int} hours worked today")
     public void user_has_hours_worked_today(int workedHours) {
-        testUser.registerTime(workedHours);
+        try{
+                    testUser.registerTime(workedHours);
+        }catch(Error e){
+            errorMessage = e.getMessage();
+        }
+
     }
 
     @And("user registers {int} hours today and {int} hours on date {int} {int} {int}")
@@ -152,6 +163,16 @@ public class StepDefinitionsUser {
         assertTrue(testUser.getActivities().contains(activity));
     }
 
+    
+    @Given ("user with UID: {string} has {int} hours worked")
+    public void set_hours_Worked_for_user_with_UID(String UID, int hoursWorked){
+        app.getUserWithUID(UID).registerTime(hoursWorked);
+    }
+
+    @Then( "An error: {string} is thrown")
+        public void assert_correct_error_thrown(String correctErrorMessage){
+        assertEquals(correctErrorMessage, errorMessage);
+        }
     
 
 
