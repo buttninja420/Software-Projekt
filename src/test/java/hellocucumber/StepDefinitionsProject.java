@@ -242,7 +242,6 @@ public class StepDefinitionsProject {
         assertNotEquals(name,tmProject.getProjectleader());
     }
 
-
     @When("the project leader checks the budgeted hours to be {int} hours")
     public void the_project_leader_checks_the_budgeted_hours(int budgetedHours) {
         budgetedHours = tmProject.getBudgetedTime();
