@@ -80,7 +80,13 @@ public class User {
     public void registerTime(int timeRegistered){ //updates time today
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);
-        workHistory.put(today, timeRegistered);
+        int newtime = workHistory.get(today) + timeRegistered;
+        if (newtime < 0){
+            throw new Error("cant have less than 0 hours registered per day");
+        }else{
+            workHistory.put(today, newtime);
+        }
+
     } 
     
     //         LocalDate date = LocalDate.of(2025, 5, 5);
@@ -88,7 +94,12 @@ public class User {
         makeSureDateExists(date);
         int prevTimeWorked = workHistory.get(date);
         int newtime = prevTimeWorked + timeRegistered;
-        workHistory.put(date,newtime);
+        if(newtime < 0){
+            throw new Error("cant have less than 0 hours registered per day");
+        } else{
+            workHistory.put(date,newtime);
+        }
+
     }
 
     public String showWorkToday(){
