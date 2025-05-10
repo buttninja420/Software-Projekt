@@ -155,7 +155,7 @@ public class App extends Application {
 
     ListView<String> activityList = new ListView<>();
     for (Activity a : currentUser.getActivities()) {
-        activityList.getItems().add(a.toString()); 
+        activityList.getItems().add(a.getTitle()); 
     }
 
     Button closeButton = new Button("Close");
@@ -166,7 +166,7 @@ public class App extends Application {
     Scene scene = new Scene(layout, 400, 300);
     myProjectsWindow.setScene(scene);
     myProjectsWindow.show();
-}
+    }
 
 
     private void newProjectWindow() {
@@ -234,131 +234,140 @@ public class App extends Application {
 
 
     private void projectEditorWindow(Project project) {
-        Stage projectEditorWindow = new Stage();
-        projectEditorWindow.setTitle("Edit Project " + project.getName());
-    
-        HBox mainLayout = new HBox(50);
-        mainLayout.setPadding(new Insets(20));
-        mainLayout.setAlignment(Pos.TOP_LEFT);
-    
-        VBox leftBox = new VBox(15);
-        leftBox.setAlignment(Pos.TOP_LEFT);
-        DatePicker startDatePicker = new DatePicker(project.getStartDate());
-        startDatePicker.setOnAction(event -> {
-            LocalDate selectedDate = startDatePicker.getValue();
-            if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
-                showErrorPopup("Start date cannot be after end date. Pick a new date");
-                startDatePicker.setValue(project.getStartDate());
-            } else {
-                project.setStartDate(selectedDate);
-            }
-        });
-        
-        DatePicker endDatePicker = new DatePicker(project.getEndDate());
-        endDatePicker.setOnAction(event -> {
-            LocalDate selectedDate = endDatePicker.getValue();
-            if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
-                showErrorPopup("End date cannot be before start date. Pick a new date");
-                endDatePicker.setValue(project.getEndDate());
-            } else {
-                project.setEndDate(selectedDate);
-            }
-        });
-        
+    Stage projectEditorWindow = new Stage();
+    projectEditorWindow.setTitle("Edit Project " + project.getName());
 
-        leftBox.setTranslateX(30);
-        
-        Label headerLabel = new Label("Project " + project.getName());
-        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        
-        Label reportLabel = new Label("Reports of projects:");
-        
+    HBox mainLayout = new HBox(50);
+    mainLayout.setPadding(new Insets(20));
+    mainLayout.setAlignment(Pos.TOP_LEFT);
 
-        Label startDateLabel = new Label("Start date: Not set");
-        Label endDateLabel = new Label("End date: Not set");
-        
-        HBox projectLeaderBox = new HBox(10);
-        Label projectLeaderLabel = new Label("Project leader:");
-        final TextField projectLeaderTF = new TextField("No current");
-
-        Button projectLeaderButton = new Button("Assign project leader");
-        projectLeaderButton.setOnAction(event -> {
-            String newLeader = projectLeaderTF.getText().trim();
-            if (!newLeader.isEmpty() && newLeader.length() == 4) {
-                project.setProjectLeader(getUserWithUID(newLeader));
-                projectLeaderTF.setText(newLeader);
-                projectLeaderTF.setEditable(false);
-            }
-        });
-
-
-        projectLeaderTF.setPrefWidth(150);
-        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
-
-        
-        
-        leftBox.getChildren().addAll(
-            headerLabel, 
-            reportLabel, 
-            new Label("Start date:"), startDatePicker,
-            new Label("End date:"), endDatePicker,
-            projectLeaderBox
-        );
-        
-        VBox rightBox = new VBox(15);
-        rightBox.setAlignment(Pos.TOP_LEFT);
-        rightBox.setTranslateY(45);
-    
-        HBox activityHeader = new HBox(10);
-        Label activitiesLabel = new Label("Activities of project:");
-        Button addActivityButton = new Button("+ Add activity");
-        activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
-        activityHeader.setAlignment(Pos.CENTER_LEFT);
-
-        addActivityButton.setOnAction(event -> {
-            Stage inputWindow = new Stage();
-            inputWindow.setTitle("Add New Activity");
-    
-            VBox popupLayout = new VBox(10);
-            popupLayout.setPadding(new Insets(10));
-            popupLayout.setAlignment(Pos.CENTER);
-    
-            Label prompt = new Label("Enter activity name:");
-            TextField inputField = new TextField();
-            Button confirmButton = new Button("Create");
-    
-            confirmButton.setOnAction(e -> {
-                String title = inputField.getText().trim();
-                if (!title.isEmpty()) {
-                    project.addActivity(new Activity(title, project));
-                    inputWindow.close();
-                    projectEditorWindow.close();
-                    projectEditorWindow(project);
-                }
-            });
-    
-            popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
-            Scene scene = new Scene(popupLayout, 250, 150);
-            inputWindow.setScene(scene);
-            inputWindow.show();
-        });
-    
-        rightBox.getChildren().add(activityHeader);
-
-        for (Activity activity : project.getActivities()) {
-            Button activityButton = new Button(activity.getTitle());
-            activityButton.setOnAction(e -> activityEditorWindow(activity));
-            rightBox.getChildren().add(activityButton);
+    VBox leftBox = new VBox(15);
+    leftBox.setAlignment(Pos.TOP_LEFT);
+    DatePicker startDatePicker = new DatePicker(project.getStartDate());
+    startDatePicker.setOnAction(event -> {
+        LocalDate selectedDate = startDatePicker.getValue();
+        if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
+            showErrorPopup("Start date cannot be after end date. Pick a new date");
+            startDatePicker.setValue(project.getStartDate());
+        } else {
+            project.setStartDate(selectedDate);
         }
-        
-    
-        mainLayout.getChildren().addAll(leftBox, rightBox);
-        HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));  
-    
-        Scene scene = new Scene(mainLayout, 600, 400);
-        projectEditorWindow.setScene(scene);
-        projectEditorWindow.show();
+    });
+
+    DatePicker endDatePicker = new DatePicker(project.getEndDate());
+    endDatePicker.setOnAction(event -> {
+        LocalDate selectedDate = endDatePicker.getValue();
+        if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
+            showErrorPopup("End date cannot be before start date. Pick a new date");
+            endDatePicker.setValue(project.getEndDate());
+        } else {
+            project.setEndDate(selectedDate);
+        }
+    });
+
+    leftBox.setTranslateX(30);
+
+    Label headerLabel = new Label("Project " + project.getName());
+    headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+    Label reportLabel = new Label("Reports of projects:");
+
+    Label startDateLabel = new Label("Start date: Not set");
+    Label endDateLabel = new Label("End date: Not set");
+
+    HBox projectLeaderBox = new HBox(10);
+    Label projectLeaderLabel = new Label("Project leader:");
+    TextField projectLeaderTF = new TextField();
+    if (project.getProjectleader() != null) {
+        projectLeaderTF.setText(project.getProjectleader().getUID());
+        projectLeaderTF.setDisable(true);
+    } else {
+        projectLeaderTF.setText("No current");
     }
+    
+
+    Button projectLeaderButton = new Button("Assign project leader");
+    projectLeaderButton.setOnAction(event -> {
+        String newLeader = projectLeaderTF.getText().trim();
+        if (!newLeader.isEmpty() && newLeader.length() == 4) {
+            project.setProjectLeader(getUserWithUID(newLeader));
+            projectLeaderTF.setText(newLeader);
+            projectLeaderTF.setEditable(false);
+            projectLeaderTF.setDisable(true);
+        }
+    });
+
+    projectLeaderTF.setPrefWidth(150);
+    projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
+
+    leftBox.getChildren().addAll(
+        headerLabel,
+        reportLabel,
+        new Label("Start date:"), startDatePicker,
+        new Label("End date:"), endDatePicker,
+        projectLeaderBox
+    );
+
+    VBox rightBox = new VBox(15);
+    rightBox.setAlignment(Pos.TOP_LEFT);
+    rightBox.setTranslateY(45);
+
+    HBox activityHeader = new HBox(10);
+    Label activitiesLabel = new Label("Activities of project:");
+    Button addActivityButton = new Button("+ Add activity");
+    activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
+    activityHeader.setAlignment(Pos.CENTER_LEFT);
+
+    rightBox.getChildren().add(activityHeader);
+
+    // Add existing activities
+    for (Activity activity : project.getActivities()) {
+        Button activityButton = new Button(activity.getTitle());
+        activityButton.setOnAction(e -> activityEditorWindow(activity));
+        rightBox.getChildren().add(activityButton);
+    }
+
+    // Add activity functionality
+    addActivityButton.setOnAction(event -> {
+        Stage inputWindow = new Stage();
+        inputWindow.setTitle("Add New Activity");
+
+        VBox popupLayout = new VBox(10);
+        popupLayout.setPadding(new Insets(10));
+        popupLayout.setAlignment(Pos.CENTER);
+
+        Label prompt = new Label("Enter activity name:");
+        TextField inputField = new TextField();
+        Button confirmButton = new Button("Create");
+
+        confirmButton.setOnAction(e -> {
+            String title = inputField.getText().trim();
+            if (!title.isEmpty()) {
+                Activity newActivity = new Activity(title, project);
+                project.addActivity(newActivity);
+
+                // Add button directly to existing UI
+                Button activityButton = new Button(newActivity.getTitle());
+                activityButton.setOnAction(ev -> activityEditorWindow(newActivity));
+                rightBox.getChildren().add(activityButton);
+
+                inputWindow.close();
+            }
+        });
+
+        popupLayout.getChildren().addAll(prompt, inputField, confirmButton);
+        Scene scene = new Scene(popupLayout, 250, 150);
+        inputWindow.setScene(scene);
+        inputWindow.show();
+    });
+
+    mainLayout.getChildren().addAll(leftBox, rightBox);
+    HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));
+
+    Scene scene = new Scene(mainLayout, 600, 400);
+    projectEditorWindow.setScene(scene);
+    projectEditorWindow.show();
+}
 
     
     public void activityEditorWindow(Activity activity) {
@@ -379,11 +388,11 @@ public class App extends Application {
         HBox budgetedTimeBox = new HBox(10);
         budgetedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label budgetedTimeLabel = new Label("Budgeted Time:");
-        final TextField budgetedTimeTF = new TextField(String.valueOf(activity.getBudgetedTime()));
+        final TextField budgetedTimeTF = new TextField(String.valueOf(activity.getProject().getBudgetedTime()));
         budgetedTimeTF.setOnKeyReleased(event -> {
             try {
                 int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
-                activity.setBudgetedTime(budget);
+                activity.getProject().setBudgetedTime(budget);
             } catch (NumberFormatException ignored) {}
         });
         budgetedTimeBox.getChildren().addAll(budgetedTimeLabel, budgetedTimeTF);
@@ -392,7 +401,7 @@ public class App extends Application {
         HBox recordedTimeBox = new HBox(10);
         recordedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label recordedTimeLabel = new Label("Recorded Time:");
-        final TextField recordedTimeTF = new TextField(String.valueOf(activity.getRecordedTime()));
+        final TextField recordedTimeTF = new TextField(String.valueOf(activity.getProject().getRecordedTime()));
         recordedTimeTF.setEditable(false);
         recordedTimeBox.getChildren().addAll(recordedTimeLabel, recordedTimeTF);
         layout.getChildren().add(recordedTimeBox);
@@ -403,7 +412,25 @@ public class App extends Application {
         addTimeTF.setPromptText("Enter time");
         Button addTimeButton = new Button("Add recorded time");
         Button assignUserButton = new Button("Assign user");
-        Button assignSelf = new Button("Assign");
+        Button assignSelf = new Button("Assign self");
+
+        assignSelf.setOnAction(event -> {
+            int result = activity.assignUser(loginUID);
+
+            if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
+                
+                // Tilmeld bruger her
+            } else {
+                showErrorPopup("You can only join an activity when both the project and activity have dates.");
+            }
+
+            if (result == 0) {
+                showErrorPopup("You have been assigned to this activity.");
+            } else {
+                showErrorPopup("You are not available or already assigned.");
+            }
+
+        });
     
         addTimeButton.setOnAction(event -> {
             try {
@@ -412,8 +439,8 @@ public class App extends Application {
                     showErrorPopup("Time cannot be negative.");
                     return;
                 }
-                activity.addTime(addedTime);
-                recordedTimeTF.setText(String.valueOf(activity.getRecordedTime()));
+
+                recordedTimeTF.setText(String.valueOf(activity.getProject().getRecordedTime()));
                 addTimeTF.clear();
             } catch (NumberFormatException e) {
                 showErrorPopup("Please enter a valid number.");
@@ -423,10 +450,11 @@ public class App extends Application {
     
         addTimeBox.getChildren().addAll(addTimeTF, addTimeButton);
         layout.getChildren().add(addTimeBox);
-        if (activity.getProject().getProjectleader().equals(loginUID) && activity.getProject().getProjectleader() != null) {
-            layout.getChildren().add(assignUserButton);
+        if (activity.getProject().getProjectleader() != null && activity.getProject().getProjectleader().equals(loginUID)) {
+            layout.getChildren().addAll(assignUserButton, assignSelf);
         } else {
-            layout.getChildren().add(assignSelf);
+            layout.getChildren().addAll(assignSelf);
+
         }
     
         Scene scene = new Scene(layout, 400, 300);

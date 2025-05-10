@@ -29,12 +29,12 @@ public class User {
     }
 
     public Boolean getAvailability(Activity possibleActivity){ 
-        LocalDate start = possibleActivity.getStartDate();
-        LocalDate end = possibleActivity.getEndDate();
+        LocalDate start = possibleActivity.getProject().getStartDate();
+        LocalDate end = possibleActivity.getProject().getEndDate();
         int count = 0; 
     
         for (Activity activity : Activities){
-            if (activity.getStartDate().isBefore(end) || activity.getEndDate().isAfter(start)){
+            if (activity.getProject().getStartDate().isBefore(end) || activity.getProject().getEndDate().isAfter(start)){
                 count++;
             } 
         }
@@ -46,13 +46,12 @@ public class User {
         return count < maxActivities;
     }
     
-
     
     public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
         int count = 0;
         for (Activity activity : Activities) {
             // Hvis aktiviteten overlapper med det angivne tidsrum
-            if (!(activity.getEndDate().isBefore(start) || activity.getStartDate().isAfter(end))) {
+            if (!(activity.getProject().getEndDate().isBefore(start) || activity.getProject().getStartDate().isAfter(end))) {
                 count++;
             }
         }

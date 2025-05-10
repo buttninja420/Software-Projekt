@@ -17,6 +17,9 @@ public class Project {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private int budgetedTime;
+    private int recordedtime;
+
     
     public Project(String Name) {
         this.projectNumber = idCounter++;
@@ -48,9 +51,71 @@ public class Project {
     public int getAssignedTime() {
         int totalAssignedTime = 0;
         for (Activity activity : activities) {
-            totalAssignedTime += activity.getRecordedTime();
+            totalAssignedTime += activity.getProject().getRecordedTime();
         }
         return totalAssignedTime;
+    }
+
+    public int getBudgetedTime() {
+        return budgetedTime;
+    }
+    public void setBudgetedTime(int budgetedTime) {
+        this.budgetedTime = budgetedTime;
+    }
+    public int getRecordedTime() {
+        return recordedtime;
+    }
+    public void setRecordedTime(int recordedtime) {
+        this.recordedtime = recordedtime;
+    }
+
+    public void addTime(int addTime) {
+        assert addTime > 0 : "Precondition failed: Cannot add negative time.";
+        assert addTime != 0 : "Precondition failed: Cannot add zero time.";
+
+        int oldRecorded = recordedtime;
+
+        if (budgetedTime >= recordedtime + addTime) {
+            recordedtime += addTime;
+            assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
+        } else {
+            assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
+            throw new IllegalArgumentException("The added time exceeds the budgeted time.");
+        }
+    }
+   
+
+    public String getName(){
+        return this.name;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    public void setStartDate(LocalDate startDate) {
+        if (this.endDate != null && startDate.isAfter(this.endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date.");
+        }
+        this.startDate = startDate;
+    }
+    
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        if (this.startDate != null && endDate.isBefore(this.startDate)) {
+            throw new IllegalArgumentException("End date cannot be before start date.");
+        }
+        this.endDate = endDate;
+    }
+
+    public void editDate(LocalDate newStartDate, LocalDate newEndDate) {
+        if (newStartDate != null && newEndDate != null && newStartDate.isAfter(newEndDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date.");
+        }
+        this.startDate = newStartDate;
+        this.endDate = newEndDate;
     }
 
     public String generateReport() {
@@ -71,10 +136,10 @@ public class Project {
             report.append("--------------\n");
         } else {
             for (Activity activity : activities) {
-                String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "Not set";
-                String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "Not set";
-                int budgetedTime = activity.getBudgetedTime();
-                int recordedTime = activity.getRecordedTime();
+                String startDate = (activity.getProject().getStartDate() != null) ? activity.getProject().getStartDate().toString() : "Not set";
+                String endDate = (activity.getProject().getEndDate() != null) ? activity.getProject().getEndDate().toString() : "Not set";
+                int budgetedTime = activity.getProject().getBudgetedTime();
+                int recordedTime = activity.getProject().getRecordedTime();
     
                 report.append(activity.getTitle()).append("\n");
                 report.append("Start date: ").append(startDate)
@@ -89,28 +154,6 @@ public class Project {
         report.append("Total assigned time: ").append(totalTime).append(" hours\n");
     
         return report.toString();
-    }
-    
-    
-
-    public String getName(){
-        return this.name;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-    
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-    
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-    
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
     }
     
 

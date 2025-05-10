@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsUser {
     App app = new App();
+    public Project tmProject;
     public User testUser;
     public Activity activity = new Activity("Activity");
     @Given("An app with a user with UID: {string} exists")
@@ -70,8 +71,8 @@ public class StepDefinitionsUser {
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         for (int i = 0; i < activeActivities; i++){
             activity = new Activity("Activity" + i);
-            activity.setStartDate(start);
-            activity.setEndDate(end);
+            tmProject.setStartDate(start);
+            tmProject.setEndDate(end);
             activity.assignUser(testUser);
         }
     }
@@ -91,8 +92,8 @@ public class StepDefinitionsUser {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         activity = new Activity("Activity1");
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         activity.assignUser(testUser);
         testUser.getActivities().add(activity);
     }
@@ -101,8 +102,8 @@ public class StepDefinitionsUser {
     public void user_with_UID_is_not_able_to_register_for_activity_with_start_date_and_end_date(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         assertFalse(testUser.getAvailability(activity));
     }
 
@@ -136,8 +137,8 @@ public class StepDefinitionsUser {
     public void user_checks_availability_for_activity_with_start_date_and_end_date(int i, int i2, int i3, int i4, int i5, int i6) {
         LocalDate start = LocalDate.of(i, i2, i3);
         LocalDate end = LocalDate.of(i4, i5, i6);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         testUser.getAvailability(activity);
     }
 
@@ -145,8 +146,8 @@ public class StepDefinitionsUser {
     public void user_with_UID_is_available_for_activity_with_start_date_and_end_date(String s, int i, int i2, int i3, int i4, int i5, int i6) {
         LocalDate start = LocalDate.of(i, i2, i3);
         LocalDate end = LocalDate.of(i4, i5, i6);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
 
         assertTrue(testUser.getActivities().contains(activity));
     }
