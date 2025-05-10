@@ -16,11 +16,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionsActivity {
     App app = new App();
     Activity activity1;
+    Project project1;
+
+    //Theoretical predfined start-/end date
+    LocalDate startDate = LocalDate.of(2023, 10, 1);
+    LocalDate endDate = LocalDate.of(2023, 11, 1);
     protected User user1 = null;
     String errorMessage = null;
+    String errorMessage2 = null;
+    String errorMessage3 = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
 
     }
     @When("an employee with UID {string} requests to join an activity")
@@ -35,7 +47,12 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and a project leader and free timeslots")
     public void an_activity_with_a_project_leader_and_free_timeslots(String activityName) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
     }
 
     @When("the project leader with UID {string} registers an employee with UID {string} for the activity")
@@ -97,7 +114,13 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and an employee with UID {string}")
     public void an_activity_with_name_and_an_employee_with_UID(String activityName, String employee) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
+
         app.registerUser(employee);
         activity1.assignUser(app.getUserWithUID(employee));
     }
@@ -119,8 +142,8 @@ public class StepDefinitionsActivity {
         activity1.setRecordedTime(registeredTime);
     }
 
-    @When("an employee adds {int} hour to the registered work time")
-    public void an_employee_changes_the_registered_time_from_hours_to_hours(int addedTime) {
+    @When("an employee adds {int} hour to the activity registered work time")
+    public void an_employee_adds_hour_to_the_activity_registered_work_time(int addedTime) {
         activity1.addTime(addedTime);  
     }
 
@@ -135,18 +158,18 @@ public class StepDefinitionsActivity {
         activity1.setBudgetedTime(budgetedHours);
     }
 
-    @When("the project leader checks the budgeted hours to be {int} hours")
-    public void the_project_leader_checks_the_budgeted_hours(int budgetedHours) {
+    @When("the project leader checks the budgeted hours for activity to be {int} hours")
+    public void the_project_leader_checks_the_budgeted_hours_for_activity_to_be_hours(int budgetedHours) {
         budgetedHours = activity1.getBudgetedTime();
     }
 
-    @And("the project leader checks the registered hours to be {int} hours")
-    public void the_project_leader_checks_the_registered_hours_to_be_hours(int registeredHours) {
+    @And("the project leader checks the registered hours for activity to be {int} hours")
+    public void the_project_leader_checks_the_registered_hours_for_activity_to_be_hours(int registeredHours) {
         activity1.setRecordedTime(registeredHours);
     }
 
-    @Then("the project leader sees that the budgeted hours is {int} and that the registered hours is {int}")
-    public void the_project_leader_sees_that_the_budgeted_hours_is_and_that_the_registered_hours_is(int budgetedHours, int registeredHours) {
+    @Then("the project leader sees that the budgeted hours for activity is {int} and that the registered hours is {int}")
+    public void the_project_leader_sees_that_the_budgeted_hours_for_activity_is_and_that_the_registered_hours_is(int budgetedHours, int registeredHours) {
         assertEquals(budgetedHours, activity1.getBudgetedTime());
         assertEquals(registeredHours, activity1.getRecordedTime());
     }
@@ -200,14 +223,13 @@ public class StepDefinitionsActivity {
         }
     }
 
-
     @Then("the activity with name {string} does not add the registered time")
     public void the_activity_with_name_does_not_add_the_registered_time(String activityName) {
         assertEquals("The added time exceeds the budgeted time.", errorMessage);        
     }
 
-    @When("the user tries to log {int} hours")
-    public void the_user_tries_to_log_hours(int i) {
+    @When("the user tries to log {int} hours for activity")
+    public void the_user_tries_to_log_hours_for_activity(int i) {
         try {
             activity1.addTime(i);
         } catch (IllegalArgumentException | AssertionError e) {
@@ -215,9 +237,78 @@ public class StepDefinitionsActivity {
         }
     }
 
-    @Then("the user is not able to log negative hours")
-    public void the_user_is_not_able_to_log_negative_hours() {
+    @Then("the user is not able to log negative hours for activity")
+    public void the_user_is_not_able_to_log_negative_hours_for_activity() {
         assertEquals("Precondition failed: Cannot add negative time.", errorMessage);
+    }
+
+    @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int} and a project leader")
+    public void an_activity_with_name_and_start_date_and_end_date_and_a_project_leader(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        activity1 = new Activity(s);
+        activity1.setStartDate(LocalDate.of(i, i2, i3));
+        activity1.setEndDate(LocalDate.of(i4, i5, i6));
+    }
+
+    @When("the project leader tries to set start date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_set_start_date_to_for_activity(int i, int i2, int i3) {
+        LocalDate startDate = LocalDate.of(i, i2, i3);
+        try {
+            activity1.setStartDate(startDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @And("the project leader tries to set end date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_set_end_date_to_for_activity(int i, int i2, int i3) {
+        LocalDate endDate = LocalDate.of(i, i2, i3);
+        try {
+            activity1.setEndDate(endDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage3 = e.getMessage();
+        }
+    }
+
+    @And("the project leader tries to add {int} hours for activity")
+    public void the_project_leader_tries_to_add_hours_for_activity(int i) {
+        try {
+            activity1.addTime(i);
+        } catch (IllegalArgumentException e) {
+            errorMessage2 = e.getMessage();
+        }
+    }
+
+    @Then("the project leader is not able to set start date to {int} {int} {int} and add {int} hours for activity")
+    public void the_project_leader_is_not_able_to_set_start_date_to_and_add_hours_for_activity(int i, int i2, int i3, int i4) {
+        assertEquals("Start date cannot be after end date.", errorMessage);
+        assertEquals("Precondition failed: Cannot add zero time.", errorMessage2);
+        assertEquals("End date cannot be before start date.", errorMessage3);
+        assertNotEquals(LocalDate.of(i, i2, i3), activity1.getStartDate());
+    }
+
+    @Given("an activity with name {string} with start date {int} {int} {int} and end date {int} {int} {int} and a project leader")
+    public void an_activity_with_name_with_start_date_and_end_date_and_a_project_leader(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        activity1 = new Activity(s);
+        activity1.setStartDate(LocalDate.of(i, i2, i3));
+        activity1.setEndDate(LocalDate.of(i4, i5, i6));
+    }
+
+    @When("the project leader tries to edit start date to {int} {int} {int} and end date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_edit_start_date_to_and_end_date_to_for_activity(int i, int i2, int i3, int i4, int i5, int i6) {
+        LocalDate startDate = LocalDate.of(i, i2, i3);
+        LocalDate endDate = LocalDate.of(i4, i5, i6);
+        try {
+            activity1.editDate(startDate, endDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("the activity with name {string} does not change start date to {int} {int} {int} and end date to {int} {int} {int} for activity")
+    public void the_activity_with_name_does_not_change_start_date_to_and_end_date_to_for_activity(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        assertEquals("Start date cannot be after end date.", errorMessage);
+        assertNotEquals(LocalDate.of(i, i2, i3), activity1.getStartDate());
+        assertNotEquals(LocalDate.of(i4, i5, i6), activity1.getEndDate());
     }
 
 }

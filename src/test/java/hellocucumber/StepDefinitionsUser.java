@@ -12,8 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StepDefinitionsUser {
     App app = new App();
+    public Project tmProject;
     public User testUser;
     public Activity activity = new Activity("Activity");
+    public String errorMessage; 
     @Given("An app with a user with UID: {string} exists")
     public void An_app_with_a_user_with_UID_exists(String s) {
         testUser = new User(s);
@@ -46,12 +48,17 @@ public class StepDefinitionsUser {
 
     @When ("user registers {int} hours worked")
     public void user_with_UID_registers_hours_worked(int hours){
-        testUser.registerTime(hours);
+        try{
+            testUser.registerTime(hours);
+        }catch(Error e){
+            errorMessage = e.getMessage();
+        }
+
     }
 
     @Then ("user with UID: {string} has {int} hours worked today")
     public void user_with_UID_has_hours_worked_today(String UID, int hours){
-        assertEquals(testUser.getHoursToday(), hours);
+        assertEquals(hours, testUser.getHoursToday());
     }
 
     @When("user defines daily work time to be {int} hours")
@@ -70,8 +77,8 @@ public class StepDefinitionsUser {
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         for (int i = 0; i < activeActivities; i++){
             activity = new Activity("Activity" + i);
-            activity.setStartDate(start);
-            activity.setEndDate(end);
+            tmProject.setStartDate(start);
+            tmProject.setEndDate(end);
             activity.assignUser(testUser);
         }
     }
@@ -91,8 +98,8 @@ public class StepDefinitionsUser {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
         activity = new Activity("Activity1");
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         activity.assignUser(testUser);
         testUser.getActivities().add(activity);
     }
@@ -101,14 +108,19 @@ public class StepDefinitionsUser {
     public void user_with_UID_is_not_able_to_register_for_activity_with_start_date_and_end_date(String UID, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         LocalDate start = LocalDate.of(startYear, startMonth, startDay);
         LocalDate end = LocalDate.of(endYear, endMonth, endDay);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         assertFalse(testUser.getAvailability(activity));
     }
 
     @And("user has {int} hours worked today")
     public void user_has_hours_worked_today(int workedHours) {
-        testUser.registerTime(workedHours);
+        try{
+                    testUser.registerTime(workedHours);
+        }catch(Error e){
+            errorMessage = e.getMessage();
+        }
+
     }
 
     @And("user registers {int} hours today and {int} hours on date {int} {int} {int}")
@@ -136,8 +148,8 @@ public class StepDefinitionsUser {
     public void user_checks_availability_for_activity_with_start_date_and_end_date(int i, int i2, int i3, int i4, int i5, int i6) {
         LocalDate start = LocalDate.of(i, i2, i3);
         LocalDate end = LocalDate.of(i4, i5, i6);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
         testUser.getAvailability(activity);
     }
 
@@ -145,12 +157,22 @@ public class StepDefinitionsUser {
     public void user_with_UID_is_available_for_activity_with_start_date_and_end_date(String s, int i, int i2, int i3, int i4, int i5, int i6) {
         LocalDate start = LocalDate.of(i, i2, i3);
         LocalDate end = LocalDate.of(i4, i5, i6);
-        activity.setStartDate(start);
-        activity.setEndDate(end);
+        tmProject.setStartDate(start);
+        tmProject.setEndDate(end);
 
         assertTrue(testUser.getActivities().contains(activity));
     }
 
+    
+    @Given ("user with UID: {string} has {int} hours worked")
+    public void set_hours_Worked_for_user_with_UID(String UID, int hoursWorked){
+        app.getUserWithUID(UID).registerTime(hoursWorked);
+    }
+
+    @Then( "An error: {string} is thrown")
+        public void assert_correct_error_thrown(String correctErrorMessage){
+        assertEquals(correctErrorMessage, errorMessage);
+        }
     
 
 
