@@ -16,11 +16,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionsActivity {
     App app = new App();
     Activity activity1;
+    Project project1;
+
+    //Theoretical predfined start-/end date
+    LocalDate startDate = LocalDate.of(2023, 10, 1);
+    LocalDate endDate = LocalDate.of(2023, 11, 1);
     protected User user1 = null;
     String errorMessage = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
 
     }
     @When("an employee with UID {string} requests to join an activity")
@@ -35,7 +45,12 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and a project leader and free timeslots")
     public void an_activity_with_a_project_leader_and_free_timeslots(String activityName) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
     }
 
     @When("the project leader with UID {string} registers an employee with UID {string} for the activity")
@@ -97,7 +112,13 @@ public class StepDefinitionsActivity {
 
     @Given("an activity with name {string} and an employee with UID {string}")
     public void an_activity_with_name_and_an_employee_with_UID(String activityName, String employee) {
-        activity1 = new Activity(activityName);
+        project1 = new Project("Project1");
+        project1.setStartDate(startDate);
+        project1.setEndDate(endDate);
+
+        activity1 = new Activity(activityName, project1);
+        project1.addActivity(activity1);
+        
         app.registerUser(employee);
         activity1.assignUser(app.getUserWithUID(employee));
     }
@@ -119,8 +140,8 @@ public class StepDefinitionsActivity {
         activity1.setRecordedTime(registeredTime);
     }
 
-    @When("an employee adds {int} hour to the registered work time")
-    public void an_employee_changes_the_registered_time_from_hours_to_hours(int addedTime) {
+    @When("an employee adds {int} hour to the activity registered work time")
+    public void an_employee_adds_hour_to_the_activity_registered_work_time(int addedTime) {
         activity1.addTime(addedTime);  
     }
 
@@ -135,18 +156,18 @@ public class StepDefinitionsActivity {
         activity1.setBudgetedTime(budgetedHours);
     }
 
-    @When("the project leader checks the budgeted hours to be {int} hours")
-    public void the_project_leader_checks_the_budgeted_hours(int budgetedHours) {
+    @When("the project leader checks the budgeted hours for activity to be {int} hours")
+    public void the_project_leader_checks_the_budgeted_hours_for_activity_to_be_hours(int budgetedHours) {
         budgetedHours = activity1.getBudgetedTime();
     }
 
-    @And("the project leader checks the registered hours to be {int} hours")
-    public void the_project_leader_checks_the_registered_hours_to_be_hours(int registeredHours) {
+    @And("the project leader checks the registered hours for activity to be {int} hours")
+    public void the_project_leader_checks_the_registered_hours_for_activity_to_be_hours(int registeredHours) {
         activity1.setRecordedTime(registeredHours);
     }
 
-    @Then("the project leader sees that the budgeted hours is {int} and that the registered hours is {int}")
-    public void the_project_leader_sees_that_the_budgeted_hours_is_and_that_the_registered_hours_is(int budgetedHours, int registeredHours) {
+    @Then("the project leader sees that the budgeted hours for activity is {int} and that the registered hours is {int}")
+    public void the_project_leader_sees_that_the_budgeted_hours_for_activity_is_and_that_the_registered_hours_is(int budgetedHours, int registeredHours) {
         assertEquals(budgetedHours, activity1.getBudgetedTime());
         assertEquals(registeredHours, activity1.getRecordedTime());
     }
@@ -200,14 +221,13 @@ public class StepDefinitionsActivity {
         }
     }
 
-
     @Then("the activity with name {string} does not add the registered time")
     public void the_activity_with_name_does_not_add_the_registered_time(String activityName) {
         assertEquals("The added time exceeds the budgeted time.", errorMessage);        
     }
 
-    @When("the user tries to log {int} hours")
-    public void the_user_tries_to_log_hours(int i) {
+    @When("the user tries to log {int} hours for activity")
+    public void the_user_tries_to_log_hours_for_activity(int i) {
         try {
             activity1.addTime(i);
         } catch (IllegalArgumentException | AssertionError e) {
@@ -215,8 +235,8 @@ public class StepDefinitionsActivity {
         }
     }
 
-    @Then("the user is not able to log negative hours")
-    public void the_user_is_not_able_to_log_negative_hours() {
+    @Then("the user is not able to log negative hours for activity")
+    public void the_user_is_not_able_to_log_negative_hours_for_activity() {
         assertEquals("Precondition failed: Cannot add negative time.", errorMessage);
     }
 
