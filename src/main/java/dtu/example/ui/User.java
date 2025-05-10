@@ -28,23 +28,32 @@ public class User {
         return UID;
     }
 
-    public Boolean getAvailability(Activity possibleActivity){ 
+    public Boolean getAvailability(Activity possibleActivity){
+        //precondition
+        assert possibleActivity != null;
+        
         LocalDate start = possibleActivity.getStartDate();
         LocalDate end = possibleActivity.getEndDate();
-        int count = 0; 
+        
+        //precondition
+        assert start != null && end != null;
+        
+        //precondition
+        assert !end.isBefore(start);
     
+        int count = 0;
         for (Activity activity : Activities){
-            if (activity.getStartDate().isBefore(end) || activity.getEndDate().isAfter(start)){
+            if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
                 count++;
             } 
         }
-    
-        // Brug assert til at sikre antallet ikke er negativt (ekstra sikkerhed)
-        assert count >= 0 : "Count of overlapping activities should never be negative";
-    
-        // Returner direkte udtryk i stedet for if/else
-        return count < maxActivities;
+        if (count < maxActivities){
+            return true;
+        } else {
+            return false;
+        }        
     }
+    
     
 
     
