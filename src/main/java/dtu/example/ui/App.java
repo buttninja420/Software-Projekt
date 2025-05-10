@@ -155,8 +155,18 @@ public class App extends Application {
 
     ListView<String> activityList = new ListView<>();
     for (Activity a : currentUser.getActivities()) {
-        activityList.getItems().add(a.getTitle()); 
+        String projectName = (a.getProject() != null) ? a.getProject().getName() : "Unknown Project";
+        String role = project.getProjectleader() != null && project.getProjectleader().equals(currentUser) 
+                      ? "Project Leader" 
+                      : "User";
+    
+        String info = "Activity: " + a.getTitle() + 
+                      ", Project: " + projectName + 
+                      ", Role: " + role;
+    
+        activityList.getItems().add(info);
     }
+    
 
     Button closeButton = new Button("Close");
     closeButton.setOnAction(e -> myProjectsWindow.close());
@@ -289,13 +299,18 @@ public class App extends Application {
     Button projectLeaderButton = new Button("Assign project leader");
     projectLeaderButton.setOnAction(event -> {
         String newLeader = projectLeaderTF.getText().trim();
-        if (!newLeader.isEmpty() && newLeader.length() == 4) {
-            project.setProjectLeader(getUserWithUID(newLeader));
+        User user = getUserWithUID(newLeader);
+    
+        if (user != null) {
+            project.setProjectLeader(user);
             projectLeaderTF.setText(newLeader);
             projectLeaderTF.setEditable(false);
             projectLeaderTF.setDisable(true);
+        } else {
+            showErrorPopup("User '" + newLeader + "' does not exist. \nCannot assign as project leader.");
         }
     });
+    
 
     projectLeaderTF.setPrefWidth(150);
     projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
@@ -320,14 +335,12 @@ public class App extends Application {
 
     rightBox.getChildren().add(activityHeader);
 
-    // Add existing activities
     for (Activity activity : project.getActivities()) {
         Button activityButton = new Button(activity.getTitle());
         activityButton.setOnAction(e -> activityEditorWindow(activity));
         rightBox.getChildren().add(activityButton);
     }
 
-    // Add activity functionality
     addActivityButton.setOnAction(event -> {
         Stage inputWindow = new Stage();
         inputWindow.setTitle("Add New Activity");
@@ -346,7 +359,6 @@ public class App extends Application {
                 Activity newActivity = new Activity(title, project);
                 project.addActivity(newActivity);
 
-                // Add button directly to existing UI
                 Button activityButton = new Button(newActivity.getTitle());
                 activityButton.setOnAction(ev -> activityEditorWindow(newActivity));
                 rightBox.getChildren().add(activityButton);
@@ -364,7 +376,7 @@ public class App extends Application {
     mainLayout.getChildren().addAll(leftBox, rightBox);
     HBox.setMargin(leftBox, new Insets(0, 0, 0, 10));
 
-    Scene scene = new Scene(mainLayout, 600, 400);
+    Scene scene = new Scene(mainLayout, 800, 500);
     projectEditorWindow.setScene(scene);
     projectEditorWindow.show();
 }
@@ -533,6 +545,7 @@ public class App extends Application {
         stage.show();
     }
     
+
     
 }
 
