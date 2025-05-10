@@ -29,13 +29,17 @@ public class User {
     }
 
     public Boolean getAvailability(Activity possibleActivity){
+        //precondition
+        assert possibleActivity != null;
         
         LocalDate start = possibleActivity.getStartDate();
-        LocalDate end = possibleActivity.getEndDate();   
+        LocalDate end = possibleActivity.getEndDate();
         
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("Start date or end date cannot be null.");
-        }
+        //precondition
+        assert start != null && end != null;
+        
+        //precondition
+        assert !end.isBefore(start);
     
         int count = 0;
         for (Activity activity : Activities){
@@ -88,7 +92,7 @@ public class User {
         makeSureDateExists(today);
         int newtime = workHistory.get(today) + timeRegistered;
         if (newtime < 0){
-            throw new IllegalArgumentException("cant have less than 0 hours registered per day");
+            throw new Error("cant have less than 0 hours registered per day");
         }else{
             workHistory.put(today, newtime);
         }
@@ -101,7 +105,7 @@ public class User {
         int prevTimeWorked = workHistory.get(date);
         int newtime = prevTimeWorked + timeRegistered;
         if(newtime < 0){
-            throw new IllegalArgumentException("cant have less than 0 hours registered per day");
+            throw new Error("cant have less than 0 hours registered per day");
         } else{
             workHistory.put(date,newtime);
         }

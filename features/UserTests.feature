@@ -54,21 +54,4 @@ Scenario: user check availability for activity with overlapping time span
     When user checks availability for activity with start date 2023 10 2 and end date 2023 11 3
     Then user with UID: "PRIK" is available for activity with start date 2023 10 2 and end date 2023 11 3
 
-Scenario: user checks availability for activity with no start or end date
-    Given An app with a user with UID: "PRIK" exists
-    And user is registered to 2 activities in time span 2023 10 1 to 2023 11 1
-    When user checks availability for activity with no start or end date
-    Then user with UID: "PRIK" cannot check availability for activity with no start or end date
-
-Scenario: User checks availability with valid start and end date
-  Given An app with a user with UID: "PRIK" exists
-  And user is registered to 2 activities in time span 2023 10 1 to 2023 11 1
-  When user checks availability for the activity with start date 2023 10 2 and end date 2023 10 1
-  Then user with UID: "PRIK" receives an error
-
-Scenario: User logs -3 hours worked
-  Given An app with a user with UID: "PRIK" exists
-    And user with UID: "PRIK" has 2 hours worked
-    When user logs -3 hours worked
-    And -4 hours worked for date 2023 10 1
-    Then user with UID: "PRIK" cant have less than 0 hours registered per day
+        

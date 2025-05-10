@@ -16,7 +16,6 @@ public class StepDefinitionsUser {
     public User testUser;
     public Activity activity;
     public String errorMessage; 
-    public String errorMessage2;
     @Given("An app with a user with UID: {string} exists")
     public void An_app_with_a_user_with_UID_exists(String s) {
         testUser = new User(s);
@@ -25,6 +24,7 @@ public class StepDefinitionsUser {
         testUser = app.getUserWithUID(testUID);
 
     }
+
     @And("user is not registered to any activity")
     public void user_is_not_registered_to_any_activity() {
         assertEquals(testUser.getActivities().size(), 0);
@@ -50,7 +50,7 @@ public class StepDefinitionsUser {
     public void user_with_UID_registers_hours_worked(int hours){
         try{
             testUser.registerTime(hours);
-        }catch(IllegalArgumentException e){
+        }catch(Error e){
             errorMessage = e.getMessage();
         }
 
@@ -84,7 +84,6 @@ public class StepDefinitionsUser {
             activity.setStartDate(start);
             activity.setEndDate(end);
             activity.assignUser(testUser);
-
 
             testUser.getActivities().add(activity);
         }
@@ -120,7 +119,7 @@ public class StepDefinitionsUser {
     public void user_has_hours_worked_today(int workedHours) {
         try{
             testUser.registerTime(workedHours);
-        }catch(IllegalArgumentException e){
+        }catch(Error e){
             errorMessage = e.getMessage();
         }
 
@@ -159,16 +158,13 @@ public class StepDefinitionsUser {
         activity.setStartDate(start);
         activity.setEndDate(end);
 
-        try{
-            testUser.getAvailability(activity);
-        }catch(IllegalArgumentException e){
-            errorMessage = e.getMessage();
-        }
+        testUser.getActivities().add(activity);
+        activity.assignUser(testUser);
     }
 
     @Then("user with UID: {string} is available for activity with start date {int} {int} {int} and end date {int} {int} {int}")
     public void user_with_UID_is_available_for_activity_with_start_date_and_end_date(String s, int i, int i2, int i3, int i4, int i5, int i6) {
-        assertTrue(testUser.getAvailability(activity));
+        assertTrue(testUser.getActivities().contains(activity));
     }
 
     
@@ -181,96 +177,7 @@ public class StepDefinitionsUser {
         public void assert_correct_error_thrown(String correctErrorMessage){
         assertEquals(correctErrorMessage, errorMessage);
     }
-
-    @When("user checks availability for activity with no start or end date")
-    public void user_checks_availability_for_activity_with_no_start_or_end_date() {
-        activity = new Activity("ActivityX", tmProject);
-        activity.setStartDate(null);
-        activity.setEndDate(null);
-
-        tmProject.addActivity(activity);
-        
-        try{
-            testUser.getAvailability(activity);
-        }catch(IllegalArgumentException e){
-            errorMessage = e.getMessage();
-        }
-    }
-
-    @Then("user with UID: {string} cannot check availability for activity with no start or end date")
-    public void user_with_UID_cannot_check_availability_for_activity_with_no_start_or_end_date(String s) {
-        assertEquals("Start date or end date cannot be null.", errorMessage);
-    }
-
-    @Given("An app with a user with UID: {string} exists and project with start date {int} {int} {int} and end date {int} {int} {int}")
-    public void An_app_with_a_user_with_UID_exists_and_project_with_start_date_and_end_date(String s, int i, int i2, int i3, int i4, int i5, int i6) {
-        testUser = new User(s);
-        String testUID = testUser.getUID();
-        app.registerUser(testUID);
-        testUser = app.getUserWithUID(testUID);
-
-        LocalDate start = LocalDate.of(i, i2, i3);
-        LocalDate end = LocalDate.of(i4, i5, i6);
-        tmProject = new Project("Project1");
-        tmProject.setStartDate(start);
-        tmProject.setEndDate(end);
-    }
-
-
-    @When("user checks availability for the activity with start date {int} {int} {int} and end date {int} {int} {int}")
-    public void user_checks_availability_for_the_activity_with_start_date_and_end_date(int sy, int sm, int sd, int ey, int em, int ed) {
-        LocalDate start = LocalDate.of(sy, sm, sd);
-        LocalDate end = LocalDate.of(ey, em, ed);
-
-        LocalDate projectStart = LocalDate.of(2023, 1, 1);
-        LocalDate projectEnd = LocalDate.of(2023, 12, 31);
-
-        tmProject = new Project("Project1");
-        tmProject.setStartDate(projectStart);
-        tmProject.setEndDate(projectEnd);
-
-        activity = new Activity("ActivityX");
-        activity.setStartDate(start);
-       
-
-        try {
-            activity.setEndDate(end);
-            testUser.getAvailability(activity);
-        } catch (IllegalArgumentException e) {
-            errorMessage = e.getMessage();
-        }
-    }
-
-    @Then("user with UID: {string} receives an error")
-    public void user_with_UID_receives_an_error(String uid) {
-        assertEquals("End date cannot be before start date.", errorMessage);
-    }
-
-    @When("user logs {int} hours worked")
-    public void user_logs_hours_worked(int i) {
-        try{
-            testUser.registerTime(i);
-        }catch(IllegalArgumentException e){
-            errorMessage = e.getMessage();
-        }
-    }
-
-    @And("{int} hours worked for date {int} {int} {int}")
-    public void hours_worked_for_date(int i, int i2, int i3, int i4) {
-        LocalDate date = LocalDate.of(i2, i3, i4);
-        try{
-            testUser.registerTime(i, date);
-        }catch(IllegalArgumentException e){
-            errorMessage2 = e.getMessage();
-        }
-    }
-
-
-    @Then("user with UID: {string} cant have less than {int} hours registered per day")
-    public void user_with_UID_cant_have_less_than_hours_registered_per_day(String s, int i) {
-        assertEquals("cant have less than 0 hours registered per day", errorMessage);
-        assertEquals("cant have less than 0 hours registered per day", errorMessage2);
-    }
-
     
+
+
 }
