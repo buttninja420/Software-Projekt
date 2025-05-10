@@ -119,6 +119,7 @@ public class Project {
     }
 
     public String generateReport() {
+        assert true;
         StringBuilder report = new StringBuilder();
         report.append("Status of activities:\n");
         report.append("Project start date: ").append(
@@ -129,17 +130,17 @@ public class Project {
 
         report.append("--------------\n");
     
-        if (activities.isEmpty()) {
+        if (activities.isEmpty()) { // 1
             report.append("No activities yet.\n");
             report.append("Start date: Not set | End date: Not set\n");
             report.append("Time status - Budgeted: 0, Assigned: 0\n");
             report.append("--------------\n");
         } else {
             for (Activity activity : activities) {
-                String startDate = (activity.getProject().getStartDate() != null) ? activity.getProject().getStartDate().toString() : "Not set";
-                String endDate = (activity.getProject().getEndDate() != null) ? activity.getProject().getEndDate().toString() : "Not set";
-                int budgetedTime = activity.getProject().getBudgetedTime();
-                int recordedTime = activity.getProject().getRecordedTime();
+                String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "Not set";
+                String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "Not set";
+                int budgetedTime = activity.getBudgetedTime();
+                int recordedTime = activity.getRecordedTime();
     
                 report.append(activity.getTitle()).append("\n");
                 report.append("Start date: ").append(startDate)
