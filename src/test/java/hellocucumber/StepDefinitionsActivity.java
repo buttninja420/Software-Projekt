@@ -18,6 +18,8 @@ public class StepDefinitionsActivity {
     Activity activity1;
     Project project1;
 
+    int val;
+
     //Theoretical predfined start-/end date
     LocalDate startDate = LocalDate.of(2023, 10, 1);
     LocalDate endDate = LocalDate.of(2023, 11, 1);
@@ -32,6 +34,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
 
     }
@@ -52,6 +56,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
     }
 
@@ -63,7 +69,7 @@ public class StepDefinitionsActivity {
 
     @Then("the employee with UID {string} is registered for the activity")
     public void the_employee_with_UID_is_registered_for_the_activity(String employee) {
-        assertEquals(app.getUsers(),activity1.getAssignedUsers());
+        assertTrue(activity1.getAssignedUsers().contains(app.getUserWithUID(employee)));
     }
 
     @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int}")
@@ -119,6 +125,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
 
         app.registerUser(employee);
@@ -309,6 +317,17 @@ public class StepDefinitionsActivity {
         assertEquals("Start date cannot be after end date.", errorMessage);
         assertNotEquals(LocalDate.of(i, i2, i3), activity1.getStartDate());
         assertNotEquals(LocalDate.of(i4, i5, i6), activity1.getEndDate());
+    }
+
+    @When("the project leader tries to remove user who is not assigned to activity")
+    public void the_project_leader_tries_to_remove_user_who_is_not_assigned_to_activity() {
+        val = activity1.unassignUser(app.getUserWithUID("nonexistentUser"));
+        
+    }
+
+    @Then("the user is not removed from activity")
+    public void the_user_is_not_removed_from_activity() {
+        assertEquals(val, -1);
     }
 
 }
