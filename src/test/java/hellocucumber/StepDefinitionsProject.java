@@ -21,6 +21,7 @@ public class StepDefinitionsProject {
     int totalAssignedTime = 0;
     String report;
     String errorMessage = null;
+    String errorMessage2 = null;
     
     @Given("an app that exist")
     public void an_app_that_exist() {
@@ -171,12 +172,10 @@ public class StepDefinitionsProject {
     }
 
 
-    @And("activity with name {string} with {int} hour worked with start Date {int} {int} {int} and End date {int} {int} {int}")
-    public void activity_with_name_with_hour_worked_with_start_Date_and_End_date(String activityName, int hoursWorked, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+    @And("activity with name {string} with {int} hour worked and no start date and end date")
+    public void activity_with_name_with_hour_worked_with_and_no_start_date_and_no_end_date(String activityName, int hoursWorked) {
         Activity activity3 = new Activity(activityName);
         activity3.setRecordedTime(hoursWorked);
-        activity3.setStartDate(LocalDate.of(startYear, startMonth, startDay));
-        activity3.setEndDate(LocalDate.of(endYear, endMonth, endDay));
         tmProject.addActivity(activity3);
         
     }
@@ -399,7 +398,42 @@ public class StepDefinitionsProject {
         assertTrue(report.contains("Start date: Not set | End date: Not set"));
         assertTrue(report.contains("Time status - Budgeted: 0, Assigned: 0"));
     }
-   
+
+    @Given("a project with name {string} and start date {int} {int} {int} and end date {int} {int} {int} and a project leader")
+    public void a_project_with_name_and_start_date_and_end_date_and_a_project_leader(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        tmProject = new Project(s);
+        tmProject.setStartDate(LocalDate.of(i, i2, i3));
+        tmProject.setEndDate(LocalDate.of(i4, i5, i6));
+        app.addProject(s);
+        app.registerUser("projectLeader");
+        tmProject.setProjectLeader(app.getUserWithUID("projectLeader"));
+    }
+
+    @When("the project leader tries to set start date to {int} {int} {int}")
+    public void the_project_leader_tries_to_set_start_date_to(int i, int i2, int i3) {
+        LocalDate startDate = LocalDate.of(i, i2, i3);
+        try {
+            tmProject.setStartDate(startDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @And("the project leader tries to add {int} hours")
+    public void the_project_leader_tries_to_add_hours(int i) {
+        try {
+            tmProject.addTime(i);
+        } catch (IllegalArgumentException e) {
+            errorMessage2 = e.getMessage();
+        }
+    }
+
+    @Then("the project leader is not able to set start date to {int} {int} {int} and add {int} hours")
+    public void the_project_leader_is_not_able_to_set_start_date_to_and_add_hours(int i, int i2, int i3, int i4) {
+        assertEquals("Start date cannot be after end date.", errorMessage);
+        assertEquals("Precondition failed: Cannot add zero time.", errorMessage2);
+        assertNotEquals(LocalDate.of(i, i2, i3), tmProject.getStartDate());
+    }   
     
 }
 

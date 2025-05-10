@@ -60,3 +60,15 @@ Scenario: A user wants to log negative hours
   Given an activity with name "Weekend" and a project leader
   When the user tries to log -10 hours for activity
   Then the user is not able to log negative hours for activity
+
+Scenario: A project leader tries to set start date incorrectly and adds 0 hours
+    Given an activity with name "Weekend" and start date 2023 8 1 and end date 2023 9 1 and a project leader
+    When the project leader tries to set start date to 2023 10 1 for activity
+    And the project leader tries to set end date to 2023 7 1 for activity
+    And the project leader tries to add 0 hours for activity
+    Then the project leader is not able to set start date to 2023 10 1 and add 0 hours for activity
+
+  Scenario: A project leader tries to edit dates incorrectly
+    Given an activity with name "Weekend" with start date 2023 10 1 and end date 2023 11 1 and a project leader
+    When the project leader tries to edit start date to 2023 9 1 and end date to 2023 8 1 for activity
+    Then the activity with name "Weekend" does not change start date to 2023 9 1 and end date to 2023 8 1 for activity

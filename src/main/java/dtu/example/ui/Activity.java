@@ -42,19 +42,21 @@ public class Activity {
         this.recordedtime = recordedtime;
     }
 
-    public void addTime(int addTime) {
-        assert addTime > 0 : "Precondition failed: Cannot add negative time.";
-        assert addTime != 0 : "Precondition failed: Cannot add zero time.";
+     public void addTime(int addTime) {
+    if (addTime < 0) {
+        throw new IllegalArgumentException("Precondition failed: Cannot add negative time.");
+    }
+    if (addTime == 0) {
+        throw new IllegalArgumentException("Precondition failed: Cannot add zero time.");
+    }
 
-        int oldRecorded = recordedtime;
+    int oldRecorded = recordedtime;
 
-        if (budgetedTime >= recordedtime + addTime) {
-            recordedtime += addTime;
-            assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
-        } else {
-            assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
-            throw new IllegalArgumentException("The added time exceeds the budgeted time.");
-        }
+    if (budgetedTime >= recordedtime + addTime) {
+        recordedtime += addTime;
+    } else {
+        throw new IllegalArgumentException("The added time exceeds the budgeted time.");
+    }
     }
 
     public List<User> getAssignedUsers() {

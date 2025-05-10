@@ -31,7 +31,7 @@ Scenario: Check total assignmed time across all activities
 Scenario: A project leader wants to generate a report
     Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked with start Date 2023 5 5 and End date 2023 6 5
     And activity with name "Hallway" with 3 hours worked with start Date 2023 5 5 and End date 2023 6 5
-    And activity with name "Bathroom" with 1 hour worked with start Date 2023 5 5 and End date 2023 6 5
+    And activity with name "Bathroom" with 1 hour worked and no start date and end date
     When the project leader generates a report for the project
     Then the report contains the total assigned time of 6 hours and Start date 2023 5 5 and End date 2023 6 5
 
@@ -80,3 +80,9 @@ Scenario: A project leader tries to generate a report without activities
     Given a project with name "Weekend" and a project leader
     When the project leader tries to generate a report without activities
     Then the project leader is not able to generate a report without activities
+
+Scenario: A project leader tries to set start date incorrectly and adds 0 hours
+    Given a project with name "Weekend" and start date 2023 8 1 and end date 2023 9 1 and a project leader
+    When the project leader tries to set start date to 2023 10 1
+    And the project leader tries to add 0 hours
+    Then the project leader is not able to set start date to 2023 10 1 and add 0 hours

@@ -23,6 +23,8 @@ public class StepDefinitionsActivity {
     LocalDate endDate = LocalDate.of(2023, 11, 1);
     protected User user1 = null;
     String errorMessage = null;
+    String errorMessage2 = null;
+    String errorMessage3 = null;
     @Given("an activity with name {string} and a project leader")
     public void anActivityWithAProjectLeader(String activityName) {
         project1 = new Project("Project1");
@@ -118,7 +120,7 @@ public class StepDefinitionsActivity {
 
         activity1 = new Activity(activityName, project1);
         project1.addActivity(activity1);
-        
+
         app.registerUser(employee);
         activity1.assignUser(app.getUserWithUID(employee));
     }
@@ -238,6 +240,75 @@ public class StepDefinitionsActivity {
     @Then("the user is not able to log negative hours for activity")
     public void the_user_is_not_able_to_log_negative_hours_for_activity() {
         assertEquals("Precondition failed: Cannot add negative time.", errorMessage);
+    }
+
+    @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int} and a project leader")
+    public void an_activity_with_name_and_start_date_and_end_date_and_a_project_leader(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        activity1 = new Activity(s);
+        activity1.setStartDate(LocalDate.of(i, i2, i3));
+        activity1.setEndDate(LocalDate.of(i4, i5, i6));
+    }
+
+    @When("the project leader tries to set start date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_set_start_date_to_for_activity(int i, int i2, int i3) {
+        LocalDate startDate = LocalDate.of(i, i2, i3);
+        try {
+            activity1.setStartDate(startDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @And("the project leader tries to set end date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_set_end_date_to_for_activity(int i, int i2, int i3) {
+        LocalDate endDate = LocalDate.of(i, i2, i3);
+        try {
+            activity1.setEndDate(endDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage3 = e.getMessage();
+        }
+    }
+
+    @And("the project leader tries to add {int} hours for activity")
+    public void the_project_leader_tries_to_add_hours_for_activity(int i) {
+        try {
+            activity1.addTime(i);
+        } catch (IllegalArgumentException e) {
+            errorMessage2 = e.getMessage();
+        }
+    }
+
+    @Then("the project leader is not able to set start date to {int} {int} {int} and add {int} hours for activity")
+    public void the_project_leader_is_not_able_to_set_start_date_to_and_add_hours_for_activity(int i, int i2, int i3, int i4) {
+        assertEquals("Start date cannot be after end date.", errorMessage);
+        assertEquals("Precondition failed: Cannot add zero time.", errorMessage2);
+        assertEquals("End date cannot be before start date.", errorMessage3);
+        assertNotEquals(LocalDate.of(i, i2, i3), activity1.getStartDate());
+    }
+
+    @Given("an activity with name {string} with start date {int} {int} {int} and end date {int} {int} {int} and a project leader")
+    public void an_activity_with_name_with_start_date_and_end_date_and_a_project_leader(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        activity1 = new Activity(s);
+        activity1.setStartDate(LocalDate.of(i, i2, i3));
+        activity1.setEndDate(LocalDate.of(i4, i5, i6));
+    }
+
+    @When("the project leader tries to edit start date to {int} {int} {int} and end date to {int} {int} {int} for activity")
+    public void the_project_leader_tries_to_edit_start_date_to_and_end_date_to_for_activity(int i, int i2, int i3, int i4, int i5, int i6) {
+        LocalDate startDate = LocalDate.of(i, i2, i3);
+        LocalDate endDate = LocalDate.of(i4, i5, i6);
+        try {
+            activity1.editDate(startDate, endDate);
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("the activity with name {string} does not change start date to {int} {int} {int} and end date to {int} {int} {int} for activity")
+    public void the_activity_with_name_does_not_change_start_date_to_and_end_date_to_for_activity(String s, int i, int i2, int i3, int i4, int i5, int i6) {
+        assertEquals("Start date cannot be after end date.", errorMessage);
+        assertNotEquals(LocalDate.of(i, i2, i3), activity1.getStartDate());
+        assertNotEquals(LocalDate.of(i4, i5, i6), activity1.getEndDate());
     }
 
 }
