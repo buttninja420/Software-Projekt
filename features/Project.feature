@@ -73,7 +73,7 @@ Scenario: A project leader wants to edit start and end date
 
 Scenario: A project leader tries to edit start date and end date incorrectly
     Given a project with name "Weekend" with start date 2023 10 1 and end date 2023 11 1 and a project leader
-    When the project leader tries to edit start date to 2023 9 1 and end date to 2023 8 1
+    When the project leader wants to edit start date to 2023 9 1 and end date to 2023 8 1
     Then the project with name "Weekend" does not change start date to 2023 9 1 and end date to 2023 8 1
 
 Scenario: A project leader tries to generate a report without activities

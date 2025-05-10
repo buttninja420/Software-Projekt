@@ -81,7 +81,9 @@ public class Project {
 
     if (budgetedTime >= recordedtime + addTime) {
         recordedtime += addTime;
+        assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
     } else {
+        assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
         throw new IllegalArgumentException("The added time exceeds the budgeted time.");
     }
 }
