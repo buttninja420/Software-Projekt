@@ -242,7 +242,6 @@ public class StepDefinitionsProject {
         assertNotEquals(name,tmProject.getProjectleader());
     }
 
-
     @When("the project leader checks the budgeted hours to be {int} hours")
     public void the_project_leader_checks_the_budgeted_hours(int budgetedHours) {
         budgetedHours = tmProject.getBudgetedTime();
@@ -369,16 +368,6 @@ public class StepDefinitionsProject {
         assertEquals(LocalDate.of(i4, i5, i6), tmProject.getEndDate());
     }
 
-    @When("the project leader tries to edit start date to {int} {int} {int} and end date to {int} {int} {int}")
-    public void the_project_leader_tries_to_edit_start_date_to_and_end_date_to(int i, int i2, int i3, int i4, int i5, int i6) {
-        LocalDate startDate = LocalDate.of(i, i2, i3);
-        LocalDate endDate = LocalDate.of(i4, i5, i6);
-        try {
-            tmProject.editDate(startDate, endDate);
-        } catch (IllegalArgumentException e) {
-            errorMessage = e.getMessage();
-        }
-    }
 
     @Then("the project with name {string} does not change start date to {int} {int} {int} and end date to {int} {int} {int}")
     public void the_project_with_name_does_not_change_start_date_to_and_end_date_to(String s, int i, int i2, int i3, int i4, int i5, int i6) {
