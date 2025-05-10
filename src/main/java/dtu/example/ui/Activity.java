@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Activity {
-    private int budgetedTime;
+    private int budgetedTime = 0;
     private int recordedtime;
     public int addTime;
     private List<User> assignedUsers = new ArrayList<User>();
@@ -29,6 +29,7 @@ public class Activity {
         this.title = title;
     }
     
+
     public int getBudgetedTime() {
         return budgetedTime;
     }
