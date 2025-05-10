@@ -11,6 +11,19 @@ Scenario: register time of a user
     When user registers 5 hours worked
     Then user with UID: "PRIK" has 5 hours worked today
 
+Scenario: remove time registered of a user
+    Given An app with a user with UID: "PRIK" exists
+    And user with UID: "PRIK" has 5 hours worked
+    When user registers -2 hours worked
+    Then user with UID: "PRIK" has 3 hours worked today
+
+Scenario: user tries to remove more time than is registered
+    Given An app with a user with UID: "PRIK" exists
+    And user with UID: "PRIK" has 5 hours worked
+    When user registers -6 hours worked
+    Then An error: "cant have less than 0 hours registered per day" is thrown 
+    And user with UID: "PRIK" has 5 hours worked today 
+ 
 Scenario: defines daily work time
     Given An app with a user with UID: "PRIK" exists
     When user defines daily work time to be 8 hours

@@ -27,7 +27,7 @@ Scenario: Remove an employee from an activity
   
 Scenario: Edit previously registered work hours
   Given an activity with name "Testing" with 20 hours budgeted and 10 hours registered
-  When an employee adds 1 hour to the registered work time
+  When an employee adds 1 hour to the activity registered work time
   Then the activity with name "Testing" now has 11 hours of registered time
 
 Scenario: Exceed registered hours
@@ -37,9 +37,9 @@ Scenario: Exceed registered hours
 
 Scenario: Project leader wants to check budgeted hours and check if registered hours exceeds
   Given an activity with name "GetToWork" with 30 hours budgeted
-  When the project leader checks the budgeted hours to be 30 hours
-  And the project leader checks the registered hours to be 15 hours
-  Then the project leader sees that the budgeted hours is 30 and that the registered hours is 15
+  When the project leader checks the budgeted hours for activity to be 30 hours
+  And the project leader checks the registered hours for activity to be 15 hours
+  Then the project leader sees that the budgeted hours for activity is 30 and that the registered hours is 15
   
 Scenario: A project leader wants to set the max users for an activity
   Given an activity with name "Build bench" and a project leader
@@ -58,5 +58,17 @@ Scenario: A project leader sets fixed activities
 
 Scenario: A user wants to log negative hours
   Given an activity with name "Weekend" and a project leader
-  When the user tries to log -10 hours
-  Then the user is not able to log negative hours
+  When the user tries to log -10 hours for activity
+  Then the user is not able to log negative hours for activity
+
+Scenario: A project leader tries to set start date incorrectly and adds 0 hours
+    Given an activity with name "Weekend" and start date 2023 8 1 and end date 2023 9 1 and a project leader
+    When the project leader tries to set start date to 2023 10 1 for activity
+    And the project leader tries to set end date to 2023 7 1 for activity
+    And the project leader tries to add 0 hours for activity
+    Then the project leader is not able to set start date to 2023 10 1 and add 0 hours for activity
+
+  Scenario: A project leader tries to edit dates incorrectly
+    Given an activity with name "Weekend" with start date 2023 10 1 and end date 2023 11 1 and a project leader
+    When the project leader tries to edit start date to 2023 9 1 and end date to 2023 8 1 for activity
+    Then the activity with name "Weekend" does not change start date to 2023 9 1 and end date to 2023 8 1 for activity
