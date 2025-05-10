@@ -8,8 +8,8 @@ public class Activity {
     private int recordedtime;
     public int addTime;
     private List<User> assignedUsers = new ArrayList<User>();
-    public LocalDate startDate;
-    public LocalDate endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     public Boolean fixed;
     public int maxusers;
     public String title;

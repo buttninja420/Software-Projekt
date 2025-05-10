@@ -51,7 +51,7 @@ public class Project {
     public int getAssignedTime() {
         int totalAssignedTime = 0;
         for (Activity activity : activities) {
-            totalAssignedTime += activity.getProject().getRecordedTime();
+            totalAssignedTime += activity.getRecordedTime();
         }
         return totalAssignedTime;
     }
@@ -70,19 +70,23 @@ public class Project {
     }
 
     public void addTime(int addTime) {
-        assert addTime > 0 : "Precondition failed: Cannot add negative time.";
-        assert addTime != 0 : "Precondition failed: Cannot add zero time.";
-
-        int oldRecorded = recordedtime;
-
-        if (budgetedTime >= recordedtime + addTime) {
-            recordedtime += addTime;
-            assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
-        } else {
-            assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
-            throw new IllegalArgumentException("The added time exceeds the budgeted time.");
-        }
+    if (addTime < 0) {
+        throw new IllegalArgumentException("Precondition failed: Cannot add negative time.");
     }
+    if (addTime == 0) {
+        throw new IllegalArgumentException("Precondition failed: Cannot add zero time.");
+    }
+
+    int oldRecorded = recordedtime;
+
+    if (budgetedTime >= recordedtime + addTime) {
+        recordedtime += addTime;
+        assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
+    } else {
+        assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
+        throw new IllegalArgumentException("The added time exceeds the budgeted time.");
+    }
+}
    
 
     public String getName(){
