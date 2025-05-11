@@ -1,6 +1,5 @@
 package hellocucumber;
 import dtu.example.ui.*;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.*;
 
 import java.time.LocalDate;

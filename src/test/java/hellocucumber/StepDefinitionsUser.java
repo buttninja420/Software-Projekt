@@ -2,11 +2,7 @@ package hellocucumber;
 
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
-import io.cucumber.java.en_scouse.An;
 import java.time.LocalDate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
