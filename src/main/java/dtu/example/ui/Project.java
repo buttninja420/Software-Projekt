@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 public class Project {
     private List<Activity> activities = new ArrayList<>();
-    private List<User> assignedUsers = new ArrayList<>();
+    public List<User> assignedUsers = new ArrayList<>();
 
     private User leader = null;
-    private int projectNumber = 0;
-    private int maxTime;
+    public int projectNumber = 0;
+    public int maxTime;
     private static int idCounter;
     private String name ="";
     private LocalDate startDate;
