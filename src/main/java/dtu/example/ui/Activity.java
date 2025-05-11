@@ -83,6 +83,17 @@ public class Activity {
         return -1;
     }
 
+    public int assignUserAsProjectLeader(Project projectName, User projectLeader, User user) {
+        if (projectName.getProjectleader() == projectLeader) {
+            if (user.getAvailability(this)) {
+                this.assignedUsers.add(user);
+                user.assignActivityDONOTUSE(this);
+                return 0;
+            }
+        }
+        return -1;
+    }
+
     //Frank
     public int unassignUser(User user){
         if(assignedUsers.remove(user)){

@@ -6,7 +6,7 @@ Scenario: Register to an activity as employee
   Then the employee with UID "XX12" is added to the activity
 
 Scenario: Register an employee for an activity as a project leader
-  Given an activity with name "cook" and a project leader and free timeslots
+  Given an activity with name "cook" and a project leader with UID "XX20" and free timeslots
   When the project leader with UID "XX20" registers an employee with UID "XX21" for the activity
   Then the employee with UID "XX21" is added to the activity
 

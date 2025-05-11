@@ -17,6 +17,8 @@ public class StepDefinitionsActivity {
     App app = new App();
     Activity activity1;
     Project project1;
+    User projectLeader;
+    User employee;
 
     //Theoretical predfined start-/end date
     LocalDate startDate = LocalDate.of(2023, 10, 1);
@@ -47,11 +49,14 @@ public class StepDefinitionsActivity {
         assertTrue(activity1.getAssignedUsers().contains(app.getUserWithUID(string)));
     }
 
-    @Given("an activity with name {string} and a project leader and free timeslots")
-    public void an_activity_with_a_project_leader_and_free_timeslots(String activityName) {
+    @Given("an activity with name {string} and a project leader with UID {string} and free timeslots")
+    public void an_activity_with_a_project_leader_and_free_timeslots(String activityName, String UID) {
         project1 = new Project("Project1");
         project1.setStartDate(startDate);
         project1.setEndDate(endDate);
+        app.registerUser(UID);
+        projectLeader = new User(UID);
+        project1.setProjectLeader(projectLeader);
 
         activity1 = new Activity(activityName, project1);
         activity1.setStartDate(startDate);
@@ -60,14 +65,16 @@ public class StepDefinitionsActivity {
     }
 
     @When("the project leader with UID {string} registers an employee with UID {string} for the activity")
-    public void the_project_leader_with_UID_registers_an_employee_with_UID_for_the_activity(String projectLeader, String employee) {
-        app.registerUser(employee);
-        activity1.assignUser(app.getUserWithUID(employee));
+    public void the_project_leader_with_UID_registers_an_employee_with_UID_for_the_activity(String leaderUID, String employeeUID) {
+        app.registerUser(employeeUID);
+        projectLeader = project1.getProjectleader();
+        employee = app.getUserWithUID(employeeUID);
+        activity1.assignUserAsProjectLeader(project1, projectLeader, employee);
     }
 
     @Then("the employee with UID {string} is registered for the activity")
     public void the_employee_with_UID_is_registered_for_the_activity(String employee) {
-        assertEquals(app.getUsers(),activity1.getAssignedUsers());
+        assertTrue(activity1.getAssignedUsers().contains(app.getUserWithUID(employee)));
     }
 
     @Given("an activity with name {string} and start date {int} {int} {int} and end date {int} {int} {int}")
