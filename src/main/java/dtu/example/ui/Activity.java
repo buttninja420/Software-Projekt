@@ -16,42 +16,50 @@ public class Activity {
 
     public Project project;
 
+    //Jeppe
     public Activity(String title, Project project){
         this.title = title;
         this.project = project;
     }
 
+    //Jeppe
     public Project getProject() {
         return this.project;
     }
 
+    //Frank
     public Activity(String title){
         this.title = title;
     }
     
-
+    //Jeppe
     public int getBudgetedTime() {
         return budgetedTime;
     }
+
+    //Jeppe
     public void setBudgetedTime(int budgetedTime) {
         this.budgetedTime = budgetedTime;
     }
+
+    //Frank
     public int getRecordedTime() {
         return recordedtime;
     }
+
+    //Frank
     public void setRecordedTime(int recordedtime) {
         this.recordedtime = recordedtime;
     }
 
-     public void addTime(int addTime) {
+    //Jeppe
+    public void addTime(int addTime) {
     if (addTime < 0) {
         throw new IllegalArgumentException("Precondition failed: Cannot add negative time.");
     }
     if (addTime == 0) {
         throw new IllegalArgumentException("Precondition failed: Cannot add zero time.");
     }
-
-    int oldRecorded = recordedtime;
 
     if (budgetedTime >= recordedtime + addTime) {
         recordedtime += addTime;
@@ -60,10 +68,12 @@ public class Activity {
     }
     }
 
+    //Jeppe
     public List<User> getAssignedUsers() {
         return assignedUsers;
     }
 
+    //Jeppe
     public int assignUser(User user) {
         if (user.getAvailability(this)){
             this.assignedUsers.add(user);
@@ -73,6 +83,18 @@ public class Activity {
         return -1;
     }
 
+    public int assignUserAsProjectLeader(Project projectName, User projectLeader, User user) {
+        if (projectName.getProjectleader() == projectLeader) {
+            if (user.getAvailability(this)) {
+                this.assignedUsers.add(user);
+                user.assignActivityDONOTUSE(this);
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    //Frank
     public int unassignUser(User user){
         if(assignedUsers.remove(user)){
             user.removeActivity(this);
@@ -82,9 +104,12 @@ public class Activity {
         }
     }
 
+    //Jeppe
     public LocalDate getStartDate() {
         return startDate;
     }
+
+    //Jeppe
     public void setStartDate(LocalDate startDate) {
         if (this.endDate != null && startDate.isAfter(this.endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date.");
@@ -92,9 +117,12 @@ public class Activity {
         this.startDate = startDate;
     }
     
+    //Frank
     public LocalDate getEndDate() {
         return endDate;
     }
+
+    //Frank
     public void setEndDate(LocalDate endDate) {
         if (this.startDate != null && endDate.isBefore(this.startDate)) {
             throw new IllegalArgumentException("End date cannot be before start date.");
@@ -102,29 +130,42 @@ public class Activity {
         this.endDate = endDate;
     }
     
-    
+    //Frank
     public Boolean getFixed() {
         return fixed;
     }
+
+    //Frank
     public void setFixed(Boolean fixed) {
         this.fixed = fixed;
     }
+
+    //Jeppe
     public int getMaxUsers() {
         return maxusers;
     }
+
+    //Frank
     public void setMaxUsers(int maxusers) {
         this.maxusers = maxusers;
     }
+
+    //Jeppe
     public String getTitle() {
         return title;
     }
+
+    //Jeppe
     public void editTitle(String title) {
         this.title = title;
     }
     
+    //Frank
     public void editBudgetedTime(int newTime){ // ændrer budgettet time
         budgetedTime = newTime; 
     }
+
+    //Frank
     public void editDate(LocalDate newStartDate, LocalDate newEndDate) {
         if (newStartDate != null && newEndDate != null && newStartDate.isAfter(newEndDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date.");
