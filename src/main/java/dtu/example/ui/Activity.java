@@ -87,7 +87,7 @@ public class Activity {
         if (projectName.getProjectleader() == projectLeader) {
             if (user.getAvailability(this)) {
                 this.assignedUsers.add(user);
-                user.assignActivityDONOTUSE(this);
+                user.assignActivity(this);
                 return 0;
             }
         }
