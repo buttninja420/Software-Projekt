@@ -81,7 +81,7 @@ public class App extends Application {
 
         Button loginButton = new Button("Sign In");
         loginButton.setOnAction(e -> {
-            String userId = userIdField.getText().trim();
+            String userId = userIdField.getText().trim().toLowerCase();
             if (!userId.isEmpty()) {
 
                 if (getUserUIDs().contains(userId)) {
@@ -135,7 +135,7 @@ public class App extends Application {
     //Nikolaj
     public User getUserWithUID(String UID) {
         for (User user : Users) {
-            if (user.getUID().equals(UID)) {
+            if (user.getUID().equals(UID.toLowerCase())) {
                 return user;
             }
         }
@@ -843,7 +843,7 @@ public class App extends Application {
         if (activity.getProject().getStartDate() == null || activity.getProject().getEndDate() == null) {
             activityStartDatePicker.setDisable(true);
             activityEndDatePicker.setDisable(true);
-            infoLabel.setText("Der skal sættes startdate og enddate på projektet \nfør man kan sætte på aktiviteten");
+            infoLabel.setText("Projektet mangler start og slut dato \nfør man kan sætte på aktiviteten");
             infoLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
         } else {
             activityStartDatePicker.setDisable(false);

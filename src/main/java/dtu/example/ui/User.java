@@ -30,7 +30,7 @@ public class User {
 
     //Kelvin
     public String getUID(){
-        return UID;
+        return UID.toLowerCase();
     }
 
     //Nikolaj

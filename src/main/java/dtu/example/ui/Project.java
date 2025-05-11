@@ -172,6 +172,12 @@ public class Project {
                       .append(" | End date: ").append(endDate).append("\n");
                 report.append("Time status - Budgeted: ").append(budgetedTime)
                       .append(", Recorded time: ").append(recordedTime).append("\n");
+                report.append("Employees: ");
+                for (User user : activity.getAssignedUsers()){
+                    report.append(user.getUID() + ", ");
+                }
+                report.replace(report.length()-2, report.length(), "");
+                report.append("\n");
                 report.append("--------------\n");
             }
         }
