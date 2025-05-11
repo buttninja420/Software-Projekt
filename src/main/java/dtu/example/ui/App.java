@@ -38,7 +38,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Opretter "huba"
         Users.add(new User("huba"));
 
         for (int i = 1; i < 50; i++) {
@@ -160,7 +159,7 @@ public class App extends Application {
 
         for (Activity a : currentUser.getActivities()) {
             Label titleLabel = new Label(a.getTitle());
-            titleLabel.setPrefWidth(150); // Set column width
+            titleLabel.setPrefWidth(150); 
             Label dateLabel = new Label(a.getStartDate() + " - " + a.getEndDate());
 
             HBox row = new HBox(10, titleLabel, dateLabel);
@@ -339,20 +338,42 @@ public class App extends Application {
                 projectLeaderTF.setText(newLeader);
                 projectLeaderTF.setEditable(false);
                 projectLeaderTF.setDisable(true);
+            
+                Button reportButton = new Button("Generate Report");
+                reportButton.setOnAction(ev -> {
+                    String report = project.generateReport();
+                    showReportWindow(report);
+                });
+            
+                if (!leftBox.getChildren().contains(reportButton)) {
+                    leftBox.getChildren().add(reportButton);
+                }
             } else {
                 showErrorPopup("Error. User '" + newLeader + "' does not exist. \nCannot assign as project leader", true);
             }
-        });
+    });
 
         projectLeaderTF.setPrefWidth(150);
         projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
 
         leftBox.getChildren().addAll(
-                headerLabel,
-                reportLabel,
-                new Label("Start date:"), startDatePicker,
-                new Label("End date:"), endDatePicker,
-                projectLeaderBox);
+            headerLabel,
+            reportLabel,
+            new Label("Start date:"), startDatePicker,
+            new Label("End date:"), endDatePicker,
+            projectLeaderBox
+        );
+        
+        if (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser)) {
+            Button reportButton = new Button("Generate Report");
+            reportButton.setOnAction(event -> {
+                String report = project.generateReport();
+                showReportWindow(report);
+            });
+            leftBox.getChildren().add(reportButton);
+        }
+        
+        
 
         rightGrid = new GridPane();
 
@@ -523,7 +544,88 @@ public class App extends Application {
         addTimeTF.setPromptText("Enter time");
         Button addTimeButton = new Button("Add recorded time");
         Button assignUserButton = new Button("Assign user");
-        Button assignSelf = new Button("Assign self");
+        Button unassignUserButton = new Button("Unassign user");
+        Button assignSelf = new Button();
+        if (activity.getAssignedUsers().contains(LoginUser)) {
+            assignSelf.setText("Unassign self");
+        } else {
+            assignSelf.setText("Assign self");
+        }
+        Button seeAssignedUsersButton = new Button("See assigned users");
+
+
+        HBox manageUsersBox = new HBox(10); 
+        manageUsersBox.setAlignment(Pos.CENTER);
+        manageUsersBox.getChildren().addAll(assignUserButton, unassignUserButton);
+
+        seeAssignedUsersButton.setOnAction(event -> {
+            Stage assignedUsersWindow = new Stage();
+            assignedUsersWindow.setTitle("Assigned Users for " + activity.getTitle());
+        
+            VBox assignedLayout = new VBox(10);
+            assignedLayout.setPadding(new Insets(10));
+            assignedLayout.setAlignment(Pos.CENTER_LEFT);
+        
+            Label header = new Label("Users assigned to activity:");
+            assignedLayout.getChildren().add(header);
+        
+            for (User user : activity.getAssignedUsers()) {
+                assignedLayout.getChildren().add(new Label(user.getUID()));
+            }
+        
+            Button closeButton = new Button("Close");
+            closeButton.setOnAction(e -> assignedUsersWindow.close());
+            assignedLayout.getChildren().add(closeButton);
+        
+            Scene scene = new Scene(assignedLayout, 300, 300);
+            assignedUsersWindow.setScene(scene);
+            assignedUsersWindow.show();
+        });
+        
+
+        unassignUserButton.setOnAction(event -> {
+            if (activity.getProject().getProjectleader() != null &&
+                activity.getProject().getProjectleader().equals(LoginUser)) {
+        
+                Stage unassignUserStage = new Stage();
+                unassignUserStage.setTitle("Unassign User from Activity");
+        
+                VBox unassignLayout = new VBox(10);
+                unassignLayout.setPadding(new Insets(10));
+                unassignLayout.setAlignment(Pos.CENTER);
+        
+                Label label = new Label("Enter User ID to Unassign:");
+                TextField userIdField = new TextField();
+                Button confirmButton = new Button("Unassign");
+        
+                confirmButton.setOnAction(e -> {
+                    String userId = userIdField.getText().trim();
+                    User user = getUserWithUID(userId);
+                    if (user != null) {
+                        if (activity.getAssignedUsers().contains(user)) {
+                            activity.getAssignedUsers().remove(user);
+                            showErrorPopup("User successfully unassigned from activity.", false);
+                            unassignUserStage.close();
+                            opdaterProjektAktiviteter(activity.getProject());
+                        } else {
+                            showErrorPopup("Error. User is not assigned to this activity.", true);
+                        }
+                    } else {
+                        showErrorPopup("Error. User does not exist.", true);
+                    }
+                });
+        
+                unassignLayout.getChildren().addAll(label, userIdField, confirmButton);
+        
+                Scene scene = new Scene(unassignLayout, 300, 150);
+                unassignUserStage.setScene(scene);
+                unassignUserStage.show();
+        
+            } else {
+                showErrorPopup("Error. Only the Project Leader can unassign users.", true);
+            }
+        });
+        
 
         assignUserButton.setOnAction(event -> {
             if (activity.getProject().getProjectleader() != null &&
@@ -543,20 +645,27 @@ public class App extends Application {
                 confirmButton.setOnAction(e -> {
                     String userId = userIdField.getText().trim();
                     User user = getUserWithUID(userId);
+                
                     if (user != null) {
+                        if (activity.getAssignedUsers().contains(user)) {
+                            showErrorPopup("Error. User '" + userId + "' is already assigned to this activity", true);
+                            return;
+                        }
+                
                         int result = activity.assignUser(user);
+                
                         if (result == 0) {
                             showErrorPopup("User assigned successfully", false);
                             assignUserStage.close();
-
                             opdaterProjektAktiviteter(activity.getProject());
                         } else {
                             showErrorPopup("Error. User cannot be assigned (availability or already assigned)", true);
                         }
                     } else {
-                        showErrorPopup("Error. User does not exist", true);
+                        showErrorPopup("Error. User '" + userId + "' does not exist", true);
                     }
                 });
+                
 
                 assignLayout.getChildren().addAll(label, userIdField, confirmButton);
 
@@ -570,21 +679,44 @@ public class App extends Application {
         });
 
         assignSelf.setOnAction(event -> {
-            int result = activity.assignUser(LoginUser);
+            if (activity.getAssignedUsers().contains(LoginUser)) {
+
+                activity.getAssignedUsers().remove(LoginUser);
+                showErrorPopup("You have been unassigned from this activity.", false);
+                assignSelf.setText("Assign self");
+            } else {
+
+                if (activity.getProject().getStartDate() == null || activity.getProject().getEndDate() == null) {
+                    showErrorPopup("Error. The project must have start and end dates before joining an activity", true);
+                    return;
+                }
         
-            if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
+                if (activity.getStartDate() == null || activity.getEndDate() == null) {
+                    showErrorPopup("Error. You cannot join this activity before both start and end dates are set", true);
+                    return;
+                }
+        
+                if (activity.getAssignedUsers().contains(LoginUser)) {
+                    showErrorPopup("Error. You are already assigned to this activity", true);
+                    return;
+                }
+        
+                int result = activity.assignUser(LoginUser);
+        
                 if (result == 0) {
                     showErrorPopup("You have been assigned to this activity", false);
-        
-                    opdaterProjektAktiviteter(activity.getProject());
-        
+                    assignSelf.setText("Unassign self");
                 } else {
-                    showErrorPopup("Error. You are not available or already assigned", true);
+                    showErrorPopup("Error. You cannot be assigned to this activity", true);
                 }
-            } else {
-                showErrorPopup("Error. You can only join an activity \nwhen both the project and activity\n have dates", true);
             }
+        
+            opdaterProjektAktiviteter(activity.getProject());
         });
+        
+        
+        
+        
 
         addTimeButton.setOnAction(event -> {
             try {
@@ -698,7 +830,7 @@ public class App extends Application {
         } else {
             activityStartDatePicker.setDisable(false);
             activityEndDatePicker.setDisable(false);
-            infoLabel.setText("Her kan du sætte start date og enddate på aktiviteten.");
+            infoLabel.setText("Her kan du sætte start date og enddate på aktiviteten");
             infoLabel.setStyle("-fx-text-fill: green; -fx-font-size: 12px;");
         }
         
@@ -709,11 +841,12 @@ public class App extends Application {
         
         if (activity.getProject().getProjectleader() != null
                 && activity.getProject().getProjectleader().equals(LoginUser)) {
-            layout.getChildren().addAll(assignUserButton, assignSelf);
+                    layout.getChildren().addAll(seeAssignedUsersButton, manageUsersBox, assignSelf);
         } else {
             layout.getChildren().addAll(assignSelf);
-
         }
+
+
 
         Scene scene = new Scene(layout, 400, 400);
         activityEditorWindow.setScene(scene);
@@ -826,7 +959,27 @@ public class App extends Application {
             row++;
         }
     }
+
+    private void showReportWindow(String reportContent) {
+        Stage reportStage = new Stage();
+        reportStage.setTitle("Project Report");
     
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(15));
+        layout.setAlignment(Pos.TOP_LEFT);
+    
+        Label reportLabel = new Label(reportContent);
+        reportLabel.setStyle("-fx-font-family: monospace; -fx-font-size: 12px;");
+    
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> reportStage.close());
+    
+        layout.getChildren().addAll(reportLabel, closeButton);
+    
+        Scene scene = new Scene(layout, 500, 400);
+        reportStage.setScene(scene);
+        reportStage.show();
+    }
 
     private void addFixedAtivitiesButton(User LogedinUser) {
         Stage inputWindow = new Stage();
@@ -868,6 +1021,9 @@ public class App extends Application {
                 showErrorPopup("Error. Activity must have a title please add one", true);
             }
         });
+
+        
+        
 
         popupLayout.getChildren().addAll(prompt, inputField, DatepickersBox, confirmButton);
         Scene scene = new Scene(popupLayout, 250, 150);

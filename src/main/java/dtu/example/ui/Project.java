@@ -137,7 +137,7 @@ public class Project {
         if (activities.isEmpty()) { // 1
             report.append("No activities yet.\n");
             report.append("Start date: Not set | End date: Not set\n");
-            report.append("Time status - Budgeted: 0, Assigned: 0\n");
+            report.append("Time status - Budgeted: 0, Recorded time: 0\n");
             report.append("--------------\n");
         } else {
             for (Activity activity : activities) {
@@ -150,13 +150,13 @@ public class Project {
                 report.append("Start date: ").append(startDate)
                       .append(" | End date: ").append(endDate).append("\n");
                 report.append("Time status - Budgeted: ").append(budgetedTime)
-                      .append(", Assigned: ").append(recordedTime).append("\n");
+                      .append(", Recorded time: ").append(recordedTime).append("\n");
                 report.append("--------------\n");
             }
         }
     
         int totalTime = getAssignedTime();
-        report.append("Total assigned time: ").append(totalTime).append(" hours\n");
+        report.append("Total recorded time: ").append(totalTime).append(" hours\n");
     
         return report.toString();
     }
