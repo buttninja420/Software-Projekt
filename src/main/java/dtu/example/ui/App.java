@@ -19,7 +19,9 @@ import javafx.scene.control.ListView;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -327,7 +329,7 @@ public class App extends Application {
         leftBox.setTranslateX(30);
 
         Label headerLabel = new Label("Project " + project.getName());
-        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        headerLabel.setStyle( "-fx-font-size: 20px; -fx-font-weight: bold;");
 
         Label reportLabel = new Label("Reports of projects:");
 
@@ -752,6 +754,7 @@ public class App extends Application {
                 }
 
                 activity.addTime(addedTime);
+                LoginUser.registerTime(addedTime);
                 recordedTimeTF.setText(String.valueOf(activity.getRecordedTime()));
                 addTimeTF.clear();
 
@@ -934,8 +937,16 @@ public class App extends Application {
         ProjektKnap.setPrefHeight(60);
         ProjektKnap.setPrefWidth(200);
 
+        Button userInfoButton = new Button("Show work hours");
+        userInfoButton.setPrefHeight(60);
+        userInfoButton.setPrefWidth(200);
+
+        userInfoButton.setOnAction(event -> {
+            userInfoWindow(LoginUser);
+        });
+
         VenstreBlok.getChildren().addAll(myUserLabel, infoLabel, ProjektKnap, myActivitiesButton,
-                addFixedAtivitiesButton);
+                addFixedAtivitiesButton,userInfoButton);
 
         projectListBox = new GridPane();
         projectListBox.setHgap(20);
@@ -978,6 +989,44 @@ public class App extends Application {
     
             row++;
         }
+    }
+
+    //Nikolaj & kelvin
+    private void userInfoWindow(User currUser){
+        Stage Infostage = new Stage();
+        Infostage.setTitle(currUser.getUID()+ " Work hours");
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(15));
+        layout.setAlignment(Pos.CENTER);
+
+        ListView<String> activityList = new ListView<>();
+
+        HashMap<LocalDate, Integer> map = currUser.getWorkHistory();
+
+        currUser.registerTime(2,LocalDate.now().plusDays(5));
+        currUser.registerTime(8,LocalDate.now().plusDays(7));
+        currUser.registerTime(2,LocalDate.now().plusDays(9));
+        for (int i = 0;i<100;i++){
+            currUser.registerTime(2,LocalDate.now().plusDays(9+i));
+        }
+
+        for (Map.Entry<LocalDate, Integer> entry : map.entrySet()) {
+            LocalDate key = entry.getKey();
+            //Label titleLabel = new Label(currUser.showWorkDate(key));
+            //titleLabel.setPrefWidth(150); 
+
+            //String row = new HBox(10, titleLabel);
+            //row.setAlignment(Pos.CENTER);
+            activityList.getItems().add(currUser.showWorkDate(key));
+        }
+
+        activityList.setItems(activityList.getItems().sorted());
+
+        layout.getChildren().add(activityList);
+
+        Scene scene = new Scene(layout, 500, 400);
+        Infostage.setScene(scene);
+        Infostage.show();
     }
 
     private void showReportWindow(String reportContent) {

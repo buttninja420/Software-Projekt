@@ -23,6 +23,11 @@ public class User {
         return dailyWorkTime;
     }
 
+    //Kelvin & NIkolaj
+    public HashMap<LocalDate, Integer> getWorkHistory(){
+        return workHistory;
+    }
+
     //Nikolaj
     public void setDailyWorkTime(int newDailyWorkTime){
         dailyWorkTime = newDailyWorkTime;
@@ -125,14 +130,14 @@ public class User {
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);
         int timeWorked = workHistory.get(today);
-        return "Date: " + today.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;  
+        return "Date: " + today.toString() + " Time worked: " + timeWorked + "/" + dailyWorkTime;  
     }
 
     //Kelvin
     public String showWorkDate(LocalDate date){
         makeSureDateExists(date);
         int timeWorked = workHistory.get(date);
-        return "Date: " + date.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;
+        return "Date: " + date.toString() + " Time worked: " + timeWorked + "/" + dailyWorkTime;
     }
 
     //Kelvin
