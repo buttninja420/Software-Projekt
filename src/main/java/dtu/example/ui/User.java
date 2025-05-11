@@ -12,22 +12,28 @@ public class User {
     private List<Activity> Activities = new ArrayList<Activity>();
     public static int maxActivities = 20; 
 
+
+    //Nikolaj
     public User(String UID){
         this.UID = UID;
     }
 
+    //Nikolaj
     public int getDailyWorkTime(){
         return dailyWorkTime;
     }
 
+    //Nikolaj
     public void setDailyWorkTime(int newDailyWorkTime){
         dailyWorkTime = newDailyWorkTime;
     }
 
+    //Kelvin
     public String getUID(){
         return UID;
     }
 
+    //Nikolaj
     public Boolean getAvailability(Activity possibleActivity){
         //precondition
         assert possibleActivity != null;
@@ -55,8 +61,7 @@ public class User {
     }
     
     
-
-    
+    //Kelvin
     public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
         int count = 0;
         for (Activity activity : Activities) {
@@ -69,24 +74,27 @@ public class User {
     }
     
     
-
+    //Nikolaj
     public List<Activity> getActivities(){
         return Activities;
     }
 
-    public void assignActivityDONOTUSE(Activity activity){ //maybe delete
+    //Nikolaj
+    public void assignActivity(Activity activity){ //maybe delete
         Activities.add(activity);
     }
 
-    public void removeActivityDONOTUSE(Activity activity){
+    //Nikolaj
+    public void removeActivity(Activity activity){
         Activities.remove(activity);
     }
 
+    //Nikolaj
     public int getMaxActivities(){
         return maxActivities;
     }
 
-
+    //Kelvin
     public void registerTime(int timeRegistered){ //updates time today
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);
@@ -99,7 +107,7 @@ public class User {
 
     } 
     
-    //         LocalDate date = LocalDate.of(2025, 5, 5);
+    //Kelvin
     public void registerTime(int timeRegistered, LocalDate date){
         makeSureDateExists(date);
         int prevTimeWorked = workHistory.get(date);
@@ -112,6 +120,7 @@ public class User {
 
     }
 
+    //Kelvin
     public String showWorkToday(){
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);
@@ -119,19 +128,22 @@ public class User {
         return "Date: " + today.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;  
     }
 
+    //Kelvin
     public String showWorkDate(LocalDate date){
         makeSureDateExists(date);
         int timeWorked = workHistory.get(date);
         return "Date: " + date.toString() + "Time worked: " + timeWorked + "/" + dailyWorkTime;
     }
 
+    //Kelvin
     public void makeSureDateExists(LocalDate date){ //checks if date exists and if it doesnt create a new date entry.
         if (workHistory.get(date) == null){
             workHistory.put(date,0);
         }
 
     }
-
+    
+    //Kelvin
     public int getHoursToday() {
         LocalDate today = LocalDate.now();
         makeSureDateExists(today);

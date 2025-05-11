@@ -37,6 +37,8 @@ public class App extends Application {
     private GridPane rightGrid;
 
     @Override
+
+    //Louise
     public void start(Stage stage) throws IOException {
         Users.add(new User("huba"));
 
@@ -47,18 +49,22 @@ public class App extends Application {
         showLoginWindow(stage);
     }
 
+    //Louise
     public App() {
     }
 
+    //Nikolaj
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
+    //Nikolaj
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
+    //Louise
     private void showLoginWindow(Stage primaryStage) {
         Stage loginStage = new Stage();
         loginStage.setTitle("Login");
@@ -96,10 +102,12 @@ public class App extends Application {
         loginStage.show();
     }
 
+    //Nikolaj
     public static void main(String[] args) {
         launch();
     }
 
+    //Louise
     public int registerUser(String UID) {
         for (User user : Users) {
             if (user.getUID().equals(UID)) {
@@ -110,10 +118,12 @@ public class App extends Application {
         return 0;
     }
 
+    //Nikolaj
     public List<User> getUsers() {
         return Users;
     }
 
+    //Nikolaj
     public List<String> getUserUIDs() {
         List<String> UIDs = new ArrayList<>();
         for (User user : Users) {
@@ -122,6 +132,7 @@ public class App extends Application {
         return UIDs;
     }
 
+    //Nikolaj
     public User getUserWithUID(String UID) {
         for (User user : Users) {
             if (user.getUID().equals(UID)) {
@@ -131,6 +142,7 @@ public class App extends Application {
         return null;
     }
 
+    //Nikolaj
     public Project getProject(String projectName) {
         for (Project project : projects) {
             if (project.getName().equalsIgnoreCase(projectName)) {
@@ -140,10 +152,12 @@ public class App extends Application {
         return null;
     }
 
+    //Nikolaj
     public void addProject(String projectName) {
         projects.add(new Project(projectName));
     }
 
+    //Louise
     private void myActivitiesWindow(User currentUser) {
         Stage myActivitiesWindow = new Stage();
         myActivitiesWindow.setTitle("My Activities");
@@ -178,6 +192,7 @@ public class App extends Application {
         myActivitiesWindow.show();
     }
 
+    //Louise
     private void newProjectWindow() {
         Stage newProjectWindow = new Stage();
         newProjectWindow.setTitle("New project");
@@ -209,6 +224,7 @@ public class App extends Application {
         newProjectWindow.show();
     }
 
+    //Nikolaj
     private void opdaterProjektListe() {
         projectListBox.getChildren().clear();
 
@@ -242,6 +258,7 @@ public class App extends Application {
         }
     }
 
+    //Louise
     private void projectEditorWindow(Project project) {
         Stage projectEditorWindow = new Stage();
         projectEditorWindow.setTitle("Edit Project " + project.getName());
@@ -469,6 +486,7 @@ public class App extends Application {
         projectEditorWindow.show();
     }
 
+    //Louise
     public void activityEditorWindow(Activity activity) {
         Stage activityEditorWindow = new Stage();
         activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
@@ -853,6 +871,7 @@ public class App extends Application {
         activityEditorWindow.show();
     }
 
+    //Louise
     public void showErrorPopup(String message, boolean isCritical) {
         Stage errorStage = new Stage();
         errorStage.setTitle("");
@@ -877,7 +896,7 @@ public class App extends Application {
         errorStage.show();
     }
     
-
+    //Louise
     private void startMainWindow(Stage stage) {
         projects.add(new Project("Make chair"));
         projects.add(new Project("Build table"));
@@ -936,6 +955,7 @@ public class App extends Application {
         stage.show();
     }
 
+    //Nikolaj
     private void opdaterProjektAktiviteter(Project project) {
         rightGrid.getChildren().removeIf(node -> 
             GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) >= 2
@@ -981,6 +1001,7 @@ public class App extends Application {
         reportStage.show();
     }
 
+    //Louise
     private void addFixedAtivitiesButton(User LogedinUser) {
         Stage inputWindow = new Stage();
         inputWindow.setTitle("Add New fixed Activity");

@@ -54,4 +54,10 @@ Scenario: user check availability for activity with overlapping time span
     When user checks availability for activity with start date 2023 10 2 and end date 2023 11 3
     Then user with UID: "PRIK" is available for activity with start date 2023 10 2 and end date 2023 11 3
 
+Scenario: user tries to remove more time than is registered
+    Given An app with a user with UID: "PRIK" exists
+    And user with UID: "PRIK" has 5 hours worked on date 2023 10 1
+    When user registers -6 hours worked on date 2023 10 1
+    Then An error: "cant have less than 0 hours registered per day" is thrown 
+    And user with UID: "PRIK" has 5 hours worked on date 2023 10 1
         

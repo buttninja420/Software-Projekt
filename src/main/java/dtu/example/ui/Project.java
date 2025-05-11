@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 public class Project {
     private List<Activity> activities = new ArrayList<>();
-    private List<User> assignedUsers = new ArrayList<>();
+    public List<User> assignedUsers = new ArrayList<>();
 
     private User leader = null;
-    private int projectNumber = 0;
-    private int maxTime;
+    public int projectNumber = 0;
+    public int maxTime;
     private static int idCounter;
     private String name ="";
     private LocalDate startDate;
@@ -20,12 +20,14 @@ public class Project {
     private int budgetedTime;
     private int recordedtime;
 
-    
+    //Jeppe
     public Project(String Name) {
-        this.projectNumber = idCounter++;
+        this.projectNumber = Integer.parseInt(String.valueOf(LocalDate.now().getYear()) +  String.valueOf(idCounter));
+        idCounter++;
         this.name = Name;
     }
     
+    //Jeppe
     public int setProjectLeader(User user) {
         if (this.leader == null){
             this.leader = user;
@@ -36,18 +38,22 @@ public class Project {
         }       
         }
     
+    //Jeppe
     public User getProjectleader(){
         return this.leader;
     }
 
+    //Frank
     public List<Activity> getActivities() {
         return this.activities;
     }
 
+    //Frank
     public void addActivity(Activity activity) {
         activities.add(activity);
     }
 
+    //Jeppe
     public int getAssignedTime() {
         int totalAssignedTime = 0;
         for (Activity activity : activities) {
@@ -56,19 +62,27 @@ public class Project {
         return totalAssignedTime;
     }
 
+    //Jeppe
     public int getBudgetedTime() {
         return budgetedTime;
     }
+
+    //Jeppe
     public void setBudgetedTime(int budgetedTime) {
         this.budgetedTime = budgetedTime;
     }
+
+    //Kelvin
     public int getRecordedTime() {
         return recordedtime;
     }
+
+    //Kelvin
     public void setRecordedTime(int recordedtime) {
         this.recordedtime = recordedtime;
     }
 
+    //Frank
     public void addTime(int addTime) {
     if (addTime < 0) {
         throw new IllegalArgumentException("Precondition failed: Cannot add negative time.");
@@ -88,14 +102,17 @@ public class Project {
     }
 }
    
-
+    //Frank
     public String getName(){
         return this.name;
     }
 
+    //Kelvin
     public LocalDate getStartDate() {
         return startDate;
     }
+
+    //Kelvin
     public void setStartDate(LocalDate startDate) {
         if (this.endDate != null && startDate.isAfter(this.endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date.");
@@ -103,10 +120,12 @@ public class Project {
         this.startDate = startDate;
     }
     
+    //Frank
     public LocalDate getEndDate() {
         return endDate;
     }
 
+    //Frank
     public void setEndDate(LocalDate endDate) {
         if (this.startDate != null && endDate.isBefore(this.startDate)) {
             throw new IllegalArgumentException("End date cannot be before start date.");
@@ -114,6 +133,7 @@ public class Project {
         this.endDate = endDate;
     }
 
+    //Kelvin
     public void editDate(LocalDate newStartDate, LocalDate newEndDate) {
         if (newStartDate != null && newEndDate != null && newStartDate.isAfter(newEndDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date.");
@@ -122,6 +142,7 @@ public class Project {
         this.endDate = newEndDate;
     }
 
+    //Kelvin
     public String generateReport() {
         assert true;
         StringBuilder report = new StringBuilder();

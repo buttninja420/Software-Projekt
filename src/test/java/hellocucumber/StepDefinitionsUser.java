@@ -2,11 +2,7 @@ package hellocucumber;
 
 import dtu.example.ui.*;
 import io.cucumber.java.en.*;
-import io.cucumber.java.en_scouse.An;
 import java.time.LocalDate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -176,6 +172,22 @@ public class StepDefinitionsUser {
     @Then( "An error: {string} is thrown")
         public void assert_correct_error_thrown(String correctErrorMessage){
         assertEquals(correctErrorMessage, errorMessage);
+    }
+
+    @And("user with UID: {string} has {int} hours worked on date {int} {int} {int}")
+    public void user_with_UID_has_hours_worked_on_date(String s, int i, int i2, int i3, int i4) {
+        LocalDate date = LocalDate.of(i2, i3, i4);
+        testUser.registerTime(i, date);
+    }
+
+    @When("user registers {int} hours worked on date {int} {int} {int}")
+    public void user_registers_hours_worked_on_date(int i, int i2, int i3, int i4) {
+        LocalDate date = LocalDate.of(i2, i3, i4);
+        try {
+            testUser.registerTime(i, date);
+        } catch (Error e) {
+            errorMessage = e.getMessage();
+        }
     }
     
 
