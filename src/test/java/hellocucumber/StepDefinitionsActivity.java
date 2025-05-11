@@ -32,6 +32,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
 
     }
@@ -52,6 +54,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
     }
 
@@ -93,6 +97,8 @@ public class StepDefinitionsActivity {
     @Given("an activity with name {string}")
     public void an_activity_with_name(String activityName) {
         activity1 = new Activity(activityName);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
     }
 
     @When("an employee with UID {string} who has {int} ongoing activites tries to join the activity with name {string}")
@@ -119,6 +125,8 @@ public class StepDefinitionsActivity {
         project1.setEndDate(endDate);
 
         activity1 = new Activity(activityName, project1);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         project1.addActivity(activity1);
 
         app.registerUser(employee);
@@ -155,6 +163,8 @@ public class StepDefinitionsActivity {
     @Given("an activity with name {string} with {int} hours budgeted")
     public void an_activity_with_name_with_hours_budgeted(String activityName, int budgetedHours) {
         activity1 = new Activity(activityName);
+        activity1.setStartDate(startDate);
+        activity1.setEndDate(endDate);
         activity1.setBudgetedTime(budgetedHours);
     }
 
