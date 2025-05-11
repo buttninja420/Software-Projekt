@@ -74,11 +74,11 @@ public class User {
         return Activities;
     }
 
-    public void assignActivityDONOTUSE(Activity activity){ //maybe delete
+    public void assignActivity(Activity activity){ //maybe delete
         Activities.add(activity);
     }
 
-    public void removeActivityDONOTUSE(Activity activity){
+    public void removeActivity(Activity activity){
         Activities.remove(activity);
     }
 

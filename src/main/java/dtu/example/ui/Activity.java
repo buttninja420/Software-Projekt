@@ -67,7 +67,7 @@ public class Activity {
     public int assignUser(User user) {
         if (user.getAvailability(this)){
             this.assignedUsers.add(user);
-            user.assignActivityDONOTUSE(this);
+            user.assignActivity(this);
             return 0;
         }
         return -1;
@@ -75,7 +75,7 @@ public class Activity {
 
     public int unassignUser(User user){
         if(assignedUsers.remove(user)){
-            user.removeActivityDONOTUSE(this);
+            user.removeActivity(this);
             return 0;
         }else{
             return -1;

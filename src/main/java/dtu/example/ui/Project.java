@@ -22,7 +22,8 @@ public class Project {
 
     
     public Project(String Name) {
-        this.projectNumber = idCounter++;
+        this.projectNumber = Integer.parseInt(String.valueOf(LocalDate.now().getYear()) +  String.valueOf(idCounter));
+        idCounter++;
         this.name = Name;
     }
     
