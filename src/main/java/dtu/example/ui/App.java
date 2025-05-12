@@ -41,7 +41,7 @@ public class App extends Application {
 
     @Override
 
-    //Louise
+    // Louise
     public void start(Stage stage) throws IOException {
         Users.add(new User("huba"));
 
@@ -52,22 +52,22 @@ public class App extends Application {
         showLoginWindow(stage);
     }
 
-    //Louise
+    // Louise
     public App() {
     }
 
-    //Nikolaj
+    // Nikolaj
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
-    //Nikolaj
+    // Nikolaj
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
-    //Louise
+    // Louise
     private void showLoginWindow(Stage primaryStage) {
         Stage loginStage = new Stage();
         loginStage.setTitle("Login");
@@ -105,12 +105,12 @@ public class App extends Application {
         loginStage.show();
     }
 
-    //Nikolaj
+    // Nikolaj
     public static void main(String[] args) {
         launch();
     }
 
-    //Louise
+    // Louise
     public int registerUser(String UID) {
         for (User user : Users) {
             if (user.getUID().equals(UID)) {
@@ -121,12 +121,12 @@ public class App extends Application {
         return 0;
     }
 
-    //Nikolaj
+    // Nikolaj
     public List<User> getUsers() {
         return Users;
     }
 
-    //Nikolaj
+    // Nikolaj
     public List<String> getUserUIDs() {
         List<String> UIDs = new ArrayList<>();
         for (User user : Users) {
@@ -135,7 +135,7 @@ public class App extends Application {
         return UIDs;
     }
 
-    //Nikolaj
+    // Nikolaj
     public User getUserWithUID(String UID) {
         for (User user : Users) {
             if (user.getUID().equals(UID.toLowerCase())) {
@@ -145,7 +145,7 @@ public class App extends Application {
         return null;
     }
 
-    //Nikolaj
+    // Nikolaj
     public Project getProject(String projectName) {
         for (Project project : projects) {
             if (project.getName().equalsIgnoreCase(projectName)) {
@@ -155,12 +155,12 @@ public class App extends Application {
         return null;
     }
 
-    //Nikolaj
+    // Nikolaj
     public void addProject(String projectName) {
         projects.add(new Project(projectName));
     }
 
-    //Louise
+    // Louise
     private void myActivitiesWindow(User currentUser) {
         Stage myActivitiesWindow = new Stage();
         myActivitiesWindow.setTitle("My Activities");
@@ -176,7 +176,7 @@ public class App extends Application {
 
         for (Activity a : currentUser.getActivities()) {
             Label titleLabel = new Label(a.getTitle());
-            titleLabel.setPrefWidth(150); 
+            titleLabel.setPrefWidth(150);
             Label dateLabel = new Label(a.getStartDate() + " - " + a.getEndDate());
 
             HBox row = new HBox(10, titleLabel, dateLabel);
@@ -195,7 +195,7 @@ public class App extends Application {
         myActivitiesWindow.show();
     }
 
-    //Louise
+    // Louise
     private void newProjectWindow() {
         Stage newProjectWindow = new Stage();
         newProjectWindow.setTitle("New project");
@@ -227,7 +227,7 @@ public class App extends Application {
         newProjectWindow.show();
     }
 
-    //Nikolaj
+    // Nikolaj
     private void opdaterProjektListe() {
         projectListBox.getChildren().clear();
 
@@ -261,7 +261,7 @@ public class App extends Application {
         }
     }
 
-    //Louise
+    // Louise
     private void projectEditorWindow(Project project) {
         Stage projectEditorWindow = new Stage();
         projectEditorWindow.setTitle("Edit Project " + project.getName());
@@ -273,21 +273,22 @@ public class App extends Application {
         VBox leftBox = new VBox(15);
         leftBox.setAlignment(Pos.TOP_LEFT);
         DatePicker startDatePicker = new DatePicker(project.getStartDate());
-        if (project.getStartDate() == null || (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser))) {
+        if (project.getStartDate() == null
+                || (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser))) {
             startDatePicker.setDisable(false);
         } else {
             startDatePicker.setDisable(true);
         }
         startDatePicker.setOnAction(event -> {
             LocalDate selectedDate = startDatePicker.getValue();
-        
+
             if (project.getStartDate() != null &&
-                (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
+                    (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
                 showErrorPopup("Error: Only the project leader can \nchange the start date", true);
                 startDatePicker.setValue(project.getStartDate());
                 return;
             }
-        
+
             if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
                 showErrorPopup("Error: Start date cannot be after end date. \nPick a new date", true);
                 startDatePicker.setValue(project.getStartDate());
@@ -295,27 +296,26 @@ public class App extends Application {
             } else {
                 project.setStartDate(selectedDate);
 
-
             }
         });
 
         DatePicker endDatePicker = new DatePicker(project.getEndDate());
-        if (project.getEndDate() == null || 
-            (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser))) {
+        if (project.getEndDate() == null ||
+                (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser))) {
             endDatePicker.setDisable(false);
         } else {
             endDatePicker.setDisable(true);
         }
         endDatePicker.setOnAction(event -> {
             LocalDate selectedDate = endDatePicker.getValue();
-    
+
             if (project.getEndDate() != null &&
-                (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
+                    (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
                 showErrorPopup("Error: Only the project leader can change\n the end date", true);
                 endDatePicker.setValue(project.getEndDate());
                 return;
             }
-    
+
             if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
                 showErrorPopup("Error: End date cannot be before start date. \nPick a new date", true);
                 endDatePicker.setValue(project.getEndDate());
@@ -323,17 +323,15 @@ public class App extends Application {
             } else {
                 project.setEndDate(selectedDate);
 
-
             }
         });
-        
+
         leftBox.setTranslateX(30);
 
         Label headerLabel = new Label("Project " + project.getName());
-        headerLabel.setStyle( "-fx-font-size: 20px; -fx-font-weight: bold;");
+        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        //Label reportLabel = new Label("Reports of projects:");
-
+        // Label reportLabel = new Label("Reports of projects:");
 
         HBox projectLeaderBox = new HBox(10);
         Label projectLeaderLabel = new Label("Project leader:");
@@ -371,13 +369,12 @@ public class App extends Application {
         projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderDropdown, projectLeaderButton);
 
         leftBox.getChildren().addAll(
-            headerLabel,
-            //reportLabel,
-            new Label("Start date:"), startDatePicker,
-            new Label("End date:"), endDatePicker,
-            projectLeaderBox
-        );
-        
+                headerLabel,
+                // reportLabel,
+                new Label("Start date:"), startDatePicker,
+                new Label("End date:"), endDatePicker,
+                projectLeaderBox);
+
         if (project.getProjectleader() != null && project.getProjectleader().equals(LoginUser)) {
             Button reportButton = new Button("Generate Report");
             reportButton.setOnAction(event -> {
@@ -386,13 +383,11 @@ public class App extends Application {
             });
             leftBox.getChildren().add(reportButton);
         }
-        
-        
 
         rightGrid = new GridPane();
 
-        rightGrid.setHgap(20); 
-        rightGrid.setVgap(10); 
+        rightGrid.setHgap(20);
+        rightGrid.setVgap(10);
         rightGrid.setAlignment(Pos.TOP_LEFT);
 
         ColumnConstraints col1 = new ColumnConstraints();
@@ -406,7 +401,6 @@ public class App extends Application {
 
         rightGrid.getColumnConstraints().addAll(col1, col2, col3);
 
-
         rightGrid.getChildren().clear();
 
         HBox activityHeader = new HBox(10);
@@ -414,31 +408,30 @@ public class App extends Application {
         Button addActivityButton = new Button("+ Add activity");
         activityHeader.getChildren().addAll(activitiesLabel, addActivityButton);
         activityHeader.setAlignment(Pos.CENTER_LEFT);
-        
+
         rightGrid.add(activityHeader, 0, 0, 3, 1);
-        
+
         rightGrid.add(new Label("Activity Name"), 0, 1);
         rightGrid.add(new Label("Users"), 1, 1);
         rightGrid.add(new Label("Dates"), 2, 1);
-        
 
         int row = 2;
         for (Activity activity : project.getActivities()) {
             Button activityButton = new Button(activity.getTitle());
             activityButton.setOnAction(e -> activityEditorWindow(activity));
-        
+
             Label userCountLabel = new Label(String.valueOf(activity.getAssignedUsers().size()));
-        
+
             String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "-";
             String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "-";
             Label dateLabel = new Label(startDate + " | " + endDate);
-        
+
             rightGrid.add(activityButton, 0, row);
             rightGrid.add(userCountLabel, 1, row);
             rightGrid.add(dateLabel, 2, row);
-        
-            row++; 
-        }         
+
+            row++;
+        }
 
         addActivityButton.setOnAction(event -> {
             Stage inputWindow = new Stage();
@@ -460,7 +453,7 @@ public class App extends Application {
 
                     Button activityButton = new Button(newActivity.getTitle());
                     activityButton.setOnAction(ev -> activityEditorWindow(newActivity));
-                    int newRow = project.getActivities().size() + 1; 
+                    int newRow = project.getActivities().size() + 1;
                     rightGrid.add(activityButton, 0, newRow);
                     rightGrid.add(new Label("0"), 1, newRow);
                     rightGrid.add(new Label("- | -"), 2, newRow);
@@ -485,7 +478,7 @@ public class App extends Application {
         projectEditorWindow.show();
     }
 
-    //Louise
+    // Louise
     public void activityEditorWindow(Activity activity) {
         Stage activityEditorWindow = new Stage();
         activityEditorWindow.setTitle("Edit activity " + activity.getTitle());
@@ -523,32 +516,31 @@ public class App extends Application {
         saveBudgetButton.setOnAction(event -> {
             try {
                 int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
-        
+
                 if (budget <= 0) {
                     showErrorPopup("Error: Budgeted time must be a positive integer", true);
                     budgetedTimeTF.clear();
                     return;
                 }
-        
+
                 if (activity.getBudgetedTime() == 0) {
                     activity.setBudgetedTime(budget);
                     saveBudgetButton.setVisible(false);
                     budgetedTimeTF.setEditable(false);
                 } else if (activity.getProject().getProjectleader() != null &&
-                           activity.getProject().getProjectleader().equals(LoginUser)) {
+                        activity.getProject().getProjectleader().equals(LoginUser)) {
                     activity.setBudgetedTime(budget);
                     saveBudgetButton.setVisible(false);
                     budgetedTimeTF.setEditable(false);
                 } else {
-                    showErrorPopup("Error: Only the project leader can change \nthe budgeted time after it's set", true);
+                    showErrorPopup("Error: Only the project leader can change \nthe budgeted time after it's set",
+                            true);
                 }
             } catch (NumberFormatException e) {
                 showErrorPopup("Error: Invalid number entered. \nPlease enter a valid integer", true);
             }
         });
-        
-        
-        
+
         budgetedTimeBox.getChildren().addAll(budgetedTimeLabel, budgetedTimeTF);
         if (saveBudgetButton.isVisible()) {
             budgetedTimeBox.getChildren().add(saveBudgetButton);
@@ -559,8 +551,8 @@ public class App extends Application {
         recordedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label recordedTimeLabel = new Label("Recorded Time:");
         final TextField recordedTimeTF = new TextField(String.valueOf(activity.getRecordedTime()));
-        recordedTimeTF.setEditable(false);  
-        recordedTimeTF.setStyle("-fx-control-inner-background: #E0E0E0;"); 
+        recordedTimeTF.setEditable(false);
+        recordedTimeTF.setStyle("-fx-control-inner-background: #E0E0E0;");
         recordedTimeBox.getChildren().addAll(recordedTimeLabel, recordedTimeTF);
         layout.getChildren().add(recordedTimeBox);
 
@@ -573,116 +565,112 @@ public class App extends Application {
         Button unassignUserButton = new Button("Unassign user");
         Button assignSelf = new Button();
         if (activity.getAssignedUsers().contains(LoginUser)) {
-            assignSelf.setText("Unassign self");
+            assignSelf.setText("Assign/Unassign self");
         } else {
-            assignSelf.setText("Assign self");
+            assignSelf.setText("Assign/Unassign self");
         }
         Button seeAssignedUsersButton = new Button("See assigned users");
 
-
-        HBox manageUsersBox = new HBox(10); 
+        HBox manageUsersBox = new HBox(10);
         manageUsersBox.setAlignment(Pos.CENTER);
         manageUsersBox.getChildren().addAll(assignUserButton, unassignUserButton);
 
         seeAssignedUsersButton.setOnAction(event -> {
             Stage assignedUsersWindow = new Stage();
             assignedUsersWindow.setTitle("Assigned Users for " + activity.getTitle());
-        
+
             VBox assignedLayout = new VBox(10);
             assignedLayout.setPadding(new Insets(10));
             assignedLayout.setAlignment(Pos.CENTER_LEFT);
-        
+
             Label header = new Label("Users assigned to activity:");
             assignedLayout.getChildren().add(header);
-        
+
             for (User user : activity.getAssignedUsers()) {
                 assignedLayout.getChildren().add(new Label(user.getUID()));
             }
-        
+
             Button closeButton = new Button("Close");
             closeButton.setOnAction(e -> assignedUsersWindow.close());
             assignedLayout.getChildren().add(closeButton);
-        
+
             Scene scene = new Scene(assignedLayout, 300, 300);
             assignedUsersWindow.setScene(scene);
             assignedUsersWindow.show();
         });
-        
 
         unassignUserButton.setOnAction(event -> {
             Stage unassignUserStage = new Stage();
             unassignUserStage.setTitle("Unassign User from Activity");
-        
+
             VBox unassignLayout = new VBox(10);
             unassignLayout.setPadding(new Insets(10));
             unassignLayout.setAlignment(Pos.CENTER);
-        
+
             Label label = new Label("Select User to Unassign:");
             ComboBox<String> userDropdown = new ComboBox<>();
-        
 
             for (User user : activity.getAssignedUsers()) {
                 userDropdown.getItems().add(user.getUID());
             }
-        
+
             Button confirmButton = new Button("Unassign");
-        
+
             confirmButton.setOnAction(e -> {
                 String selectedUID = userDropdown.getValue();
                 if (selectedUID != null) {
                     User user = getUserWithUID(selectedUID);
                     if (user != null) {
-                        activity.unassignUser(user); 
+                        activity.unassignUser(user);
                         showErrorPopup("User unassigned successfully", false);
                         unassignUserStage.close();
                     }
                 }
             });
-        
+
             unassignLayout.getChildren().addAll(label, userDropdown, confirmButton);
-        
+
             Scene scene = new Scene(unassignLayout, 300, 150);
             unassignUserStage.setScene(scene);
             unassignUserStage.show();
         });
-        
-        
 
         assignUserButton.setOnAction(event -> {
             if (activity.getProject().getProjectleader() != null &&
-                activity.getProject().getProjectleader().equals(LoginUser)) {
-        
+                    activity.getProject().getProjectleader().equals(LoginUser)) {
+
                 Stage assignUserStage = new Stage();
                 assignUserStage.setTitle("Assign User to Activity");
-        
+
                 VBox assignLayout = new VBox(10);
                 assignLayout.setPadding(new Insets(10));
                 assignLayout.setAlignment(Pos.CENTER);
-        
+
                 Label label = new Label("Select from available users:");
                 ComboBox<String> userDropdown = new ComboBox<>();
-        
+
                 for (User user : getAllAvailableUsers(activity)) {
                     if (!activity.getAssignedUsers().contains(user)) {
-                        userDropdown.getItems().add(user.getUID() + "     Current activities: " + user.getWorkLoad(activity));
+                        userDropdown.getItems()
+                                .add(user.getUID() + "     Current activities: " + user.getWorkLoad(activity));
                     }
-                }                
-        
+                }
+
                 userDropdown.setPrefWidth(200);
-        
+
                 Button confirmButton = new Button("Assign");
-        
+
                 confirmButton.setOnAction(e -> {
                     String selectedEntry = userDropdown.getValue();
                     if (selectedEntry != null && !selectedEntry.isEmpty()) {
-                        String selectedUserId = selectedEntry.substring(0, 4); 
+                        String selectedUserId = selectedEntry.substring(0, 4);
                         User user = getUserWithUID(selectedUserId);
-        
+
                         if (activity.getAssignedUsers().contains(user)) {
                             showErrorPopup("Error: User is already assigned to this activity.", true);
                             return;
                         }
-        
+
                         int result = activity.assignUser(user);
                         if (result == 0) {
                             showErrorPopup("User assigned successfully", false);
@@ -694,59 +682,60 @@ public class App extends Application {
                         showErrorPopup("Error: Please select a user", true);
                     }
                 });
-        
+
                 assignLayout.getChildren().addAll(label, userDropdown, confirmButton);
-        
+
                 Scene scene = new Scene(assignLayout, 300, 150);
                 assignUserStage.setScene(scene);
                 assignUserStage.show();
-        
+
             } else {
                 showErrorPopup("Error: Only the Project Leader can assign users", true);
             }
         });
-        
-        
 
         assignSelf.setOnAction(event -> {
             if (activity.getAssignedUsers().contains(LoginUser)) {
 
                 activity.getAssignedUsers().remove(LoginUser);
                 showErrorPopup("You have been unassigned from this activity.", false);
-                assignSelf.setText("Assign self");
+                assignSelf.setText("Assign/Unassign self");
             } else {
 
-                if (activity.getProject().getProjectleader() != null 
-                && activity.getProject().getProjectleader().equals(LoginUser)) {
+                if (activity.getProject().getProjectleader() != null
+                        && activity.getProject().getProjectleader().equals(LoginUser)) {
 
-                int result = activity.assignUser(LoginUser);
-                if (result == 0) {
-                    showErrorPopup("You have been assigned to this activity", false);
+                    int result = activity.assignUser(LoginUser);
+                    if (result == 0) {
+                        showErrorPopup("You have been assigned to this activity", false);
 
+                    } else {
+                        showErrorPopup("Error: You are not available or already assigned", true);
+                    }
+                } else if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
+
+                    int result = activity.assignUser(LoginUser);
+                    if (result == 0) {
+                        showErrorPopup("You have been assigned to this activity", false);
+
+                    } else {
+                        showErrorPopup("Error: You are not available or already assigned", true);
+                    }
                 } else {
-                    showErrorPopup("Error: You are not available or already assigned", true);
+                    showErrorPopup(
+                            "Error: You can only join an activity \nwhen both the project and activity\n have dates",
+                            true);
                 }
-            } else if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
 
-                int result = activity.assignUser(LoginUser);
-                if (result == 0) {
-                    showErrorPopup("You have been assigned to this activity", false);
+            }
 
-                } else {
-                    showErrorPopup("Error: You are not available or already assigned", true);
-                }
-            } else {
-                showErrorPopup("Error: You can only join an activity \nwhen both the project and activity\n have dates", true);
-            }
-            
-            }
-        
             opdaterProjektAktiviteter(activity.getProject());
         });
-        
-        
-        
-        
+
+        if (activity.getStartDate() == null && activity.getEndDate() == null) {
+            assignSelf.setDisable(true);
+            assignUserButton.setDisable(true);
+        }
 
         addTimeButton.setOnAction(event -> {
             try {
@@ -759,7 +748,8 @@ public class App extends Application {
 
                 if (activity.getRecordedTime() + addedTime > activity.getBudgetedTime()) {
                     showErrorPopup(
-                            "Error: You cannot record more time \nthan the budgeted time. Contact your \nprojectleader to edit budgeted time", true);
+                            "Error: You cannot record more time \nthan the budgeted time. Contact your \nprojectleader to edit budgeted time",
+                            true);
                     return;
                 }
 
@@ -776,24 +766,24 @@ public class App extends Application {
 
         addTimeBox.getChildren().addAll(addTimeTF, addTimeButton);
         layout.getChildren().add(addTimeBox);
-        
-        //date
+
+        // date
         DatePicker activityStartDatePicker = new DatePicker(activity.getStartDate());
         DatePicker activityEndDatePicker = new DatePicker(activity.getEndDate());
-        
+
         if (activity.getProject().getStartDate() == null || activity.getProject().getEndDate() == null) {
             activityStartDatePicker.setDisable(true);
             activityEndDatePicker.setDisable(true);
         } else {
             activityStartDatePicker.setDisable(false);
             activityEndDatePicker.setDisable(false);
-        }        
+        }
 
         activityStartDatePicker.setOnAction(e -> {
             LocalDate selectedDate = activityStartDatePicker.getValue();
             LocalDate projectStart = activity.getProject().getStartDate();
             LocalDate projectEnd = activity.getProject().getEndDate();
-        
+
             if (projectStart != null && selectedDate.isBefore(projectStart)) {
                 showErrorPopup("Error: Start date cannot be before project start date", true);
                 activityStartDatePicker.setValue(activity.getStartDate());
@@ -810,17 +800,20 @@ public class App extends Application {
             } else {
                 activity.setStartDate(selectedDate);
                 opdaterProjektAktiviteter(activity.getProject());
-                
+
+            }
+
+            if (activity.getStartDate() != null && activity.getEndDate() != null) {
+                assignSelf.setDisable(false);
+                assignUserButton.setDisable(false);
             }
         });
-        
-        
-        
+
         activityEndDatePicker.setOnAction(e -> {
             LocalDate selectedDate = activityEndDatePicker.getValue();
             LocalDate projectStart = activity.getProject().getStartDate();
             LocalDate projectEnd = activity.getProject().getEndDate();
-        
+
             if (projectStart != null && selectedDate.isBefore(projectStart)) {
                 showErrorPopup("Error: End date cannot be before project start date", true);
                 activityEndDatePicker.setValue(activity.getEndDate());
@@ -837,22 +830,25 @@ public class App extends Application {
             } else {
                 activity.setEndDate(selectedDate);
                 opdaterProjektAktiviteter(activity.getProject());
-                
+
+            }
+
+            if (activity.getStartDate() != null && activity.getEndDate() != null) {
+                assignSelf.setDisable(false);
+                assignUserButton.setDisable(false);
             }
         });
-        
-        
+
         Label infoLabel = new Label();
-        infoLabel.setStyle("-fx-font-size: 12px;"); 
-        layout.getChildren().add(infoLabel);        
+        infoLabel.setStyle("-fx-font-size: 12px;");
+        layout.getChildren().add(infoLabel);
 
         HBox activityDatePickers = new HBox(10);
         activityDatePickers.setAlignment(Pos.CENTER_LEFT);
         activityDatePickers.getChildren().addAll(
-            new Label("Start:"), activityStartDatePicker, 
-            new Label("End:"), activityEndDatePicker
-        );
-        
+                new Label("Start:"), activityStartDatePicker,
+                new Label("End:"), activityEndDatePicker);
+
         if (activity.getProject().getStartDate() == null || activity.getProject().getEndDate() == null) {
             activityStartDatePicker.setDisable(true);
             activityEndDatePicker.setDisable(true);
@@ -864,52 +860,47 @@ public class App extends Application {
             infoLabel.setText("Her kan du sætte start date og enddate på aktiviteten");
             infoLabel.setStyle("-fx-text-fill: green; -fx-font-size: 12px;");
         }
-        
-        
-        
 
         layout.getChildren().add(activityDatePickers);
-        
+
         if (activity.getProject().getProjectleader() != null
                 && activity.getProject().getProjectleader().equals(LoginUser)) {
-                    layout.getChildren().addAll(seeAssignedUsersButton, manageUsersBox, assignSelf);
+            layout.getChildren().addAll(seeAssignedUsersButton, manageUsersBox, assignSelf);
         } else {
             layout.getChildren().addAll(assignSelf);
         }
-
-
 
         Scene scene = new Scene(layout, 400, 400);
         activityEditorWindow.setScene(scene);
         activityEditorWindow.show();
     }
 
-    //Louise
+    // Louise
     public void showErrorPopup(String message, boolean isCritical) {
         Stage errorStage = new Stage();
         errorStage.setTitle("");
-    
+
         VBox box = new VBox(10);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(10));
-    
+
         Label label = new Label(message);
         if (isCritical) {
             label.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
         } else {
             label.setStyle("-fx-text-fill: green; -fx-font-size: 12px;");
         }
-    
+
         Button okButton = new Button("OK");
         okButton.setOnAction(e -> errorStage.close());
-    
+
         box.getChildren().addAll(label, okButton);
         Scene scene = new Scene(box, 300, 150);
         errorStage.setScene(scene);
         errorStage.show();
     }
-    
-    //Louise
+
+    // Louise
     private void startMainWindow(Stage stage) {
         projects.add(new Project("Make chair"));
         projects.add(new Project("Build table"));
@@ -956,7 +947,7 @@ public class App extends Application {
         });
 
         VenstreBlok.getChildren().addAll(myUserLabel, infoLabel, ProjektKnap, myActivitiesButton,
-                addFixedAtivitiesButton,userInfoButton);
+                addFixedAtivitiesButton, userInfoButton);
 
         projectListBox = new GridPane();
         projectListBox.setHgap(20);
@@ -976,35 +967,33 @@ public class App extends Application {
         stage.show();
     }
 
-    //Nikolaj
+    // Nikolaj
     private void opdaterProjektAktiviteter(Project project) {
-        rightGrid.getChildren().removeIf(node -> 
-            GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) >= 2
-        );
-    
+        rightGrid.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) >= 2);
+
         int row = 2;
         for (Activity activity : project.getActivities()) {
             Button activityButton = new Button(activity.getTitle());
             activityButton.setOnAction(e -> activityEditorWindow(activity));
-    
+
             Label userCountLabel = new Label(String.valueOf(activity.getAssignedUsers().size()));
-    
+
             String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "-";
             String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "-";
             Label dateLabel = new Label(startDate + " | " + endDate);
-    
+
             rightGrid.add(activityButton, 0, row);
             rightGrid.add(userCountLabel, 1, row);
             rightGrid.add(dateLabel, 2, row);
-    
+
             row++;
         }
     }
 
-    //Nikolaj & kelvin
-    private void userInfoWindow(User currUser){
+    // Nikolaj & kelvin
+    private void userInfoWindow(User currUser) {
         Stage Infostage = new Stage();
-        Infostage.setTitle(currUser.getUID()+ " Work hours");
+        Infostage.setTitle(currUser.getUID() + " Work hours");
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
@@ -1013,20 +1002,20 @@ public class App extends Application {
 
         HashMap<LocalDate, Integer> map = currUser.getWorkHistory();
 
-        currUser.registerTime(2,LocalDate.now().plusDays(5));
-        currUser.registerTime(8,LocalDate.now().plusDays(7));
-        currUser.registerTime(2,LocalDate.now().plusDays(9));
-        for (int i = 0;i<100;i++){
-            currUser.registerTime(2,LocalDate.now().plusDays(9+i));
+        currUser.registerTime(2, LocalDate.now().plusDays(5));
+        currUser.registerTime(8, LocalDate.now().plusDays(7));
+        currUser.registerTime(2, LocalDate.now().plusDays(9));
+        for (int i = 0; i < 100; i++) {
+            currUser.registerTime(2, LocalDate.now().plusDays(9 + i));
         }
 
         for (Map.Entry<LocalDate, Integer> entry : map.entrySet()) {
             LocalDate key = entry.getKey();
-            //Label titleLabel = new Label(currUser.showWorkDate(key));
-            //titleLabel.setPrefWidth(150); 
+            // Label titleLabel = new Label(currUser.showWorkDate(key));
+            // titleLabel.setPrefWidth(150);
 
-            //String row = new HBox(10, titleLabel);
-            //row.setAlignment(Pos.CENTER);
+            // String row = new HBox(10, titleLabel);
+            // row.setAlignment(Pos.CENTER);
             activityList.getItems().add(currUser.showWorkDate(key));
         }
 
@@ -1042,25 +1031,25 @@ public class App extends Application {
     private void showReportWindow(String reportContent) {
         Stage reportStage = new Stage();
         reportStage.setTitle("Project Report");
-    
+
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.TOP_LEFT);
-    
+
         Label reportLabel = new Label(reportContent);
         reportLabel.setStyle("-fx-font-family: monospace; -fx-font-size: 12px;");
-    
+
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> reportStage.close());
-    
+
         layout.getChildren().addAll(reportLabel, closeButton);
-    
+
         Scene scene = new Scene(layout, 500, 400);
         reportStage.setScene(scene);
         reportStage.show();
     }
 
-    //Louise
+    // Louise
     private void addFixedAtivitiesButton(User LogedinUser) {
         Stage inputWindow = new Stage();
         inputWindow.setTitle("Add New fixed Activity");
@@ -1101,20 +1090,17 @@ public class App extends Application {
             }
         });
 
-        
-        
-
         popupLayout.getChildren().addAll(prompt, inputField, DatepickersBox, confirmButton);
         Scene scene = new Scene(popupLayout, 250, 150);
         inputWindow.setScene(scene);
         inputWindow.show();
     }
 
-    //Nikolaj
-    private List<User> getAllAvailableUsers(Activity activity){
+    // Nikolaj
+    private List<User> getAllAvailableUsers(Activity activity) {
         List<User> AvailableUsers = new ArrayList<>();
-        for (User user : Users){
-            if (user.getAvailability(activity)){
+        for (User user : Users) {
+            if (user.getAvailability(activity)) {
                 AvailableUsers.add(user);
             }
         }
