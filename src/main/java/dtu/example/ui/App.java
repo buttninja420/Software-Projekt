@@ -92,7 +92,7 @@ public class App extends Application {
                     loginStage.close();
                     startMainWindow(primaryStage);
                 } else {
-                    showErrorPopup("Error. User doesn't exists. \nPlease try again", true);
+                    showErrorPopup("Error: User doesn't exists. \nPlease try again", true);
                 }
 
             }
@@ -283,13 +283,13 @@ public class App extends Application {
         
             if (project.getStartDate() != null &&
                 (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
-                showErrorPopup("Error. Only the project leader can \nchange the start date", true);
+                showErrorPopup("Error: Only the project leader can \nchange the start date", true);
                 startDatePicker.setValue(project.getStartDate());
                 return;
             }
         
             if (project.getEndDate() != null && selectedDate.isAfter(project.getEndDate())) {
-                showErrorPopup("Error. Start date cannot be after end date. \nPick a new date", true);
+                showErrorPopup("Error: Start date cannot be after end date. \nPick a new date", true);
                 startDatePicker.setValue(project.getStartDate());
                 return;
             } else {
@@ -311,13 +311,13 @@ public class App extends Application {
     
             if (project.getEndDate() != null &&
                 (project.getProjectleader() == null || !project.getProjectleader().equals(LoginUser))) {
-                showErrorPopup("Error. Only the project leader can change\n the end date", true);
+                showErrorPopup("Error: Only the project leader can change\n the end date", true);
                 endDatePicker.setValue(project.getEndDate());
                 return;
             }
     
             if (project.getStartDate() != null && selectedDate.isBefore(project.getStartDate())) {
-                showErrorPopup("Error. End date cannot be before start date. \nPick a new date", true);
+                showErrorPopup("Error: End date cannot be before start date. \nPick a new date", true);
                 endDatePicker.setValue(project.getEndDate());
                 return;
             } else {
@@ -361,10 +361,10 @@ public class App extends Application {
                     projectLeaderDropdown.setValue(selectedLeader);
                     projectLeaderDropdown.setDisable(true);
                 } else {
-                    showErrorPopup("Error. Selected user does not exist", true);
+                    showErrorPopup("Error: Selected user does not exist", true);
                 }
             } else {
-                showErrorPopup("Error. Please select a project leader", true);
+                showErrorPopup("Error: Please select a project leader", true);
             }
         });
 
@@ -523,7 +523,7 @@ public class App extends Application {
                 int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
         
                 if (budget <= 0) {
-                    showErrorPopup("Error. Budgeted time must be a positive integer", true);
+                    showErrorPopup("Error: Budgeted time must be a positive integer", true);
                     budgetedTimeTF.clear();
                     return;
                 }
@@ -538,10 +538,10 @@ public class App extends Application {
                     saveBudgetButton.setVisible(false);
                     budgetedTimeTF.setEditable(false);
                 } else {
-                    showErrorPopup("Error. Only the project leader can change \nthe budgeted time after it's set", true);
+                    showErrorPopup("Error: Only the project leader can change \nthe budgeted time after it's set", true);
                 }
             } catch (NumberFormatException e) {
-                showErrorPopup("Error. Invalid number entered. \nPlease enter a valid integer", true);
+                showErrorPopup("Error: Invalid number entered. \nPlease enter a valid integer", true);
             }
         });
         
@@ -677,7 +677,7 @@ public class App extends Application {
                         User user = getUserWithUID(selectedUserId);
         
                         if (activity.getAssignedUsers().contains(user)) {
-                            showErrorPopup("Error. User is already assigned to this activity.", true);
+                            showErrorPopup("Error: User is already assigned to this activity.", true);
                             return;
                         }
         
@@ -686,10 +686,10 @@ public class App extends Application {
                             showErrorPopup("User assigned successfully", false);
                             assignUserStage.close();
                         } else {
-                            showErrorPopup("Error. User cannot be assigned (availability or already assigned)", true);
+                            showErrorPopup("Error: User cannot be assigned (availability or already assigned)", true);
                         }
                     } else {
-                        showErrorPopup("Error. Please select a user", true);
+                        showErrorPopup("Error: Please select a user", true);
                     }
                 });
         
@@ -700,7 +700,7 @@ public class App extends Application {
                 assignUserStage.show();
         
             } else {
-                showErrorPopup("Error. Only the Project Leader can assign users", true);
+                showErrorPopup("Error: Only the Project Leader can assign users", true);
             }
         });
         
@@ -722,7 +722,7 @@ public class App extends Application {
                     showErrorPopup("You have been assigned to this activity", false);
 
                 } else {
-                    showErrorPopup("Error. You are not available or already assigned", true);
+                    showErrorPopup("Error: You are not available or already assigned", true);
                 }
             } else if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
 
@@ -731,10 +731,10 @@ public class App extends Application {
                     showErrorPopup("You have been assigned to this activity", false);
 
                 } else {
-                    showErrorPopup("Error. You are not available or already assigned", true);
+                    showErrorPopup("Error: You are not available or already assigned", true);
                 }
             } else {
-                showErrorPopup("Error. You can only join an activity \nwhen both the project and activity\n have dates", true);
+                showErrorPopup("Error: You can only join an activity \nwhen both the project and activity\n have dates", true);
             }
             
             }
@@ -751,13 +751,13 @@ public class App extends Application {
                 int addedTime = Integer.parseInt(addTimeTF.getText().trim());
 
                 if (addedTime < 0) {
-                    showErrorPopup("Error. Time cannot be negative", true);
+                    showErrorPopup("Error: Time cannot be negative", true);
                     return;
                 }
 
                 if (activity.getRecordedTime() + addedTime > activity.getBudgetedTime()) {
                     showErrorPopup(
-                            "Error. You cannot record more time \nthan the budgeted time. Contact your \nprojectleader to edit budgeted time", true);
+                            "Error: You cannot record more time \nthan the budgeted time. Contact your \nprojectleader to edit budgeted time", true);
                     return;
                 }
 
@@ -767,7 +767,7 @@ public class App extends Application {
                 addTimeTF.clear();
 
             } catch (NumberFormatException e) {
-                showErrorPopup("Error. Please enter a valid number", true);
+                showErrorPopup("Error: Please enter a valid number", true);
                 addTimeTF.clear();
             }
         });
@@ -793,17 +793,17 @@ public class App extends Application {
             LocalDate projectEnd = activity.getProject().getEndDate();
         
             if (projectStart != null && selectedDate.isBefore(projectStart)) {
-                showErrorPopup("Error. Start date cannot be before project start date", true);
+                showErrorPopup("Error: Start date cannot be before project start date", true);
                 activityStartDatePicker.setValue(activity.getStartDate());
                 return;
             }
             if (projectEnd != null && selectedDate.isAfter(projectEnd)) {
-                showErrorPopup("Error. Start date cannot be after project end date", true);
+                showErrorPopup("Error: Start date cannot be after project end date", true);
                 activityStartDatePicker.setValue(activity.getStartDate());
                 return;
             }
             if (activity.getEndDate() != null && selectedDate.isAfter(activity.getEndDate())) {
-                showErrorPopup("Error. Start date cannot be after activity end date", true);
+                showErrorPopup("Error: Start date cannot be after activity end date", true);
                 activityStartDatePicker.setValue(activity.getStartDate());
             } else {
                 activity.setStartDate(selectedDate);
@@ -820,17 +820,17 @@ public class App extends Application {
             LocalDate projectEnd = activity.getProject().getEndDate();
         
             if (projectStart != null && selectedDate.isBefore(projectStart)) {
-                showErrorPopup("Error. End date cannot be before project start date", true);
+                showErrorPopup("Error: End date cannot be before project start date", true);
                 activityEndDatePicker.setValue(activity.getEndDate());
                 return;
             }
             if (projectEnd != null && selectedDate.isAfter(projectEnd)) {
-                showErrorPopup("Error. End date cannot be after project end date", true);
+                showErrorPopup("Error: End date cannot be after project end date", true);
                 activityEndDatePicker.setValue(activity.getEndDate());
                 return;
             }
             if (activity.getStartDate() != null && selectedDate.isBefore(activity.getStartDate())) {
-                showErrorPopup("Error. End date cannot be before activity start date", true);
+                showErrorPopup("Error: End date cannot be before activity start date", true);
                 activityEndDatePicker.setValue(activity.getEndDate());
             } else {
                 activity.setEndDate(selectedDate);
@@ -1085,18 +1085,17 @@ public class App extends Application {
             if (!title.isEmpty()) {
                 if (startDatePicker.getValue().isBefore(endDatePicker.getValue())) {
                     Activity newActivity = new Activity(title);
+                    newActivity.editDate(startDatePicker.getValue(), endDatePicker.getValue());
                     newActivity.assignUser(LogedinUser);
                     newActivity.fixed = true;
 
-                    newActivity.editDate(startDatePicker.getValue(), endDatePicker.getValue());
-
                     inputWindow.close();
                 } else {
-                    showErrorPopup("Error. Start date cannot be after end date", true);
+                    showErrorPopup("Error: Start date cannot be after end date", true);
                 }
 
             } else {
-                showErrorPopup("Error. Activity must have a title please add one", true);
+                showErrorPopup("Error: Activity must have a title please add one", true);
             }
         });
 
