@@ -331,8 +331,6 @@ public class App extends Application {
 
         Label reportLabel = new Label("Reports of projects:");
 
-        //Label startDateLabel = new Label("Start date: Not set");
-        //Label endDateLabel = new Label("End date: Not set");
 
         HBox projectLeaderBox = new HBox(10);
         Label projectLeaderLabel = new Label("Project leader:");
