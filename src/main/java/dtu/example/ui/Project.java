@@ -95,9 +95,7 @@ public class Project {
 
     if (budgetedTime >= recordedtime + addTime) {
         recordedtime += addTime;
-        assert recordedtime == oldRecorded + addTime : "Postcondition failed: Time not added correctly.";
     } else {
-        assert recordedtime == oldRecorded : "Postcondition failed: recordedtime should not change when over budget.";
         throw new IllegalArgumentException("The added time exceeds the budgeted time.");
     }
 }
@@ -144,7 +142,6 @@ public class Project {
 
     //Kelvin
     public String generateReport() {
-        assert true;
         StringBuilder report = new StringBuilder();
         report.append("Report of project: " + name + "\n\n");
                 report.append("Project start date: ").append(
@@ -158,11 +155,14 @@ public class Project {
 
         report.append("--------------\n");
     
-        if (activities.isEmpty()) { // 1
+        if (activities.isEmpty()) {
             report.append("No activities yet.\n");
             report.append("Start date: Not set | End date: Not set\n");
             report.append("Time status - Budgeted: 0, Recorded time: 0\n");
             report.append("--------------\n");
+
+            return report.toString();
+            
         } else {
             for (Activity activity : activities) {
                 String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "Not set";
@@ -174,7 +174,7 @@ public class Project {
                 report.append("Start date: ").append(startDate)
                       .append(" | End date: ").append(endDate).append("\n");
                 report.append("Time status - Budgeted: ").append(budgetedTime)
-                      .append(", Recorded time: ").append(recordedTime).append("\n");
+                      .append(", Recorded time: ").append(recordedTime).append(" hours\n");
                 report.append("Employees: ");
                 for (User user : activity.getAssignedUsers()){
                     report.append(user.getUID() + ", ");

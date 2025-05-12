@@ -139,7 +139,7 @@ public class StepDefinitionsUser {
     public void user_with_UID_has_hours_worked_today_and_hours_on_date(String UID, int workedHours, int otherHours, int Year, int Month, int Day) {
         LocalDate date = LocalDate.of(Year, Month, Day);
         assertEquals(testUser.getHoursToday(), workedHours);
-        assertEquals(testUser.showWorkDate(date), "Date: " + date.toString() + "Time worked: " + otherHours + "/" + 8);
+        assertEquals(testUser.showWorkDate(date), "Date: " + date.toString() + " Time worked: " + otherHours + "/" + 8);
     }
     
     @When("user checks availability for activity with start date {int} {int} {int} and end date {int} {int} {int}")

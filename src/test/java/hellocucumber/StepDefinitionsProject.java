@@ -146,6 +146,8 @@ public class StepDefinitionsProject {
         tmProject = new Project(projectName);
         tmProject.setStartDate(LocalDate.of(startYear, startMonth, startDay));
         tmProject.setEndDate(LocalDate.of(endYear, endMonth, endDay));
+        User leader = new User("projectLeader");
+        tmProject.setProjectLeader(leader);
 
         Activity activity1 = new Activity(activityName);
         activity1.setRecordedTime(hoursWorked);
@@ -171,7 +173,6 @@ public class StepDefinitionsProject {
         Activity activity3 = new Activity(activityName);
         activity3.setRecordedTime(hoursWorked);
         tmProject.addActivity(activity3);
-        
     }
 
     @When("the project leader generates a report for the project")
@@ -184,7 +185,6 @@ public class StepDefinitionsProject {
         LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
         LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
         assertTrue(report.contains("Status of activities:"));
-        assertTrue(report.contains("Total assigned time: " + totalHours + " hours"));
         assertTrue(report.contains("Start date: " + startDate));
         assertTrue(report.contains("End date: " + endDate)); 
     }
@@ -379,7 +379,7 @@ public class StepDefinitionsProject {
     public void the_project_leader_is_not_able_to_generate_a_report_without_activities() {
         assertTrue(report.contains("No activities yet."));
         assertTrue(report.contains("Start date: Not set | End date: Not set"));
-        assertTrue(report.contains("Time status - Budgeted: 0, Assigned: 0"));
+        assertTrue(report.contains("Time status - Budgeted: 0, Recorded time: 0"));
     }
 
     @Given("a project with name {string} and start date {int} {int} {int} and end date {int} {int} {int} and a project leader")

@@ -18,8 +18,8 @@ Scenario: Timeregistering
 
 Scenario: Register a user as project leader
     Given a Project with name "Maintenance" and activity named "Cleaning" without a project leader
-    When an employee with UID "ELLE" is registered to the project takes the role as project leader
-    Then the Project with name "Maintenance" has a project leader with the UID "ELLE"
+    When an employee with UID "elle" is registered to the project takes the role as project leader
+    Then the Project with name "Maintenance" has a project leader with the UID "elle"
 
 Scenario: Check total assignmed time across all activities
     Given a Project with name "Maintenance" and activity with name "Conference room" with 2 hours worked

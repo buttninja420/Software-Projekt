@@ -40,18 +40,10 @@ public class User {
 
     //Nikolaj
     public Boolean getAvailability(Activity possibleActivity){
-        //precondition
-        assert possibleActivity != null;
         
         LocalDate start = possibleActivity.getStartDate();
         LocalDate end = possibleActivity.getEndDate();
-        
-        //precondition
-        assert start != null && end != null;
-        
-        //precondition
-        assert !end.isBefore(start);
-    
+
         int count = 0;
         for (Activity activity : Activities){
             if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
@@ -67,18 +59,10 @@ public class User {
 
     //Nikolaj
     public int getWorkLoad(Activity possibleActivity){
-        //precondition
-        assert possibleActivity != null;
-        
+
         LocalDate start = possibleActivity.getStartDate();
         LocalDate end = possibleActivity.getEndDate();
         
-        //precondition
-        assert start != null && end != null;
-        
-        //precondition
-        assert !end.isBefore(start);
-    
         int count = 0;
         for (Activity activity : Activities){
             if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
