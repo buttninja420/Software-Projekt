@@ -40,21 +40,8 @@ public class User {
 
     //Nikolaj
     public Boolean getAvailability(Activity possibleActivity){
-        
-        LocalDate start = possibleActivity.getStartDate();
-        LocalDate end = possibleActivity.getEndDate();
-
-        int count = 0;
-        for (Activity activity : Activities){
-            if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
-                count++;
-            } 
-        }
-        if (count < maxActivities){
-            return true;
-        } else {
-            return false;
-        }        
+        int count = getWorkLoad(possibleActivity);
+        return (count < maxActivities);       
     }
 
     //Nikolaj
@@ -81,7 +68,7 @@ public class User {
                 count++;
             }
         }
-        return count < 20;
+        return (count < maxActivities);
     }
     
     
