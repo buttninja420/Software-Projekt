@@ -660,7 +660,7 @@ public class App extends Application {
                 Label label = new Label("Select from available users:");
                 ComboBox<String> userDropdown = new ComboBox<>();
         
-                for (User user : Users) {
+                for (User user : getAllAvailableUsers(activity)) {
                     if (!activity.getAssignedUsers().contains(user)) {
                         userDropdown.getItems().add(user.getUID() + "     Current activities: " + user.getWorkLoad(activity));
                     }
