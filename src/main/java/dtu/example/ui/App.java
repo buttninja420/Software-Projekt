@@ -426,17 +426,19 @@ public class App extends Application {
         for (Activity activity : project.getActivities()) {
             Button activityButton = new Button(activity.getTitle());
             activityButton.setOnAction(e -> activityEditorWindow(activity));
-
+        
             Label userCountLabel = new Label(String.valueOf(activity.getAssignedUsers().size()));
-
+        
             String startDate = (activity.getStartDate() != null) ? activity.getStartDate().toString() : "-";
             String endDate = (activity.getEndDate() != null) ? activity.getEndDate().toString() : "-";
             Label dateLabel = new Label(startDate + " | " + endDate);
-
+        
             rightGrid.add(activityButton, 0, row);
             rightGrid.add(userCountLabel, 1, row);
             rightGrid.add(dateLabel, 2, row);
-        }    
+        
+            row++; 
+        }         
 
         addActivityButton.setOnAction(event -> {
             Stage inputWindow = new Stage();
