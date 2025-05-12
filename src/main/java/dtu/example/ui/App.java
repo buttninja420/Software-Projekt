@@ -332,7 +332,7 @@ public class App extends Application {
         Label headerLabel = new Label("Project " + project.getName());
         headerLabel.setStyle( "-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        Label reportLabel = new Label("Reports of projects:");
+        //Label reportLabel = new Label("Reports of projects:");
 
 
         HBox projectLeaderBox = new HBox(10);
@@ -372,7 +372,7 @@ public class App extends Application {
 
         leftBox.getChildren().addAll(
             headerLabel,
-            reportLabel,
+            //reportLabel,
             new Label("Start date:"), startDatePicker,
             new Label("End date:"), endDatePicker,
             projectLeaderBox
