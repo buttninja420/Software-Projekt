@@ -655,11 +655,11 @@ public class App extends Application {
                 assignLayout.setPadding(new Insets(10));
                 assignLayout.setAlignment(Pos.CENTER);
         
-                Label label = new Label("Select User:");
+                Label label = new Label("Select from available users:");
                 ComboBox<String> userDropdown = new ComboBox<>();
-                for (User user : Users) {
+                for (User user : getAllAvailableUsers(activity)) {
                     if (!activity.getAssignedUsers().contains(user)) {
-                        userDropdown.getItems().add(user.getUID());
+                        userDropdown.getItems().add(user.getUID() + "     Current activities: " + String.valueOf(user.getWorkLoad(activity)));
                     }
                 }
                 
@@ -668,7 +668,8 @@ public class App extends Application {
                 Button confirmButton = new Button("Assign");
         
                 confirmButton.setOnAction(e -> {
-                    String selectedUser = userDropdown.getValue();
+                    String selectedUser = userDropdown.getValue().substring(0, 4);
+                    System.out.println(selectedUser);
                     if (selectedUser != null && !selectedUser.isEmpty()) {
                         User user = getUserWithUID(selectedUser);
                         int result = activity.assignUser(user);
@@ -1096,5 +1097,16 @@ public class App extends Application {
         Scene scene = new Scene(popupLayout, 250, 150);
         inputWindow.setScene(scene);
         inputWindow.show();
+    }
+
+    //Nikolaj
+    private List<User> getAllAvailableUsers(Activity activity){
+        List<User> AvailableUsers = new ArrayList<>();
+        for (User user : Users){
+            if (user.getAvailability(activity)){
+                AvailableUsers.add(user);
+            }
+        }
+        return AvailableUsers;
     }
 }

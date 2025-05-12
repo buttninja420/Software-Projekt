@@ -64,7 +64,29 @@ public class User {
             return false;
         }        
     }
+
+    //Nikolaj
+    public int getWorkLoad(Activity possibleActivity){
+        //precondition
+        assert possibleActivity != null;
+        
+        LocalDate start = possibleActivity.getStartDate();
+        LocalDate end = possibleActivity.getEndDate();
+        
+        //precondition
+        assert start != null && end != null;
+        
+        //precondition
+        assert !end.isBefore(start);
     
+        int count = 0;
+        for (Activity activity : Activities){
+            if (activity.getStartDate().isBefore(end) ||  activity.getEndDate().isAfter(start)){
+                count++;
+            } 
+        }
+        return count;  
+    }
     
     //Kelvin
     public boolean getAvailabilityDate(LocalDate start, LocalDate end) {
