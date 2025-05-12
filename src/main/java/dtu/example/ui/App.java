@@ -557,6 +557,8 @@ public class App extends Application {
         recordedTimeBox.setAlignment(Pos.CENTER_LEFT);
         Label recordedTimeLabel = new Label("Recorded Time:");
         final TextField recordedTimeTF = new TextField(String.valueOf(activity.getRecordedTime()));
+        recordedTimeTF.setEditable(false);  
+        recordedTimeTF.setStyle("-fx-control-inner-background: #E0E0E0;"); 
         recordedTimeBox.getChildren().addAll(recordedTimeLabel, recordedTimeTF);
         layout.getChildren().add(recordedTimeBox);
 
@@ -657,21 +659,28 @@ public class App extends Application {
         
                 Label label = new Label("Select from available users:");
                 ComboBox<String> userDropdown = new ComboBox<>();
-                for (User user : getAllAvailableUsers(activity)) {
+        
+                for (User user : Users) {
                     if (!activity.getAssignedUsers().contains(user)) {
-                        userDropdown.getItems().add(user.getUID() + "     Current activities: " + String.valueOf(user.getWorkLoad(activity)));
+                        userDropdown.getItems().add(user.getUID() + "     Current activities: " + user.getWorkLoad(activity));
                     }
-                }
-                
+                }                
+        
                 userDropdown.setPrefWidth(200);
         
                 Button confirmButton = new Button("Assign");
         
                 confirmButton.setOnAction(e -> {
-                    String selectedUser = userDropdown.getValue().substring(0, 4);
-                    System.out.println(selectedUser);
-                    if (selectedUser != null && !selectedUser.isEmpty()) {
-                        User user = getUserWithUID(selectedUser);
+                    String selectedEntry = userDropdown.getValue();
+                    if (selectedEntry != null && !selectedEntry.isEmpty()) {
+                        String selectedUserId = selectedEntry.substring(0, 4); 
+                        User user = getUserWithUID(selectedUserId);
+        
+                        if (activity.getAssignedUsers().contains(user)) {
+                            showErrorPopup("Error. User is already assigned to this activity.", true);
+                            return;
+                        }
+        
                         int result = activity.assignUser(user);
                         if (result == 0) {
                             showErrorPopup("User assigned successfully", false);
@@ -695,6 +704,7 @@ public class App extends Application {
             }
         });
         
+        
 
         assignSelf.setOnAction(event -> {
             if (activity.getAssignedUsers().contains(LoginUser)) {
@@ -704,29 +714,29 @@ public class App extends Application {
                 assignSelf.setText("Assign self");
             } else {
 
-                if (activity.getProject().getStartDate() == null || activity.getProject().getEndDate() == null) {
-                    showErrorPopup("Error. The project must have start and end dates before joining an activity", true);
-                    return;
-                }
-        
-                if (activity.getStartDate() == null || activity.getEndDate() == null) {
-                    showErrorPopup("Error. You cannot join this activity before both start and end dates are set", true);
-                    return;
-                }
-        
-                if (activity.getAssignedUsers().contains(LoginUser)) {
-                    showErrorPopup("Error. You are already assigned to this activity", true);
-                    return;
-                }
-        
+                if (activity.getProject().getProjectleader() != null 
+                && activity.getProject().getProjectleader().equals(LoginUser)) {
+
                 int result = activity.assignUser(LoginUser);
-        
                 if (result == 0) {
                     showErrorPopup("You have been assigned to this activity", false);
-                    assignSelf.setText("Unassign self");
+
                 } else {
-                    showErrorPopup("Error. You cannot be assigned to this activity", true);
+                    showErrorPopup("Error. You are not available or already assigned", true);
                 }
+            } else if (activity.getProject().getStartDate() != null && activity.getProject().getEndDate() != null) {
+
+                int result = activity.assignUser(LoginUser);
+                if (result == 0) {
+                    showErrorPopup("You have been assigned to this activity", false);
+
+                } else {
+                    showErrorPopup("Error. You are not available or already assigned", true);
+                }
+            } else {
+                showErrorPopup("Error. You can only join an activity \nwhen both the project and activity\n have dates", true);
+            }
+            
             }
         
             opdaterProjektAktiviteter(activity.getProject());
