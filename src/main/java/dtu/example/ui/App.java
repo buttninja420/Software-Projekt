@@ -606,47 +606,42 @@ public class App extends Application {
         
 
         unassignUserButton.setOnAction(event -> {
-            if (activity.getProject().getProjectleader() != null &&
-                activity.getProject().getProjectleader().equals(LoginUser)) {
+            Stage unassignUserStage = new Stage();
+            unassignUserStage.setTitle("Unassign User from Activity");
         
-                Stage unassignUserStage = new Stage();
-                unassignUserStage.setTitle("Unassign User from Activity");
+            VBox unassignLayout = new VBox(10);
+            unassignLayout.setPadding(new Insets(10));
+            unassignLayout.setAlignment(Pos.CENTER);
         
-                VBox unassignLayout = new VBox(10);
-                unassignLayout.setPadding(new Insets(10));
-                unassignLayout.setAlignment(Pos.CENTER);
+            Label label = new Label("Select User to Unassign:");
+            ComboBox<String> userDropdown = new ComboBox<>();
         
-                Label label = new Label("Enter User ID to Unassign:");
-                TextField userIdField = new TextField();
-                Button confirmButton = new Button("Unassign");
-        
-                confirmButton.setOnAction(e -> {
-                    String userId = userIdField.getText().trim();
-                    User user = getUserWithUID(userId);
-                    if (user != null) {
-                        if (activity.getAssignedUsers().contains(user)) {
-                            activity.getAssignedUsers().remove(user);
-                            showErrorPopup("User successfully unassigned from activity.", false);
-                            unassignUserStage.close();
-                            opdaterProjektAktiviteter(activity.getProject());
-                        } else {
-                            showErrorPopup("Error. User is not assigned to this activity.", true);
-                        }
-                    } else {
-                        showErrorPopup("Error. User does not exist.", true);
-                    }
-                });
-        
-                unassignLayout.getChildren().addAll(label, userIdField, confirmButton);
-        
-                Scene scene = new Scene(unassignLayout, 300, 150);
-                unassignUserStage.setScene(scene);
-                unassignUserStage.show();
-        
-            } else {
-                showErrorPopup("Error. Only the Project Leader can unassign users.", true);
+            // Fyld dropdown med assigned users
+            for (User user : activity.getAssignedUsers()) {
+                userDropdown.getItems().add(user.getUID());
             }
+        
+            Button confirmButton = new Button("Unassign");
+        
+            confirmButton.setOnAction(e -> {
+                String selectedUID = userDropdown.getValue();
+                if (selectedUID != null) {
+                    User user = getUserWithUID(selectedUID);
+                    if (user != null) {
+                        activity.unassignUser(user); // Denne metode skal eksistere i din Activity-klasse
+                        showErrorPopup("User unassigned successfully", false);
+                        unassignUserStage.close();
+                    }
+                }
+            });
+        
+            unassignLayout.getChildren().addAll(label, userDropdown, confirmButton);
+        
+            Scene scene = new Scene(unassignLayout, 300, 150);
+            unassignUserStage.setScene(scene);
+            unassignUserStage.show();
         });
+        
         
 
         assignUserButton.setOnAction(event -> {
