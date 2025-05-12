@@ -1085,10 +1085,9 @@ public class App extends Application {
             if (!title.isEmpty()) {
                 if (startDatePicker.getValue().isBefore(endDatePicker.getValue())) {
                     Activity newActivity = new Activity(title);
+                    newActivity.editDate(startDatePicker.getValue(), endDatePicker.getValue());
                     newActivity.assignUser(LogedinUser);
                     newActivity.fixed = true;
-
-                    newActivity.editDate(startDatePicker.getValue(), endDatePicker.getValue());
 
                     inputWindow.close();
                 } else {
