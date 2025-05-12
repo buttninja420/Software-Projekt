@@ -55,6 +55,7 @@ public class StepDefinitionsUser {
     @Then ("user with UID: {string} has {int} hours worked today")
     public void user_with_UID_has_hours_worked_today(String UID, int hours){
         assertEquals(hours, testUser.getHoursToday());
+        assertEquals(hours, testUser.getWorkHistory().get(LocalDate.now()));
     }
 
     @When("user defines daily work time to be {int} hours")

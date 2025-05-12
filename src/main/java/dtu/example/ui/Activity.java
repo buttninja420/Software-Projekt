@@ -75,11 +75,18 @@ public class Activity {
 
     //Jeppe
     public int assignUser(User user) {
+        assert endDate != null : "Precondition failed: missing end date";
+        assert startDate != null : "Precondition failed: missing start date";
+
         if (user.getAvailability(this)){
             this.assignedUsers.add(user);
             user.assignActivity(this);
+            assert assignedUsers.contains(user) : "Postcondition failed: user not added to activity";
+            assert user.getActivities().contains(this) : "Postcondition failed: activity not added to user";
             return 0;
         }
+
+        
         return -1;
     }
 
