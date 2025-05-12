@@ -146,7 +146,7 @@ public class Project {
     public String generateReport() {
         assert true;
         StringBuilder report = new StringBuilder();
-        report.append("Report of project " + name + "\n\n");
+        report.append("Report of project: " + name + "\n\n");
                 report.append("Project start date: ").append(
             (startDate != null) ? startDate.toString() : "Not set"
         ).append(" | End date: ").append(
