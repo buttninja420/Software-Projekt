@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -336,42 +337,38 @@ public class App extends Application {
 
         HBox projectLeaderBox = new HBox(10);
         Label projectLeaderLabel = new Label("Project leader:");
-        TextField projectLeaderTF = new TextField();
-        if (project.getProjectleader() != null) {
-            projectLeaderTF.setText(project.getProjectleader().getUID());
-            projectLeaderTF.setDisable(true);
-        } else {
-            projectLeaderTF.setPromptText("No current");  
+
+        ComboBox<String> projectLeaderDropdown = new ComboBox<>();
+        for (User user : Users) {
+            projectLeaderDropdown.getItems().add(user.getUID());
         }
-        
+        projectLeaderDropdown.setPrefWidth(150);
+
+        if (project.getProjectleader() != null) {
+            projectLeaderDropdown.setValue(project.getProjectleader().getUID());
+            projectLeaderDropdown.setDisable(true);
+        } else {
+            projectLeaderDropdown.setPromptText("Select project leader");
+        }
 
         Button projectLeaderButton = new Button("Assign project leader");
         projectLeaderButton.setOnAction(event -> {
-            String newLeader = projectLeaderTF.getText().trim();
-            User user = getUserWithUID(newLeader);
-
-            if (user != null) {
-                project.setProjectLeader(user);
-                projectLeaderTF.setText(newLeader);
-                projectLeaderTF.setEditable(false);
-                projectLeaderTF.setDisable(true);
-            
-                Button reportButton = new Button("Generate Report");
-                reportButton.setOnAction(ev -> {
-                    String report = project.generateReport();
-                    showReportWindow(report);
-                });
-            
-                if (!leftBox.getChildren().contains(reportButton)) {
-                    leftBox.getChildren().add(reportButton);
+            String selectedLeader = projectLeaderDropdown.getValue();
+            if (selectedLeader != null && !selectedLeader.isEmpty()) {
+                User user = getUserWithUID(selectedLeader);
+                if (user != null) {
+                    project.setProjectLeader(user);
+                    projectLeaderDropdown.setValue(selectedLeader);
+                    projectLeaderDropdown.setDisable(true);
+                } else {
+                    showErrorPopup("Error. Selected user does not exist", true);
                 }
             } else {
-                showErrorPopup("Error. User '" + newLeader + "' does not exist. \nCannot assign as project leader", true);
+                showErrorPopup("Error. Please select a project leader", true);
             }
-    });
+        });
 
-        projectLeaderTF.setPrefWidth(150);
-        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderTF, projectLeaderButton);
+        projectLeaderBox.getChildren().addAll(projectLeaderLabel, projectLeaderDropdown, projectLeaderButton);
 
         leftBox.getChildren().addAll(
             headerLabel,
@@ -525,10 +522,16 @@ public class App extends Application {
             try {
                 int budget = Integer.parseInt(budgetedTimeTF.getText().trim());
         
+                if (budget <= 0) {
+                    showErrorPopup("Error. Budgeted time must be a positive integer", true);
+                    budgetedTimeTF.clear();
+                    return;
+                }
+        
                 if (activity.getBudgetedTime() == 0) {
                     activity.setBudgetedTime(budget);
-                    saveBudgetButton.setVisible(false);      
-                    budgetedTimeTF.setEditable(false);      
+                    saveBudgetButton.setVisible(false);
+                    budgetedTimeTF.setEditable(false);
                 } else if (activity.getProject().getProjectleader() != null &&
                            activity.getProject().getProjectleader().equals(LoginUser)) {
                     activity.setBudgetedTime(budget);
@@ -541,6 +544,7 @@ public class App extends Application {
                 showErrorPopup("Error. Invalid number entered. \nPlease enter a valid integer", true);
             }
         });
+        
         
         
         budgetedTimeBox.getChildren().addAll(budgetedTimeLabel, budgetedTimeTF);
@@ -647,54 +651,54 @@ public class App extends Application {
 
         assignUserButton.setOnAction(event -> {
             if (activity.getProject().getProjectleader() != null &&
-                    activity.getProject().getProjectleader().equals(LoginUser)) {
-
+                activity.getProject().getProjectleader().equals(LoginUser)) {
+        
                 Stage assignUserStage = new Stage();
                 assignUserStage.setTitle("Assign User to Activity");
-
+        
                 VBox assignLayout = new VBox(10);
                 assignLayout.setPadding(new Insets(10));
                 assignLayout.setAlignment(Pos.CENTER);
-
-                Label label = new Label("Enter User ID:");
-                TextField userIdField = new TextField();
+        
+                Label label = new Label("Select User:");
+                ComboBox<String> userDropdown = new ComboBox<>();
+                for (User user : Users) {
+                    if (!activity.getAssignedUsers().contains(user)) {
+                        userDropdown.getItems().add(user.getUID());
+                    }
+                }
+                
+                userDropdown.setPrefWidth(200);
+        
                 Button confirmButton = new Button("Assign");
-
+        
                 confirmButton.setOnAction(e -> {
-                    String userId = userIdField.getText().trim();
-                    User user = getUserWithUID(userId);
-                
-                    if (user != null) {
-                        if (activity.getAssignedUsers().contains(user)) {
-                            showErrorPopup("Error. User '" + userId + "' is already assigned to this activity", true);
-                            return;
-                        }
-                
+                    String selectedUser = userDropdown.getValue();
+                    if (selectedUser != null && !selectedUser.isEmpty()) {
+                        User user = getUserWithUID(selectedUser);
                         int result = activity.assignUser(user);
-                
                         if (result == 0) {
                             showErrorPopup("User assigned successfully", false);
                             assignUserStage.close();
-                            opdaterProjektAktiviteter(activity.getProject());
                         } else {
                             showErrorPopup("Error. User cannot be assigned (availability or already assigned)", true);
                         }
                     } else {
-                        showErrorPopup("Error. User '" + userId + "' does not exist", true);
+                        showErrorPopup("Error. Please select a user", true);
                     }
                 });
-                
-
-                assignLayout.getChildren().addAll(label, userIdField, confirmButton);
-
+        
+                assignLayout.getChildren().addAll(label, userDropdown, confirmButton);
+        
                 Scene scene = new Scene(assignLayout, 300, 150);
                 assignUserStage.setScene(scene);
                 assignUserStage.show();
-
+        
             } else {
                 showErrorPopup("Error. Only the Project Leader can assign users", true);
             }
         });
+        
 
         assignSelf.setOnAction(event -> {
             if (activity.getAssignedUsers().contains(LoginUser)) {
