@@ -616,7 +616,7 @@ public class App extends Application {
             Label label = new Label("Select User to Unassign:");
             ComboBox<String> userDropdown = new ComboBox<>();
         
-            // Fyld dropdown med assigned users
+
             for (User user : activity.getAssignedUsers()) {
                 userDropdown.getItems().add(user.getUID());
             }
@@ -628,7 +628,7 @@ public class App extends Application {
                 if (selectedUID != null) {
                     User user = getUserWithUID(selectedUID);
                     if (user != null) {
-                        activity.unassignUser(user); // Denne metode skal eksistere i din Activity-klasse
+                        activity.unassignUser(user); 
                         showErrorPopup("User unassigned successfully", false);
                         unassignUserStage.close();
                     }
